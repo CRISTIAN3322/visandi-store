@@ -1,0 +1,73 @@
+[
+  {
+    "id": "1",
+    "name": "Vela Kapibara",
+    "price": 20000,
+    "images": [
+      "/images/products/capibara-2.jpeg",
+      "/images/products/capibara-3.jpeg"
+    ],
+    "description": "Vela Kapibara por 10 Unidades",
+    "category": "vela"
+  },
+  {
+    "id": "2",
+    "name": "Velas Jesus",
+    "price": 20000,
+    "images": [
+      "/images/products/jesus-1.jpeg",
+      "/images/products/jesus-2.jpeg"
+    ],
+    "description": "Velas Jesus por 10 Unidades",
+    "category": "vela"
+  },
+  {
+    "id": "3",
+    "name": "Velas Looney Toons",
+    "price": 20000,
+    "images": [
+      "/images/products/looney-toons-1.jpeg",
+      "/images/products/looney-toons-2.jpeg",
+      "/images/products/looney-toons-3.jpeg"
+    ],
+    "description": "Velas Looney Toons por 10 Unidades",
+    "category": "vela"
+  },
+  {
+    "id": "4",
+    "name": "Velas Pinguinos",
+    "price": 20000,
+    "images": [
+      "/images/products/pinguinos-1.jpeg",
+      "/images/products/pinguinos-2.jpeg",
+      "/images/products/pinguinos-3.jpeg"
+    ],
+    "description": "Velas Pinguinos por 10 Unidades",
+    "category": "vela"
+  },
+  {
+    "id": "5",
+    "name": "Velas Rugrats",
+    "price": 20000,
+    "images": [
+      "/images/products/rugrats-1.jpeg",
+      "/images/products/rugrats-2.jpeg",
+      "/images/products/rugrats-3.jpeg"
+    ],
+    "description": "Velas Rugrats por 10 Unidades",
+    "category": "vela"
+  },
+  {
+    "id": "6",
+    "name": "Velas Stitch",
+    "price": 20000,
+    "images": [
+      "/images/products/stitch-1.jpeg",
+      "/images/products/stitch-2.jpeg",
+      "/images/products/stitch-3.jpeg"
+    ],
+    "description": "Velas Stitch por 10 Unidades",
+    "category": "vela"
+  }
+]
+  

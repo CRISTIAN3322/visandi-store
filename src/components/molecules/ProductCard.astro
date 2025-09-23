@@ -1,0 +1,383 @@
+---
+import ProductImage from '../atoms/ProductImage.astro';
+import Button from '../atoms/Button.astro';
+
+interface Props {
+  id: string;
+  name: string;
+  price: number;
+  images: string[];
+  description: string;
+}
+
+const { id, name, price, images, description } = Astro.props;
+---
+
+<div class="product-card" data-product-id={id}>
+  <div class="product-images group">
+    {images.map((image, index) => (
+      <div class={`product-image ${index === 0 ? 'active' : ''}`} data-index={index}>
+        <ProductImage src={image} alt={`${name} - Imagen ${index + 1}`} class="product-img" />
+      </div>
+    ))}
+    
+    <div class="image-gradient"></div>
+    
+    {images.length > 1 && (
+      <>
+        <div class="image-controls">
+          {images.map((_, index) => (
+            <button 
+              class={`image-dot ${index === 0 ? 'active-dot' : ''}`}
+              data-control={index}
+              aria-label={`Ver imagen ${index + 1}`}
+            ></button>
+          ))}
+        </div>
+        
+        <button class="nav-button prev" aria-label="Imagen anterior">
+          <svg xmlns="http://www.w3.org/2000/svg" class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        
+        <button class="nav-button next" aria-label="Imagen siguiente">
+          <svg xmlns="http://www.w3.org/2000/svg" class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </>
+    )}
+    
+    <div class="badge-new">
+      <span>Nuevo</span>
+    </div>
+  </div>
+  
+  <div class="card-content">
+    <h3 class="product-title">{name}</h3>
+    <p class="product-description">{description}</p>
+    <div class="card-footer">
+      <span class="product-price">${price.toFixed(2)}</span>
+      <Button 
+        text="Agregar al carrito" 
+        type="primary" 
+        onClick={`addToCart('${id}', '${name}', ${price}, '${images[0]}')`}
+        
+      />
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Estilos para la tarjeta con tamaño fijo */
+  .product-card {
+    width: 300px;
+    height: 400px;
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .product-card:hover {
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(-8px);
+  }
+  
+  /* Contenedor de imágenes */
+  .product-images {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+  }
+  
+  /* Imágenes adaptadas al tamaño de la caja */
+  .product-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+  
+  .product-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+  
+  .product-card:hover .product-img {
+    transform: scale(1.05);
+  }
+  
+  .product-image.active {
+    opacity: 1;
+    z-index: 1;
+  }
+  
+  /* Gradiente sobre la imagen */
+  .image-gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 2;
+  }
+  
+  .product-card:hover .image-gradient {
+    opacity: 1;
+  }
+  
+  /* Controles de navegación de imágenes */
+  .image-controls {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    z-index: 3;
+  }
+  
+  .image-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.5);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .image-dot:hover, .active-dot {
+    background-color: white;
+    transform: scale(1.2);
+  }
+  
+  /* Botones de navegación */
+  .nav-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #1e40af; /* Azul oscuro */
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 3;
+  }
+  
+  .nav-button.prev {
+    left: 8px;
+  }
+  
+  .nav-button.next {
+    right: 8px;
+  }
+  
+  .product-card:hover .nav-button {
+    opacity: 1;
+  }
+  
+  .nav-button:hover {
+    background-color: #2563eb; /* Azul más claro al hover */
+    transform: translateY(-50%) scale(1.1);
+  }
+  
+  .nav-icon {
+    width: 20px;
+    height: 20px;
+    color: white; /* Texto/icono blanco */
+  }
+  
+  /* Etiqueta de nuevo */
+  .badge-new {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 3;
+  }
+  
+  .badge-new span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-primary-light, #4f46e5);
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Contenido de la tarjeta */
+  .card-content {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+  
+  .product-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 8px;
+    transition: color 0.3s ease;
+  }
+  
+  .product-card:hover .product-title {
+    color: var(--color-primary, #4f46e5);
+  }
+  
+  .product-description {
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 16px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    flex-grow: 1;
+  }
+  
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+  }
+  
+  .product-price {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-primary, #4f46e5);
+  }
+  
+  /* Estilos para resaltar el botón de agregar al carrito */
+  :global(.add-to-cart-btn) {
+    background: #1e40af !important; /* Azul oscuro */
+    padding: 8px 12px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+    color: white !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transform: translateY(0);
+    transition: all 0.3s ease !important;
+    border: none !important;
+    cursor: pointer !important;
+  }
+  
+  :global(.add-to-cart-btn:hover) {
+    background: #2563eb !important; /* Azul más claro al hover */
+    transform: translateY(-2px);
+    box-shadow: 0 7px 14px rgba(0, 0, 0, 0.15);
+  }
+  
+  :global(.add-to-cart-btn:active) {
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+</style>
+
+<script define:vars={{ id }}>
+  document.addEventListener('DOMContentLoaded', () => {
+    const productCard = document.querySelector(`.product-card[data-product-id="${id}"]`);
+    if (!productCard) return;
+    
+    const images = productCard.querySelectorAll('.product-image');
+    const controls = productCard.querySelectorAll('[data-control]');
+    const prevButton = productCard.querySelector('.nav-button.prev');
+    const nextButton = productCard.querySelector('.nav-button.next');
+    
+    if (images.length <= 1) return;
+    
+    let currentIndex = 0;
+    
+    // Función para actualizar la imagen activa
+    const updateActiveImage = (index) => {
+      // Asegurarse de que el índice esté dentro del rango
+      if (index < 0) index = images.length - 1;
+      if (index >= images.length) index = 0;
+      
+      currentIndex = index;
+      
+      // Actualizar imágenes
+      images.forEach(img => img.classList.remove('active'));
+      images[currentIndex].classList.add('active');
+      
+      // Actualizar controles
+      controls.forEach((ctrl, i) => {
+        if (i === currentIndex) {
+          ctrl.classList.remove('bg-gray-300');
+          ctrl.classList.add('bg-white', 'scale-110');
+        } else {
+          ctrl.classList.remove('bg-white', 'scale-110');
+          ctrl.classList.add('bg-gray-300');
+        }
+      });
+    };
+    
+    // Configurar eventos para los controles de puntos
+    controls.forEach(control => {
+      control.addEventListener('click', () => {
+        const index = parseInt(control.getAttribute('data-control'));
+        updateActiveImage(index);
+      });
+    });
+    
+    // Configurar eventos para los botones de navegación
+    if (prevButton) {
+      prevButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        updateActiveImage(currentIndex - 1);
+      });
+    }
+    
+    if (nextButton) {
+      nextButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        updateActiveImage(currentIndex + 1);
+      });
+    }
+    
+    // Cambio automático de imágenes cada 5 segundos
+    let autoplayInterval;
+    
+    const startAutoplay = () => {
+      autoplayInterval = setInterval(() => {
+        updateActiveImage(currentIndex + 1);
+      }, 5000);
+    };
+    
+    const stopAutoplay = () => {
+      clearInterval(autoplayInterval);
+    };
+    
+    // Iniciar autoplay
+    startAutoplay();
+    
+    // Detener autoplay al pasar el ratón por encima
+    productCard.addEventListener('mouseenter', stopAutoplay);
+    productCard.addEventListener('mouseleave', startAutoplay);
+  });
+</script>

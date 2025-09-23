@@ -1,0 +1,22 @@
+---
+import ProductCard from '../molecules/ProductCard.astro';
+import type { Product } from '../../types/Product';
+
+interface Props {
+  products: Product[];
+}
+
+const { products } = Astro.props;
+---
+
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+  {products.map(product => (
+    <ProductCard 
+      id={product.id}
+      name={product.name}
+      price={product.price}
+      images={product.images}
+      description={product.description}
+    />
+  ))}
+</div>

@@ -1,0 +1,43 @@
+---
+interface Props {
+  text: string;
+  type?: 'primary' | 'secondary';
+  onClick?: string;
+  fullWidth?: boolean;
+  icon?: string;
+}
+
+const { text, type = 'primary', onClick, fullWidth = false, icon } = Astro.props;
+---
+
+<button
+  class={`px-4 py-2 rounded-lg font-medium ${type === 'primary' ? 'bg-primary hover:bg-primary-light text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-800'} ${fullWidth ? 'w-full' : ''}`}
+  onclick={onClick}
+>
+  {icon && <span class="mr-2">{icon}</span>}
+  {text}
+</button>
+
+<style>
+  button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border: none;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  button:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+</style>

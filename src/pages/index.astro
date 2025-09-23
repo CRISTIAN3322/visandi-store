@@ -1,16 +1,72 @@
 ---
+import Layout from '../layouts/Layout.astro';
+import ProductGrid from '../components/organisms/ProductGrid.astro';
+import ShoppingCart from '../components/organisms/ShoppingCart.astro';
+import products from '../data/products.json';
 
+// Número de WhatsApp para enviar pedidos
+const whatsappNumber = '+573045428015';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout title="Visandi Store - Toma de Pedidos">
+  <section class="hero bg-gradient-to-r from-green-500 to-emerald-600 text-white py-12">
+    <div class="container">
+      <div class="max-w-2xl mx-auto text-center">
+        <h1 class="text-4xl font-bold mb-4">Bienvenido a Visandi Store</h1>
+        <p class="text-xl mb-8">Explora nuestra selección de productos y realiza tu pedido fácilmente por WhatsApp</p>
+      </div>
+    </div>
+  </section>
+  <section id="productos" class="py-12">
+    <div class="container">
+      <h2 class="text-3xl font-bold mb-8 text-center">Nuestros Productos</h2>
+      <ProductGrid products={products} />
+    </div>
+  </section>
+  <ShoppingCart phoneNumber={whatsappNumber} />
+</Layout>
+
+<style>
+  .add-cart-btn {
+    background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 14px 24px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 16px;
+    box-shadow: 0 2px 8px rgba(16,185,129,0.15);
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    outline: none;
+    display: inline-block;
+  }
+  
+  .add-cart-btn:hover, .add-cart-btn:focus {
+    background: linear-gradient(90deg, #059669 0%, #10b981 100%);
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 6px 20px rgba(16,185,129,0.18);
+  }
+  
+  .whatsapp-btn {
+    display: inline-block;
+    background: #25D366;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    margin-top: 16px;
+    transition: background 0.2s;
+  }
+  
+  .whatsapp-btn:hover {
+    background: #128c7e;
+  }
+  
+  .hero > * {
+    position: relative;
+    z-index: 2;
+  }
+</style>
