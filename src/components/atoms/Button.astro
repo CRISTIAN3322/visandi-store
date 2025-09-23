@@ -11,33 +11,97 @@ const { text, type = 'primary', onClick, fullWidth = false, icon } = Astro.props
 ---
 
 <button
-  class={`px-4 py-2 rounded-lg font-medium ${type === 'primary' ? 'bg-primary hover:bg-primary-light text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-800'} ${fullWidth ? 'w-full' : ''}`}
+  class={`btn btn-${type} ${fullWidth ? 'btn-full-width' : ''}`}
   onclick={onClick}
 >
-  {icon && <span class="mr-2">{icon}</span>}
-  {text}
+  {icon && <span class="btn-icon">{icon}</span>}
+  <span class="btn-text">{text}</span>
 </button>
 
 <style>
-  button {
+  .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border: none;
     position: relative;
     overflow: hidden;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
   }
-  
-  button:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  .btn:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
   }
-  
-  button:active {
-    transform: translateY(0);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+
+  .btn:hover:before {
+    left: 100%;
+  }
+
+  .btn:hover {
+    transform: translateY(-2px) scale(1.02);
+  }
+
+  .btn:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  .btn-icon {
+    margin-right: 0.5rem;
+  }
+
+  .btn-text {
+    display: block;
+  }
+
+  .btn-full-width {
+    width: 100%;
+  }
+
+  /* Botones primarios */
+  .btn-primary {
+    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+    color: white;
+    box-shadow: 
+      0 4px 8px rgba(5, 150, 105, 0.3),
+      0 0 0 2px rgba(255, 255, 255, 0.1);
+  }
+
+  .btn-primary:hover {
+    background: linear-gradient(135deg, #047857 0%, #059669 100%);
+    box-shadow: 
+      0 8px 16px rgba(5, 150, 105, 0.4),
+      0 0 0 3px rgba(255, 255, 255, 0.2);
+  }
+
+  /* Botones secundarios */
+  .btn-secondary {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    color: #374151;
+    box-shadow: 
+      0 4px 8px rgba(0, 0, 0, 0.05),
+      0 0 0 2px rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(229, 231, 235, 0.5);
+  }
+
+  .btn-secondary:hover {
+    background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+    box-shadow: 
+      0 8px 16px rgba(0, 0, 0, 0.1),
+      0 0 0 3px rgba(255, 255, 255, 0.7);
   }
 </style>

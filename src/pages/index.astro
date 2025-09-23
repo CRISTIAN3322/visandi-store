@@ -9,17 +9,44 @@ const whatsappNumber = '+573045428015';
 ---
 
 <Layout title="Visandi Store - Toma de Pedidos">
-  <section class="hero bg-gradient-to-r from-green-500 to-emerald-600 text-white py-12">
-    <div class="container">
-      <div class="max-w-2xl mx-auto text-center">
-        <h1 class="text-4xl font-bold mb-4">Bienvenido a Visandi Store</h1>
-        <p class="text-xl mb-8">Explora nuestra selección de productos y realiza tu pedido fácilmente por WhatsApp</p>
+  <section class="hero">
+    <!-- Elementos decorativos de fondo -->
+    <div class="hero-decoration">
+      <div class="hero-decoration-circle hero-decoration-circle-1"></div>
+      <div class="hero-decoration-circle hero-decoration-circle-2"></div>
+      <div class="hero-decoration-circle hero-decoration-circle-3"></div>
+    </div>
+    
+    <div class="hero-container">
+      <div class="hero-content">
+        <h1 class="hero-title">
+          Bienvenido a <span class="hero-title-highlight">Visandi Store</span>
+        </h1>
+        <p class="hero-description">
+          Explora nuestra selección de productos únicos y realiza tu pedido fácilmente por WhatsApp
+        </p>
+        <div class="hero-buttons">
+          <a href="#productos" class="hero-btn hero-btn-primary">
+            Ver Productos
+          </a>
+          <a href="#contacto" class="hero-btn hero-btn-secondary">
+            Contactar
+          </a>
+        </div>
       </div>
     </div>
   </section>
-  <section id="productos" class="py-12">
-    <div class="container">
-      <h2 class="text-3xl font-bold mb-8 text-center">Nuestros Productos</h2>
+  
+  <section id="productos" class="products-section">
+    <div class="products-container">
+      <div class="products-header">
+        <h2 class="products-title">
+          Nuestros <span class="products-title-highlight">Productos</span>
+        </h2>
+        <p class="products-description">
+          Descubre nuestra colección cuidadosamente seleccionada de productos únicos y de calidad
+        </p>
+      </div>
       <ProductGrid products={products} />
     </div>
   </section>
@@ -27,6 +54,172 @@ const whatsappNumber = '+573045428015';
 </Layout>
 
 <style>
+  /* Hero Section Styles */
+  .hero {
+    position: relative;
+    background: linear-gradient(135deg, #10b981 0%, #059669 50%, #047857 100%);
+    color: white;
+    padding: 5rem 0;
+    overflow: hidden;
+  }
+
+  .hero-decoration {
+    position: absolute;
+    inset: 0;
+    opacity: 0.2;
+  }
+
+  .hero-decoration-circle {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    mix-blend-mode: multiply;
+    filter: blur(40px);
+    animation: pulse 4s ease-in-out infinite;
+  }
+
+  .hero-decoration-circle-1 {
+    top: 2.5rem;
+    left: 2.5rem;
+    width: 8rem;
+    height: 8rem;
+  }
+
+  .hero-decoration-circle-2 {
+    top: 5rem;
+    right: 5rem;
+    width: 10rem;
+    height: 10rem;
+    animation-delay: 2s;
+  }
+
+  .hero-decoration-circle-3 {
+    bottom: -2.5rem;
+    left: 33.333%;
+    width: 9rem;
+    height: 9rem;
+    animation-delay: 4s;
+  }
+
+  .hero-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    position: relative;
+    z-index: 10;
+  }
+
+  .hero-content {
+    max-width: 64rem;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .hero-title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    animation: fadeInUp 0.8s ease-out;
+  }
+
+  .hero-title-highlight {
+    color: #fbbf24;
+  }
+
+  .hero-description {
+    font-size: 1.25rem;
+    margin-bottom: 2.5rem;
+    color: #d1fae5;
+    line-height: 1.75;
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+  }
+
+  .hero-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+  }
+
+  .hero-btn {
+    display: inline-block;
+    padding: 1rem 2rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    font-size: 1.125rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+
+  .hero-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+
+  .hero-btn-primary {
+    background: white;
+    color: #059669;
+  }
+
+  .hero-btn-primary:hover {
+    background: #f0fdf4;
+  }
+
+  .hero-btn-secondary {
+    border: 2px solid white;
+    color: white;
+  }
+
+  .hero-btn-secondary:hover {
+    background: white;
+    color: #059669;
+  }
+
+  /* Products Section Styles */
+  .products-section {
+    padding: 5rem 0;
+    background: linear-gradient(180deg, #f9fafb 0%, #ffffff 100%);
+  }
+
+  .products-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .products-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .products-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: #1f2937;
+  }
+
+  .products-title-highlight {
+    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .products-description {
+    font-size: 1.25rem;
+    color: #6b7280;
+    max-width: 42rem;
+    margin: 0 auto;
+    line-height: 1.75;
+  }
+
+  /* Legacy button styles for compatibility */
   .add-cart-btn {
     background: linear-gradient(90deg, #10b981 0%, #059669 100%);
     color: #fff;
@@ -64,9 +257,47 @@ const whatsappNumber = '+573045428015';
   .whatsapp-btn:hover {
     background: #128c7e;
   }
-  
-  .hero > * {
-    position: relative;
-    z-index: 2;
+
+  /* Responsive */
+  @media (min-width: 640px) {
+    .hero-buttons {
+      flex-direction: row;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .hero-title {
+      font-size: 3.75rem;
+    }
+
+    .hero-description {
+      font-size: 1.5rem;
+    }
+
+    .products-title {
+      font-size: 3rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .hero-container {
+      padding: 0 1rem;
+    }
+
+    .products-container {
+      padding: 0 1rem;
+    }
+
+    .hero-title {
+      font-size: 2.5rem;
+    }
+
+    .hero-description {
+      font-size: 1.125rem;
+    }
+
+    .products-title {
+      font-size: 2rem;
+    }
   }
 </style>
