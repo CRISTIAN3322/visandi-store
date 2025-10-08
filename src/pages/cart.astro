@@ -1,0 +1,512 @@
+---
+import Layout from '../layouts/Layout.astro';
+import products from '../data/products.json';
+
+// Función para obtener productos del carrito desde localStorage
+const getCartItems = (): any[] => {
+  if (typeof window !== 'undefined') {
+    const cart = localStorage.getItem('shopping-cart');
+    return cart ? JSON.parse(cart) : [];
+  }
+  return [];
+};
+
+// Calcular totales
+const cartItems = getCartItems();
+const subtotal = cartItems.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0);
+const shipping = subtotal > 50000 ? 0 : 5000; // Envío gratis sobre $50,000
+const total = subtotal + shipping;
+---
+
+<Layout title="Carrito de Compras - Visandi Store">
+  <main class="cart-page">
+    <div class="container">
+      <!-- Header de la página -->
+      <div class="cart-page__header">
+        <h1 class="cart-page__title">
+          <span class="cart-page__icon">🛒</span>
+          Carrito de Compras
+        </h1>
+        <p class="cart-page__subtitle">Revisa tu pedido y completa tus datos</p>
+      </div>
+
+      <!-- Contenido principal -->
+      <div class="cart-page__content">
+        <!-- Formulario de datos del cliente -->
+        <div class="cart-page__form-section">
+          <div class="form-card">
+            <div class="form-card__header">
+              <h2 class="form-card__title">
+                <span class="form-card__icon">👤</span>
+                Datos del Cliente
+              </h2>
+              <p class="form-card__description">Completa tus datos para procesar el pedido</p>
+            </div>
+
+            <form class="customer-form" id="customerForm">
+              <div class="form-grid">
+                <!-- Nombre completo -->
+                <div class="form-group form-group--full">
+                  <label for="fullName" class="form-label">
+                    <span class="form-label__icon">👤</span>
+                    Nombre Completo *
+                  </label>
+                  <input 
+                    type="text" 
+                    id="fullName" 
+                    name="fullName" 
+                    class="form-input" 
+                    placeholder="Ej: Juan Pérez"
+                    required
+                  >
+                  <div class="form-error" id="fullNameError"></div>
+                </div>
+
+                <!-- Teléfono -->
+                <div class="form-group">
+                  <label for="phone" class="form-label">
+                    <span class="form-label__icon">📱</span>
+                    Teléfono *
+                  </label>
+                  <input 
+                    type="tel" 
+                    id="phone" 
+                    name="phone" 
+                    class="form-input" 
+                    placeholder="Ej: 300 123 4567"
+                    required
+                  >
+                  <div class="form-error" id="phoneError"></div>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                  <label for="email" class="form-label">
+                    <span class="form-label__icon">📧</span>
+                    Email
+                  </label>
+                  <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    class="form-input" 
+                    placeholder="Ej: juan@email.com"
+                  >
+                  <div class="form-error" id="emailError"></div>
+                </div>
+
+                <!-- Dirección -->
+                <div class="form-group form-group--full">
+                  <label for="address" class="form-label">
+                    <span class="form-label__icon">📍</span>
+                    Dirección de Entrega *
+                  </label>
+                  <textarea 
+                    id="address" 
+                    name="address" 
+                    class="form-input form-input--textarea" 
+                    placeholder="Ej: Calle 123 #45-67, Barrio Centro, Medellín"
+                    rows="3"
+                    required
+                  ></textarea>
+                  <div class="form-error" id="addressError"></div>
+                </div>
+
+                <!-- Ciudad -->
+                <div class="form-group">
+                  <label for="city" class="form-label">
+                    <span class="form-label__icon">🏙️</span>
+                    Ciudad *
+                  </label>
+                  <input 
+                    type="text" 
+                    id="city" 
+                    name="city" 
+                    class="form-input" 
+                    placeholder="Ej: Medellín"
+                    required
+                  >
+                  <div class="form-error" id="cityError"></div>
+                </div>
+
+                <!-- Notas adicionales -->
+                <div class="form-group">
+                  <label for="notes" class="form-label">
+                    <span class="form-label__icon">📝</span>
+                    Notas Adicionales
+                  </label>
+                  <textarea 
+                    id="notes" 
+                    name="notes" 
+                    class="form-input form-input--textarea" 
+                    placeholder="Instrucciones especiales para la entrega..."
+                    rows="2"
+                  ></textarea>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Resumen del pedido -->
+        <div class="cart-page__summary-section">
+          <div class="order-summary">
+            <div class="order-summary__header">
+              <h2 class="order-summary__title">
+                <span class="order-summary__icon">📋</span>
+                Resumen del Pedido
+              </h2>
+              <div class="order-summary__count" id="itemCount">
+                {cartItems.length} {cartItems.length === 1 ? 'producto' : 'productos'}
+              </div>
+            </div>
+
+            <!-- Lista de productos -->
+            <div class="order-summary__products" id="cartProducts">
+              {cartItems.length === 0 ? (
+                <div class="empty-cart">
+                  <div class="empty-cart__icon">🛒</div>
+                  <h3 class="empty-cart__title">Tu carrito está vacío</h3>
+                  <p class="empty-cart__description">Agrega algunos productos para continuar</p>
+                  <a href="/" class="btn btn--primary btn--full">
+                    <span class="btn__icon">🏠</span>
+                    <span class="btn__text">Ir a la tienda</span>
+                  </a>
+                </div>
+              ) : (
+                cartItems.map((item) => (
+                  <div class="cart-item" data-product-id={item.id}>
+                    <div class="cart-item__image">
+                      <img src={item.image} alt={item.name} class="cart-item__img">
+                    </div>
+                    
+                    <div class="cart-item__details">
+                      <h3 class="cart-item__name">{item.name}</h3>
+                      <div class="cart-item__price">${item.price.toLocaleString()}</div>
+                      <div class="cart-item__quantity">
+                        <span class="cart-item__quantity-label">Cantidad:</span>
+                        <span class="cart-item__quantity-value">{item.quantity}</span>
+                      </div>
+                    </div>
+                    
+                    <div class="cart-item__total">
+                      <div class="cart-item__total-label">Subtotal</div>
+                      <div class="cart-item__total-price">${(item.price * item.quantity).toLocaleString()}</div>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+
+            <!-- Totales -->
+            {cartItems.length > 0 && (
+              <div class="order-summary__totals">
+                <div class="total-row">
+                  <span class="total-label">Subtotal</span>
+                  <span class="total-value">${subtotal.toLocaleString()}</span>
+                </div>
+                
+                <div class="total-row">
+                  <span class="total-label">Envío</span>
+                  <span class="total-value">
+                    {shipping === 0 ? (
+                      <span class="free-shipping">¡GRATIS!</span>
+                    ) : (
+                      `$${shipping.toLocaleString()}`
+                    )}
+                  </span>
+                </div>
+                
+                {shipping > 0 && (
+                  <div class="shipping-note">
+                    <span class="shipping-note__icon">🚚</span>
+                    <span class="shipping-note__text">
+                      Agrega $${(50000 - subtotal).toLocaleString()} más para envío gratis
+                    </span>
+                  </div>
+                )}
+                
+                <div class="total-row total-row--final">
+                  <span class="total-label">Total</span>
+                  <span class="total-value">${total.toLocaleString()}</span>
+                </div>
+              </div>
+            )}
+
+            <!-- Botón de WhatsApp -->
+            {cartItems.length > 0 && (
+              <div class="order-summary__actions">
+                <button type="button" class="btn btn--whatsapp btn--full" id="sendWhatsApp">
+                  <span class="btn__icon">📱</span>
+                  <span class="btn__text">Enviar Pedido por WhatsApp</span>
+                </button>
+                
+                <div class="payment-info">
+                  <div class="payment-info__icon">💳</div>
+                  <div class="payment-info__text">
+                    <strong>Métodos de pago:</strong><br>
+                    Efectivo, Transferencia, Nequi, Daviplata
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('customerForm');
+    const sendWhatsAppBtn = document.getElementById('sendWhatsApp');
+    const cartProducts = document.getElementById('cartProducts');
+    const itemCount = document.getElementById('itemCount');
+
+    // Cargar productos del carrito desde localStorage
+    function loadCartProducts() {
+      const cart = JSON.parse(localStorage.getItem('shopping-cart') || '[]');
+      if (cart.length === 0) {
+        if (cartProducts) {
+          cartProducts.innerHTML = `
+            <div class="empty-cart">
+              <div class="empty-cart__icon">🛒</div>
+              <h3 class="empty-cart__title">Tu carrito está vacío</h3>
+              <p class="empty-cart__description">Agrega algunos productos para continuar</p>
+              <a href="/" class="btn btn--primary btn--full">
+                <span class="btn__icon">🏠</span>
+                <span class="btn__text">Ir a la tienda</span>
+              </a>
+            </div>
+          `;
+        }
+        if (itemCount) {
+          itemCount.textContent = '0 productos';
+        }
+        if (sendWhatsAppBtn) {
+          sendWhatsAppBtn.style.display = 'none';
+        }
+        return;
+      }
+
+      // Actualizar contador
+      if (itemCount) {
+        itemCount.textContent = `${cart.length} ${cart.length === 1 ? 'producto' : 'productos'}`;
+      }
+      
+      // Mostrar productos
+      if (cartProducts) {
+        cartProducts.innerHTML = cart.map((item: any) => `
+          <div class="cart-item" data-product-id="${item.id}">
+            <div class="cart-item__image">
+              <img src="${item.image}" alt="${item.name}" class="cart-item__img">
+            </div>
+            
+            <div class="cart-item__details">
+              <h3 class="cart-item__name">${item.name}</h3>
+              <div class="cart-item__price">$${item.price.toLocaleString()}</div>
+              <div class="cart-item__quantity">
+                <span class="cart-item__quantity-label">Cantidad:</span>
+                <span class="cart-item__quantity-value">${item.quantity}</span>
+              </div>
+            </div>
+            
+            <div class="cart-item__total">
+              <div class="cart-item__total-label">Subtotal</div>
+              <div class="cart-item__total-price">$${(item.price * item.quantity).toLocaleString()}</div>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // Actualizar totales
+      updateTotals(cart);
+    }
+
+    // Actualizar totales
+    function updateTotals(cart: any[]) {
+      const subtotal = cart.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0);
+      const shipping = subtotal > 50000 ? 0 : 5000;
+      const total = subtotal + shipping;
+
+      // Actualizar elementos de totales si existen
+      const totalElements = document.querySelectorAll('.total-value');
+      if (totalElements.length >= 3) {
+        totalElements[0].textContent = `$${subtotal.toLocaleString()}`;
+        totalElements[1].innerHTML = shipping === 0 ? '<span class="free-shipping">¡GRATIS!</span>' : `$${shipping.toLocaleString()}`;
+        totalElements[2].textContent = `$${total.toLocaleString()}`;
+      }
+
+      // Actualizar nota de envío gratis
+      const shippingNote = document.querySelector('.shipping-note') as HTMLElement;
+      if (shippingNote) {
+        if (shipping > 0) {
+          shippingNote.innerHTML = `
+            <span class="shipping-note__icon">🚚</span>
+            <span class="shipping-note__text">
+              Agrega $${(50000 - subtotal).toLocaleString()} más para envío gratis
+            </span>
+          `;
+          shippingNote.style.display = 'flex';
+        } else {
+          shippingNote.style.display = 'none';
+        }
+      }
+    }
+
+    // Validación del formulario
+    function validateForm() {
+      const formData = new FormData(form as HTMLFormElement);
+      let isValid = true;
+
+      // Limpiar errores anteriores
+      document.querySelectorAll('.form-error').forEach(error => error.textContent = '');
+      document.querySelectorAll('.form-input').forEach(input => input.classList.remove('form-input--error'));
+
+      // Validar nombre
+      const fullName = formData.get('fullName') as string;
+      if (!fullName?.trim() || fullName.trim().length < 2) {
+        showError('fullName', 'El nombre debe tener al menos 2 caracteres');
+        isValid = false;
+      }
+
+      // Validar teléfono
+      const phone = formData.get('phone') as string;
+      const phoneRegex = /^[0-9\s\+\-\(\)]{10,15}$/;
+      if (!phone?.trim() || !phoneRegex.test(phone.trim())) {
+        showError('phone', 'Ingresa un número de teléfono válido');
+        isValid = false;
+      }
+
+      // Validar email si se proporciona
+      const email = formData.get('email') as string;
+      if (email?.trim()) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email.trim())) {
+          showError('email', 'Ingresa un email válido');
+          isValid = false;
+        }
+      }
+
+      // Validar dirección
+      const address = formData.get('address') as string;
+      if (!address?.trim() || address.trim().length < 10) {
+        showError('address', 'La dirección debe tener al menos 10 caracteres');
+        isValid = false;
+      }
+
+      // Validar ciudad
+      const city = formData.get('city') as string;
+      if (!city?.trim() || city.trim().length < 2) {
+        showError('city', 'Ingresa una ciudad válida');
+        isValid = false;
+      }
+
+      return isValid;
+    }
+
+    function showError(fieldName: string, message: string) {
+      const field = document.getElementById(fieldName);
+      const errorElement = document.getElementById(fieldName + 'Error');
+      
+      if (field) field.classList.add('form-input--error');
+      if (errorElement) errorElement.textContent = message;
+    }
+
+    // Enviar por WhatsApp
+    function sendToWhatsApp() {
+      if (!validateForm()) {
+        showNotification('Por favor, corrige los errores en el formulario', 'error');
+        return;
+      }
+
+      const cart = JSON.parse(localStorage.getItem('shopping-cart') || '[]');
+      if (cart.length === 0) {
+        showNotification('Tu carrito está vacío', 'error');
+        return;
+      }
+
+      const formData = new FormData(form as HTMLFormElement);
+      
+      // Crear mensaje
+      let message = '🛒 *NUEVO PEDIDO - VISANDI STORE* 🛒\n\n';
+      
+      // Datos del cliente
+      message += '👤 *DATOS DEL CLIENTE:*\n';
+      message += `• Nombre: ${formData.get('fullName')}\n`;
+      message += `• Teléfono: ${formData.get('phone')}\n`;
+      if (formData.get('email')) {
+        message += `• Email: ${formData.get('email')}\n`;
+      }
+      message += `• Dirección: ${formData.get('address')}\n`;
+      message += `• Ciudad: ${formData.get('city')}\n`;
+      if (formData.get('notes')) {
+        message += `• Notas: ${formData.get('notes')}\n`;
+      }
+      
+      message += '\n📦 *PRODUCTOS:*\n';
+      cart.forEach((item: any, index: number) => {
+        message += `${index + 1}. ${item.name}\n`;
+        message += `   Cantidad: ${item.quantity}\n`;
+        message += `   Precio: $${item.price.toLocaleString()}\n`;
+        message += `   Subtotal: $${(item.price * item.quantity).toLocaleString()}\n\n`;
+      });
+      
+      // Totales
+      const subtotal = cart.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0);
+      const shipping = subtotal > 50000 ? 0 : 5000;
+      const total = subtotal + shipping;
+      
+      message += '💰 *RESUMEN:*\n';
+      message += `• Subtotal: $${subtotal.toLocaleString()}\n`;
+      message += `• Envío: ${shipping === 0 ? 'GRATIS' : `$${shipping.toLocaleString()}`}\n`;
+      message += `• *TOTAL: $${total.toLocaleString()}*\n\n`;
+      
+      message += '💳 *MÉTODOS DE PAGO:*\n';
+      message += '• Efectivo contra entrega\n';
+      message += '• Transferencia bancaria\n';
+      message += '• Nequi / Daviplata\n\n';
+      
+      message += '¡Gracias por tu pedido! 🎉\n';
+      message += 'Te contactaremos pronto para confirmar los detalles.';
+
+      // Número de WhatsApp (reemplazar con el número real)
+      const whatsappNumber = '573001234567'; // Cambiar por el número real
+      const encodedMessage = encodeURIComponent(message);
+      const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+      
+      // Abrir WhatsApp
+      window.open(whatsappUrl, '_blank');
+      
+      showNotification('¡Pedido enviado por WhatsApp!', 'success');
+    }
+
+    // Event listeners
+    sendWhatsAppBtn?.addEventListener('click', sendToWhatsApp);
+
+    // Cargar productos al inicio
+    loadCartProducts();
+
+    // Función para mostrar notificaciones
+    function showNotification(message: string, type = 'success') {
+      const notification = document.createElement('div');
+      notification.className = `notification notification--${type}`;
+      notification.innerHTML = `
+        <div class="notification__content">
+          <span class="notification__icon">${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'}</span>
+          <span class="notification__message">${message}</span>
+          <button class="notification__close" onclick="this.parentElement.parentElement.remove()">×</button>
+        </div>
+      `;
+      
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        if (notification.parentElement) {
+          notification.remove();
+        }
+      }, 4000);
+    }
+  });
+</script>

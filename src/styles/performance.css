@@ -1,0 +1,360 @@
+/* ===== OPTIMIZACIONES DE RENDIMIENTO ===== */
+
+
+/* === OPTIMIZACIONES DE RENDERIZADO === */
+
+.gpu-accelerated {
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+.gpu-accelerated:hover {
+    transform: translateZ(0) translateY(-4px);
+}
+
+
+/* === OPTIMIZACIONES DE ANIMACIONES === */
+
+.animate--optimized {
+    animation-fill-mode: both;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+/* === LAYOUT OPTIMIZADO === */
+
+.contain-layout {
+    contain: layout;
+}
+
+.contain-paint {
+    contain: paint;
+}
+
+.contain-strict {
+    contain: strict;
+}
+
+
+/* === OPTIMIZACIONES DE SCROLL === */
+
+.smooth-scroll {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+.scroll-optimized {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+
+/* === OPTIMIZACIONES DE IMÁGENES === */
+
+.image-optimized {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+}
+
+
+/* === ESTADOS DE CARGA OPTIMIZADOS === */
+
+.lazy-load {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.lazy-load.loaded {
+    opacity: 1;
+}
+
+
+/* === OPTIMIZACIONES DE TRANSICIONES === */
+
+.transition-optimized {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+/* === OPTIMIZACIONES DE HOVER === */
+
+.hover-optimized {
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-optimized:hover {
+    transform: translateY(-2px);
+}
+
+
+/* === OPTIMIZACIONES DE FOCUS === */
+
+.focus-optimized:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    transition: outline-offset 0.2s ease;
+}
+
+
+/* === OPTIMIZACIONES DE MEDIA QUERIES === */
+
+@media (prefers-reduced-motion: reduce) {
+    .animate--optimized,
+    .transition-optimized,
+    .hover-optimized {
+        animation: none !important;
+        transition: none !important;
+    }
+    .gpu-accelerated:hover {
+        transform: none !important;
+    }
+}
+
+
+/* === OPTIMIZACIONES DE CONTENIDO === */
+
+.content-optimized {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 500px;
+}
+
+
+/* === OPTIMIZACIONES DE FONT LOADING === */
+
+.font-optimized {
+    font-display: swap;
+}
+
+
+/* === OPTIMIZACIONES DE LAYOUT SHIFT === */
+
+.aspect-ratio {
+    aspect-ratio: 16 / 9;
+}
+
+.aspect-ratio--square {
+    aspect-ratio: 1 / 1;
+}
+
+.aspect-ratio--portrait {
+    aspect-ratio: 3 / 4;
+}
+
+
+/* === OPTIMIZACIONES DE STACKING CONTEXT === */
+
+.stacking-context {
+    isolation: isolate;
+    z-index: 0;
+}
+
+
+/* === OPTIMIZACIONES DE COMPOSITING === */
+
+.composite-layer {
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+
+/* === OPTIMIZACIONES DE MEMORIA === */
+
+.memory-optimized {
+    contain: layout style paint;
+}
+
+
+/* === OPTIMIZACIONES DE BATTERY === */
+
+@media (prefers-reduced-motion: reduce) and (prefers-color-scheme: dark) {
+    .battery-optimized {
+        animation: none !important;
+        transition: none !important;
+        filter: none !important;
+    }
+}
+
+
+/* === OPTIMIZACIONES DE NETWORK === */
+
+.network-optimized {
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB2aWV3Qm94PSIwIDAgMSAxIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9InRyYW5zcGFyZW50Ii8+PC9zdmc+');
+    background-size: 1px 1px;
+}
+
+
+/* === OPTIMIZACIONES DE RENDERING === */
+
+.render-optimized {
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+
+/* === OPTIMIZACIONES DE INTERACCIÓN === */
+
+.interaction-optimized {
+    touch-action: manipulation;
+    user-select: none;
+}
+
+.interaction-optimized:active {
+    transform: scale(0.98);
+}
+
+
+/* === OPTIMIZACIONES DE LAYOUT THRASHING === */
+
+.layout-stable {
+    contain: layout;
+    will-change: contents;
+}
+
+
+/* === OPTIMIZACIONES DE PAINT === */
+
+.paint-optimized {
+    contain: paint;
+    will-change: transform;
+}
+
+
+/* === OPTIMIZACIONES DE STYLE === */
+
+.style-optimized {
+    contain: style;
+    will-change: contents;
+}
+
+
+/* === OPTIMIZACIONES DE SIZE === */
+
+.size-optimized {
+    contain: size;
+    will-change: contents;
+}
+
+
+/* === OPTIMIZACIONES DE COMPOSITE === */
+
+.composite-optimized {
+    contain: layout style paint;
+    will-change: transform;
+}
+
+
+/* === OPTIMIZACIONES DE RESPONSIVE === */
+
+@media (max-width: 768px) {
+    .mobile-optimized {
+        contain: layout style paint;
+        will-change: auto;
+    }
+    .mobile-optimized * {
+        will-change: auto;
+    }
+}
+
+
+/* === OPTIMIZACIONES DE ACCESSIBILITY === */
+
+@media (prefers-reduced-motion: reduce) {
+    .accessibility-optimized {
+        animation: none !important;
+        transition: none !important;
+        transform: none !important;
+    }
+    .accessibility-optimized * {
+        animation: none !important;
+        transition: none !important;
+        transform: none !important;
+    }
+}
+
+
+/* === OPTIMIZACIONES DE COLOR SCHEME === */
+
+@media (prefers-color-scheme: dark) {
+    .dark-optimized {
+        contain: layout style paint;
+        will-change: contents;
+    }
+}
+
+
+/* === OPTIMIZACIONES DE CONTRAST === */
+
+@media (prefers-contrast: high) {
+    .contrast-optimized {
+        contain: layout style paint;
+        will-change: contents;
+    }
+}
+
+
+/* === OPTIMIZACIONES DE RESOLUTION === */
+
+@media (min-resolution: 2dppx) {
+    .retina-optimized {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+}
+
+
+/* === OPTIMIZACIONES DE ORIENTATION === */
+
+@media (orientation: portrait) {
+    .portrait-optimized {
+        contain: layout style paint;
+        will-change: contents;
+    }
+}
+
+@media (orientation: landscape) {
+    .landscape-optimized {
+        contain: layout style paint;
+        will-change: contents;
+    }
+}
+
+
+/* === OPTIMIZACIONES DE HOVER CAPABILITY === */
+
+@media (hover: hover) {
+    .hover-capable {
+        will-change: transform;
+    }
+    .hover-capable:hover {
+        transform: translateY(-2px);
+    }
+}
+
+@media (hover: none) {
+    .hover-incapable {
+        will-change: auto;
+    }
+    .hover-incapable:hover {
+        transform: none;
+    }
+}
+
+
+/* === OPTIMIZACIONES DE POINTER === */
+
+@media (pointer: coarse) {
+    .coarse-pointer {
+        touch-action: manipulation;
+        user-select: none;
+    }
+}
+
+@media (pointer: fine) {
+    .fine-pointer {
+        cursor: pointer;
+    }
+}

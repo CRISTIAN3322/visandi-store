@@ -9,41 +9,9 @@ interface Props {
 const { products } = Astro.props;
 ---
 
-<style>
-  .product-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem;
-    justify-items: center;
-  }
-
-  .product-grid-item {
-    animation: fadeInUp 0.8s ease-out both;
-  }
-
-  /* Responsive grid */
-  @media (min-width: 640px) {
-    .product-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .product-grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
-
-  @media (min-width: 1280px) {
-    .product-grid {
-      grid-template-columns: repeat(4, 1fr);
-    }
-  }
-</style>
-
 <div class="product-grid">
   {products.map((product, index) => (
-    <div class="product-grid-item" style={`animation-delay: ${index * 0.1}s;`}>
+    <div class="product-grid__item" style={`animation-delay: ${index * 0.1}s;`}>
       <ProductCard 
         id={product.id}
         name={product.name}

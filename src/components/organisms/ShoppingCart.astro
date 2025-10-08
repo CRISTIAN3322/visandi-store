@@ -10,60 +10,60 @@ const { phoneNumber } = Astro.props;
 ---
 
 <div class="shopping-cart">
-  <div class="shopping-cart-header">
+  <div class="shopping-cart__header">
     <!-- Elementos decorativos de fondo -->
-    <div class="shopping-cart-decoration">
-      <div class="shopping-cart-decoration-circle shopping-cart-decoration-circle-1"></div>
-      <div class="shopping-cart-decoration-circle shopping-cart-decoration-circle-2"></div>
+    <div class="shopping-cart__decoration">
+      <div class="shopping-cart__decoration-circle shopping-cart__decoration-circle--1"></div>
+      <div class="shopping-cart__decoration-circle shopping-cart__decoration-circle--2"></div>
     </div>
     
-    <div class="shopping-cart-header-content">
-      <div class="shopping-cart-icon-container">
-        <svg xmlns="http://www.w3.org/2000/svg" class="shopping-cart-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <div class="shopping-cart__header-content">
+      <div class="shopping-cart__icon-container">
+        <svg xmlns="http://www.w3.org/2000/svg" class="shopping-cart__icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
         </svg>
       </div>
-      <h2 class="shopping-cart-title">Carrito de Compras</h2>
+      <h2 class="shopping-cart__title">Carrito de Compras</h2>
     </div>
     
-    <button class="shopping-cart-close-btn">
-      <svg xmlns="http://www.w3.org/2000/svg" class="shopping-cart-close-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <button class="shopping-cart__close">
+      <svg xmlns="http://www.w3.org/2000/svg" class="shopping-cart__close-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
       </svg>
     </button>
   </div>
   
-  <div class="shopping-cart-body">
-    <div class="shopping-cart-empty">
-      <div class="shopping-cart-empty-icon-container">
-        <svg xmlns="http://www.w3.org/2000/svg" class="shopping-cart-empty-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+  <div class="shopping-cart__body">
+    <div class="shopping-cart__empty">
+      <div class="shopping-cart__empty-icon-container">
+        <svg xmlns="http://www.w3.org/2000/svg" class="shopping-cart__empty-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
         </svg>
       </div>
-      <h3 class="shopping-cart-empty-title">Tu carrito está vacío</h3>
-      <p class="shopping-cart-empty-description">Explora nuestros productos y agrega los que más te gusten para realizar tu pedido</p>
-      <a href="#productos" class="shopping-cart-empty-btn">
+      <h3 class="shopping-cart__empty-title">Tu carrito está vacío</h3>
+      <p class="shopping-cart__empty-description">Explora nuestros productos y agrega los que más te gusten para realizar tu pedido</p>
+      <a href="#productos" class="shopping-cart__empty-btn btn btn--primary">
         Ver Productos
       </a>
     </div>
     
-    <div class="shopping-cart-items-list hidden">
+    <div class="shopping-cart__items hidden">
       <!-- Los items del carrito se generarán dinámicamente con JavaScript -->
     </div>
   </div>
   
-  <div class="shopping-cart-footer">
-    <div class="shopping-cart-total-card">
-      <div class="shopping-cart-total-row">
-        <span class="shopping-cart-total-label">Total a Pagar:</span>
-        <span class="shopping-cart-total-amount cart-total">$0.00</span>
+  <div class="shopping-cart__footer">
+    <div class="shopping-cart__total-card">
+      <div class="shopping-cart__total-row">
+        <span class="shopping-cart__total-label">Total a Pagar:</span>
+        <span class="shopping-cart__total-amount cart-total">$0.00</span>
       </div>
-      <div class="shopping-cart-total-note">
+      <div class="shopping-cart__total-note">
         Incluye envío y manejo
       </div>
     </div>
     
-    <div class="shopping-cart-buttons">
+    <div class="shopping-cart__buttons">
       <Button 
         text="Enviar Pedido por WhatsApp" 
         type="primary" 
@@ -81,14 +81,17 @@ const { phoneNumber } = Astro.props;
   </div>
 </div>
 
-<button class="shopping-cart-toggle-btn open-cart">
-  <div class="shopping-cart-toggle-icon-container">
-    <svg xmlns="http://www.w3.org/2000/svg" class="shopping-cart-toggle-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+<a href="/cart" class="shopping-cart-toggle" id="cartToggle">
+  <div class="shopping-cart-toggle__icon-container">
+    <svg xmlns="http://www.w3.org/2000/svg" class="shopping-cart-toggle__icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
     </svg>
-    <span class="shopping-cart-count cart-count">0</span>
+    <span class="shopping-cart-toggle__count cart-count">0</span>
   </div>
-</button>
+  <div class="shopping-cart-toggle__tooltip">
+    Ver Carrito
+  </div>
+</a>
 
 <div class="shopping-cart-overlay cart-overlay hidden"></div>
 
@@ -97,32 +100,11 @@ const { phoneNumber } = Astro.props;
   
   // Cargar carrito desde localStorage si existe
   document.addEventListener('DOMContentLoaded', () => {
-    const savedCart = localStorage.getItem('cart');
+    const savedCart = localStorage.getItem('shopping-cart');
     if (savedCart) {
       cart = JSON.parse(savedCart);
-      updateCartUI();
+      updateCartCount();
     }
-    
-    // Eventos para abrir/cerrar carrito
-    const openCartBtn = document.querySelector('.open-cart');
-    const closeCartBtn = document.querySelector('.shopping-cart-close-btn');
-    const cartOverlay = document.querySelector('.cart-overlay');
-    const shoppingCart = document.querySelector('.shopping-cart');
-    
-    openCartBtn.addEventListener('click', () => {
-      shoppingCart.classList.remove('translate-x-full');
-      cartOverlay.classList.remove('hidden');
-      document.body.classList.add('overflow-hidden');
-    });
-    
-    const closeCart = () => {
-      shoppingCart.classList.add('translate-x-full');
-      cartOverlay.classList.add('hidden');
-      document.body.classList.remove('overflow-hidden');
-    };
-    
-    closeCartBtn.addEventListener('click', closeCart);
-    cartOverlay.addEventListener('click', closeCart);
   });
   
   // Función para agregar productos al carrito
@@ -142,118 +124,44 @@ const { phoneNumber } = Astro.props;
     }
     
     // Guardar en localStorage y actualizar UI
-    localStorage.setItem('cart', JSON.stringify(cart));
-    updateCartUI();
-    
-    // Mostrar notificación
-    showNotification(`${name} agregado al carrito`);
+    localStorage.setItem('shopping-cart', JSON.stringify(cart));
+    updateCartCount();
+    showNotification(`${name} agregado al carrito`, 'success');
   };
   
-  // Actualizar la interfaz del carrito
-  function updateCartUI() {
+  // Actualizar el contador del carrito
+  function updateCartCount() {
     const cartCountElement = document.querySelector('.cart-count');
-    const cartItemsList = document.querySelector('.shopping-cart-items-list');
-    const emptyCart = document.querySelector('.shopping-cart-empty');
-    const cartTotal = document.querySelector('.cart-total');
+    const cartToggle = document.querySelector('.shopping-cart-toggle');
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
     
-    // Actualizar contador
-    const itemCount = cart.reduce((total, item) => total + item.quantity, 0);
-    cartCountElement.textContent = itemCount;
+    if (cartCountElement) {
+      cartCountElement.textContent = totalItems;
+      
+      // Efecto de bounce cuando hay productos
+      if (totalItems > 0) {
+        cartCountElement.style.animation = 'none';
+        setTimeout(() => {
+          cartCountElement.style.animation = 'bounce 0.6s ease';
+        }, 10);
+      }
+    }
     
-    // Mostrar/ocultar mensaje de carrito vacío
-    if (cart.length === 0) {
-      emptyCart.classList.remove('hidden');
-      cartItemsList.classList.add('hidden');
-    } else {
-      emptyCart.classList.add('hidden');
-      cartItemsList.classList.remove('hidden');
-      
-      // Generar HTML mejorado para los items
-      cartItemsList.innerHTML = cart.map(item => `
-        <div class="shopping-cart-item">
-          <div class="shopping-cart-item-content">
-            <div class="shopping-cart-item-image-container">
-              <img src="${item.images[0]}" alt="${item.name}" class="shopping-cart-item-image">
-              <div class="shopping-cart-item-quantity-badge">
-                ${item.quantity}
-              </div>
-            </div>
-            <div class="shopping-cart-item-details">
-              <h4 class="shopping-cart-item-name">${item.name}</h4>
-              <p class="shopping-cart-item-price">$${item.price.toFixed(2)} c/u</p>
-              <div class="shopping-cart-item-controls">
-                <div class="shopping-cart-quantity-controls">
-                  <button class="shopping-cart-quantity-btn decrease-quantity" data-id="${item.id}">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="shopping-cart-quantity-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
-                    </svg>
-                  </button>
-                  <span class="shopping-cart-quantity-display">${item.quantity}</span>
-                  <button class="shopping-cart-quantity-btn increase-quantity" data-id="${item.id}">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="shopping-cart-quantity-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                    </svg>
-                  </button>
-                </div>
-                <div class="shopping-cart-item-total">
-                  $${(item.price * item.quantity).toFixed(2)}
-                </div>
-              </div>
-            </div>
-            <button class="shopping-cart-remove-btn remove-item" data-id="${item.id}">
-              <svg xmlns="http://www.w3.org/2000/svg" class="shopping-cart-remove-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-              </svg>
-            </button>
-          </div>
-        </div>
-      `).join('');
-      
-      // Calcular y mostrar total
-      const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-      cartTotal.textContent = `$${total.toFixed(2)}`;
-      
-      // Agregar event listeners para los botones
-      document.querySelectorAll('.increase-quantity').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-id');
-          const item = cart.find(item => item.id === id);
-          if (item) {
-            item.quantity += 1;
-            localStorage.setItem('cart', JSON.stringify(cart));
-            updateCartUI();
-          }
-        });
-      });
-      
-      document.querySelectorAll('.decrease-quantity').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-id');
-          const item = cart.find(item => item.id === id);
-          if (item && item.quantity > 1) {
-            item.quantity -= 1;
-            localStorage.setItem('cart', JSON.stringify(cart));
-            updateCartUI();
-          }
-        });
-      });
-      
-      document.querySelectorAll('.remove-item').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-id');
-          cart = cart.filter(item => item.id !== id);
-          localStorage.setItem('cart', JSON.stringify(cart));
-          updateCartUI();
-        });
-      });
+    // Efecto en el botón cuando se agregan productos
+    if (cartToggle && totalItems > 0) {
+      cartToggle.style.animation = 'none';
+      setTimeout(() => {
+        cartToggle.style.animation = 'cartBounce 0.4s ease';
+      }, 10);
     }
   }
   
   // Función para vaciar el carrito
   window.clearCart = () => {
     cart = [];
-    localStorage.removeItem('cart');
-    updateCartUI();
+    localStorage.removeItem('shopping-cart');
+    updateCartCount();
+    showNotification('Carrito vaciado', 'info');
   };
   
   // Función para enviar pedido por WhatsApp
@@ -378,436 +286,3 @@ const { phoneNumber } = Astro.props;
     }, 3000);
   }
 </script>
-
-<style>
-  /* Shopping Cart Styles */
-  .shopping-cart {
-    position: fixed;
-    right: 0;
-    top: 0;
-    height: 100vh;
-    width: 100%;
-    max-width: 28rem;
-    background: white;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-    transform: translateX(100%);
-    transition: all 0.5s ease-in-out;
-    z-index: 50;
-    display: flex;
-    flex-direction: column;
-    backdrop-filter: blur(20px);
-    border-left: 1px solid rgba(229, 231, 235, 0.5);
-    overflow-y: auto;
-  }
-
-  .shopping-cart-header {
-    padding: 1.5rem;
-    border-bottom: 1px solid rgba(229, 231, 235, 0.5);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: linear-gradient(135deg, #059669 0%, #10b981 50%, #047857 100%);
-    color: white;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .shopping-cart-decoration {
-    position: absolute;
-    inset: 0;
-    opacity: 0.2;
-  }
-
-  .shopping-cart-decoration-circle {
-    position: absolute;
-    background: white;
-    border-radius: 50%;
-    mix-blend-mode: multiply;
-    filter: blur(40px);
-    animation: pulse 4s ease-in-out infinite;
-  }
-
-  .shopping-cart-decoration-circle-1 {
-    top: 0.5rem;
-    left: 0.5rem;
-    width: 4rem;
-    height: 4rem;
-  }
-
-  .shopping-cart-decoration-circle-2 {
-    bottom: 0.5rem;
-    right: 0.5rem;
-    width: 5rem;
-    height: 5rem;
-    animation-delay: 2s;
-  }
-
-  .shopping-cart-header-content {
-    position: relative;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-  }
-
-  .shopping-cart-icon-container {
-    padding: 0.5rem;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-    margin-right: 0.75rem;
-    backdrop-filter: blur(10px);
-  }
-
-  .shopping-cart-icon {
-    width: 1.5rem;
-    height: 1.5rem;
-  }
-
-  .shopping-cart-title {
-    font-size: 1.25rem;
-    font-weight: 700;
-    margin: 0;
-  }
-
-  .shopping-cart-close-btn {
-    position: relative;
-    z-index: 10;
-    color: white;
-    background: none;
-    border: none;
-    padding: 0.5rem;
-    border-radius: 50%;
-    transition: all 0.3s ease;
-    cursor: pointer;
-  }
-
-  .shopping-cart-close-btn:hover {
-    color: #d1d5db;
-    background: rgba(255, 255, 255, 0.2);
-    transform: scale(1.1);
-    backdrop-filter: blur(10px);
-  }
-
-  .shopping-cart-close-icon {
-    width: 1.5rem;
-    height: 1.5rem;
-  }
-
-  .shopping-cart-body {
-    flex: 1;
-    overflow-y: auto;
-    background: linear-gradient(180deg, #f9fafb 0%, #ffffff 100%);
-  }
-
-  .shopping-cart-empty {
-    text-align: center;
-    padding: 4rem 1.5rem;
-  }
-
-  .shopping-cart-empty-icon-container {
-    width: 6rem;
-    height: 6rem;
-    margin: 0 auto 1.5rem;
-    background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .shopping-cart-empty-icon {
-    width: 3rem;
-    height: 3rem;
-    color: #10b981;
-  }
-
-  .shopping-cart-empty-title {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #1f2937;
-    margin: 0 0 0.75rem 0;
-  }
-
-  .shopping-cart-empty-description {
-    color: #6b7280;
-    line-height: 1.75;
-    margin: 0 0 1.5rem 0;
-  }
-
-  .shopping-cart-empty-btn {
-    display: inline-block;
-    margin-top: 1.5rem;
-    padding: 0.75rem 1.5rem;
-    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-    color: white;
-    text-decoration: none;
-    border-radius: 9999px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  }
-
-  .shopping-cart-empty-btn:hover {
-    background: linear-gradient(135deg, #047857 0%, #059669 100%);
-    transform: scale(1.05);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  }
-
-  .shopping-cart-items-list {
-    padding: 1.5rem;
-  }
-
-  .shopping-cart-item {
-    background: white;
-    border-radius: 1rem;
-    padding: 1rem;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    border: 1px solid rgba(229, 231, 235, 0.5);
-    margin-bottom: 1rem;
-    transition: all 0.3s ease;
-  }
-
-  .shopping-cart-item:hover {
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  }
-
-  .shopping-cart-item-content {
-    display: flex;
-    align-items: center;
-  }
-
-  .shopping-cart-item-image-container {
-    position: relative;
-  }
-
-  .shopping-cart-item-image {
-    width: 5rem;
-    height: 5rem;
-    object-fit: cover;
-    border-radius: 0.75rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  }
-
-  .shopping-cart-item-quantity-badge {
-    position: absolute;
-    top: -0.25rem;
-    right: -0.25rem;
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    color: white;
-    font-size: 0.75rem;
-    font-weight: 700;
-    border-radius: 50%;
-    height: 1.25rem;
-    width: 1.25rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .shopping-cart-item-details {
-    margin-left: 1rem;
-    flex: 1;
-  }
-
-  .shopping-cart-item-name {
-    font-size: 1rem;
-    font-weight: 700;
-    color: #1f2937;
-    margin: 0 0 0.25rem 0;
-  }
-
-  .shopping-cart-item-price {
-    font-size: 0.875rem;
-    color: #6b7280;
-    margin: 0 0 0.75rem 0;
-  }
-
-  .shopping-cart-item-controls {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .shopping-cart-quantity-controls {
-    display: flex;
-    align-items: center;
-    background: #f3f4f6;
-    border-radius: 9999px;
-    padding: 0.25rem;
-  }
-
-  .shopping-cart-quantity-btn {
-    padding: 0.5rem;
-    color: #6b7280;
-    background: none;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .shopping-cart-quantity-btn:hover {
-    color: #374151;
-    background: #e5e7eb;
-  }
-
-  .shopping-cart-quantity-icon {
-    width: 1rem;
-    height: 1rem;
-  }
-
-  .shopping-cart-quantity-display {
-    margin: 0 0.75rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-    min-width: 1.25rem;
-    text-align: center;
-  }
-
-  .shopping-cart-item-total {
-    font-size: 1.125rem;
-    font-weight: 700;
-    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .shopping-cart-remove-btn {
-    margin-left: 0.75rem;
-    padding: 0.5rem;
-    color: #ef4444;
-    background: none;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .shopping-cart-remove-btn:hover {
-    color: #dc2626;
-    background: #fef2f2;
-  }
-
-  .shopping-cart-remove-icon {
-    width: 1.25rem;
-    height: 1.25rem;
-  }
-
-  .shopping-cart-footer {
-    padding: 1.5rem;
-    border-top: 1px solid rgba(229, 231, 235, 0.5);
-    background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
-  }
-
-  .shopping-cart-total-card {
-    background: white;
-    border-radius: 1rem;
-    padding: 1.5rem;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    border: 1px solid rgba(229, 231, 235, 0.5);
-    margin-bottom: 1.5rem;
-  }
-
-  .shopping-cart-total-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-  }
-
-  .shopping-cart-total-label {
-    font-size: 1.125rem;
-    font-weight: 700;
-    color: #1f2937;
-  }
-
-  .shopping-cart-total-amount {
-    font-size: 1.5rem;
-    font-weight: 700;
-    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .shopping-cart-total-note {
-    font-size: 0.875rem;
-    color: #6b7280;
-    text-align: center;
-  }
-
-  .shopping-cart-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .shopping-cart-toggle-btn {
-    position: fixed;
-    bottom: 1.5rem;
-    right: 1.5rem;
-    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-    color: white;
-    padding: 1.25rem;
-    border-radius: 50%;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.3s ease;
-    z-index: 40;
-    cursor: pointer;
-    backdrop-filter: blur(10px);
-  }
-
-  .shopping-cart-toggle-btn:hover {
-    background: linear-gradient(135deg, #047857 0%, #059669 100%);
-    transform: scale(1.1);
-    box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.3);
-  }
-
-  .shopping-cart-toggle-icon-container {
-    position: relative;
-  }
-
-  .shopping-cart-toggle-icon {
-    width: 1.75rem;
-    height: 1.75rem;
-  }
-
-  .shopping-cart-count {
-    position: absolute;
-    top: -0.5rem;
-    right: -0.5rem;
-    background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
-    color: white;
-    font-size: 0.75rem;
-    font-weight: 700;
-    border-radius: 50%;
-    height: 1.75rem;
-    width: 1.75rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    border: 2px solid white;
-    animation: pulse 2s infinite;
-  }
-
-  .shopping-cart-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 40;
-  }
-
-  /* Utility classes */
-  .hidden {
-    display: none !important;
-  }
-
-  /* Responsive */
-  @media (max-width: 640px) {
-    .shopping-cart {
-      max-width: 100%;
-    }
-  }
-</style>

@@ -11,14 +11,6 @@ const { src, alt, class: className = '' } = Astro.props;
 <img 
   src={src} 
   alt={alt} 
-  class={`rounded-lg object-cover ${className}`} 
+  class={`product-image ${className}`} 
   loading="lazy"
 />
-
-<style>
-  img {
-    width: 100%;
-    height: auto;
-    transition: transform 0.3s ease;
-  }
-</style>

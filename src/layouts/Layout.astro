@@ -17,200 +17,49 @@ const { title, description = 'Tienda online con sistema de pedidos por WhatsApp'
     <meta name="description" content={description} />
     <title>{title}</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-      /* Estilos base mejorados */
-      :root {
-        --color-primary: #059669;
-        --color-primary-dark: #047857;
-        --color-primary-light: #10b981;
-        --color-secondary: #3b82f6;
-        --color-secondary-dark: #2563eb;
-        --color-text: #1f2937;
-        --color-text-light: #6b7280;
-        --color-text-muted: #9ca3af;
-        --color-background: #ffffff;
-        --color-background-alt: #f9fafb;
-        --color-background-dark: #f3f4f6;
-        --color-border: #e5e7eb;
-        --color-border-light: #f3f4f6;
-        --color-accent: #f59e0b;
-        --color-accent-light: #fbbf24;
-        --color-success: #10b981;
-        --color-error: #ef4444;
-        --color-warning: #f59e0b;
-        --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        --radius-sm: 0.375rem;
-        --radius-md: 0.5rem;
-        --radius-lg: 0.75rem;
-        --radius-xl: 1rem;
-      }
-      
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-      
-      html {
-        scroll-behavior: smooth;
-      }
-      
-      body {
-        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-        color: var(--color-text);
-        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-        line-height: 1.6;
-        font-size: 16px;
-        min-height: 100vh;
-      }
-      
-      a {
-        color: var(--color-primary);
-        text-decoration: none;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-      
-      a:hover {
-        color: var(--color-primary-dark);
-        transform: translateY(-1px);
-      }
-      
-      img {
-        max-width: 100%;
-        height: auto;
-        display: block;
-      }
-      
-      /* Utilidades mejoradas */
-      .container {
-        width: 100%;
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 1.5rem;
-      }
-      
-      .text-center {
-        text-align: center;
-      }
-      
-      /* Gradientes de texto */
-      .gradient-text {
-        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        font-weight: 700;
-      }
-      
-      .gradient-text-light {
-        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        font-weight: 700;
-      }
-      
-      /* Animaciones suaves */
-      @keyframes fadeInUp {
-        from {
-          opacity: 0;
-          transform: translateY(30px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-      
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
-      }
-      
-      @keyframes pulse {
-        0%, 100% {
-          opacity: 1;
-        }
-        50% {
-          opacity: 0.5;
-        }
-      }
-      
-      /* Efectos de hover mejorados */
-      .hover-lift {
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-      
-      .hover-lift:hover {
-        transform: translateY(-4px);
-        box-shadow: var(--shadow-xl);
-      }
-      
-      /* Scroll personalizado */
-      ::-webkit-scrollbar {
-        width: 8px;
-      }
-      
-      ::-webkit-scrollbar-track {
-        background: var(--color-background-alt);
-        border-radius: var(--radius-md);
-      }
-      
-      ::-webkit-scrollbar-thumb {
-        background: var(--color-border);
-        border-radius: var(--radius-md);
-      }
-      
-      ::-webkit-scrollbar-thumb:hover {
-        background: var(--color-text-light);
-      }
-      
-      /* Responsive mejorado */
-      @media (max-width: 768px) {
-        .container {
-          padding: 0 1rem;
-        }
-        
-        body {
-          font-size: 14px;
-        }
-      }
-      
-      @media (max-width: 480px) {
-        .container {
-          padding: 0 0.75rem;
-        }
-      }
+    <link rel="stylesheet" href="/src/styles/tokens.css">
+    <link rel="stylesheet" href="/src/styles/base.css">
+    <link rel="stylesheet" href="/src/styles/components.css">
+    <link rel="stylesheet" href="/src/styles/layout.css">
+    <link rel="stylesheet" href="/src/styles/pages.css">
+    <link rel="stylesheet" href="/src/styles/accessibility.css">
+    <link rel="stylesheet" href="/src/styles/performance.css">
     </style>
   </head>
   <body>
     <header class="header">
-      <div class="header-container">
-        <a href="/" class="logo-link">
-          <span class="logo-icon">🛒</span>
-          <span class="logo-text">Visandi Store</span>
+      <div class="header__container container">
+        <a href="/" class="header__logo">
+          <span class="header__logo-icon">🛒</span>
+          <span class="header__logo-text">Visandi Store</span>
         </a>
-        <nav class="navigation">
-          <ul class="nav-list">
-            <li><a href="/" class="nav-link">
-              Inicio
-              <span class="nav-underline"></span>
-            </a></li>
-            <li><a href="/#productos" class="nav-link">
-              Productos
-              <span class="nav-underline"></span>
-            </a></li>
-            <li><a href="/#contacto" class="nav-link">
-              Contacto
-              <span class="nav-underline"></span>
-            </a></li>
+        <nav class="header__navigation">
+          <ul class="header__nav-list">
+            <li class="header__nav-item">
+              <a href="/" class="header__nav-link">
+                Inicio
+                <span class="header__nav-underline"></span>
+              </a>
+            </li>
+            <li class="header__nav-item">
+              <a href="/#productos" class="header__nav-link">
+                Productos
+                <span class="header__nav-underline"></span>
+              </a>
+            </li>
+            <li class="header__nav-item">
+              <a href="/cart" class="header__nav-link">
+                <span class="header__nav-icon">🛒</span>
+                Carrito
+                <span class="header__nav-underline"></span>
+              </a>
+            </li>
+            <li class="header__nav-item">
+              <a href="/#contacto" class="header__nav-link">
+                Contacto
+                <span class="header__nav-underline"></span>
+              </a>
+            </li>
           </ul>
         </nav>
       </div>
@@ -222,420 +71,79 @@ const { title, description = 'Tienda online con sistema de pedidos por WhatsApp'
     
     <footer id="contacto" class="footer">
       <!-- Patrón de fondo decorativo -->
-      <div class="footer-decoration">
-        <div class="footer-decoration-circle footer-decoration-circle-1"></div>
-        <div class="footer-decoration-circle footer-decoration-circle-2"></div>
-        <div class="footer-decoration-circle footer-decoration-circle-3"></div>
+      <div class="footer__decoration">
+        <div class="footer__decoration-circle footer__decoration-circle--1"></div>
+        <div class="footer__decoration-circle footer__decoration-circle--2"></div>
+        <div class="footer__decoration-circle footer__decoration-circle--3"></div>
       </div>
       
-      <div class="footer-container">
-        <div class="footer-grid">
-          <div class="footer-section">
-            <h3 class="footer-title">
-              <span class="footer-icon">🛒</span>
-              <span class="footer-brand">Visandi Store</span>
+      <div class="footer__container container">
+        <div class="footer__grid">
+          <div class="footer__section">
+            <h3 class="footer__title">
+              <span class="footer__icon">🛒</span>
+              <span class="footer__brand">Visandi Store</span>
             </h3>
-            <p class="footer-description">Tu tienda online con envío de pedidos por WhatsApp. Productos de calidad con entrega rápida y atención personalizada.</p>
-            <div class="social-links">
-              <a href="#" class="social-link social-link-facebook">
+            <p class="footer__description">Tu tienda online con envío de pedidos por WhatsApp. Productos de calidad con entrega rápida y atención personalizada.</p>
+            <div class="footer__social-links">
+              <a href="#" class="footer__social-link footer__social-link--facebook">
                 <span class="sr-only">Facebook</span>
-                <svg class="social-icon" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <svg class="footer__social-icon" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd"></path>
                 </svg>
               </a>
-              <a href="#" class="social-link social-link-instagram">
+              <a href="#" class="footer__social-link footer__social-link--instagram">
                 <span class="sr-only">Instagram</span>
-                <svg class="social-icon" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <svg class="footer__social-icon" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd"></path>
                 </svg>
               </a>
-              <a href="#" class="social-link social-link-whatsapp">
+              <a href="#" class="footer__social-link footer__social-link--whatsapp">
                 <span class="sr-only">WhatsApp</span>
-                <svg class="social-icon" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <svg class="footer__social-icon" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path fill-rule="evenodd" d="M20.448 3.538a11.996 11.996 0 00-8.53-3.526C5.361.012 0 5.373 0 11.93c0 2.126.547 4.178 1.595 6.004L0 24l6.281-1.646a11.946 11.946 0 005.723 1.456h.006c6.554 0 11.917-5.363 11.917-11.92 0-3.181-1.242-6.18-3.479-8.352zM11.93 21.782h-.004a9.932 9.932 0 01-5.055-1.385l-.363-.215-3.759.986 1.004-3.665-.236-.375a9.923 9.923 0 01-1.524-5.26c0-5.445 4.435-9.88 9.886-9.88a9.87 9.87 0 017.006 2.906 9.872 9.872 0 012.867 7.01c-.004 5.447-4.436 9.878-9.822 9.878z"></path>
                 </svg>
               </a>
             </div>
           </div>
-          <div class="footer-section">
-            <h3 class="footer-subtitle">Enlaces Rápidos</h3>
-            <ul class="footer-links">
-              <li><a href="/" class="footer-link">
-                <span class="footer-link-indicator"></span>
-                <span>Inicio</span>
-              </a></li>
-              <li><a href="/#productos" class="footer-link">
-                <span class="footer-link-indicator"></span>
-                <span>Productos</span>
-              </a></li>
-              <li><a href="/#contacto" class="footer-link">
-                <span class="footer-link-indicator"></span>
-                <span>Contacto</span>
-              </a></li>
+          <div class="footer__section">
+            <h3 class="footer__subtitle">Enlaces Rápidos</h3>
+            <ul class="footer__links">
+              <li class="footer__link-item">
+                <a href="/" class="footer__link">
+                  <span class="footer__link-indicator"></span>
+                  <span>Inicio</span>
+                </a>
+              </li>
+              <li class="footer__link-item">
+                <a href="/#productos" class="footer__link">
+                  <span class="footer__link-indicator"></span>
+                  <span>Productos</span>
+                </a>
+              </li>
+              <li class="footer__link-item">
+                <a href="/#contacto" class="footer__link">
+                  <span class="footer__link-indicator"></span>
+                  <span>Contacto</span>
+                </a>
+              </li>
             </ul>
           </div>
-          <div class="footer-section">
-            <h3 class="footer-subtitle">Contáctanos</h3>
-            <p class="footer-contact-text">¿Tienes preguntas? Escríbenos por WhatsApp y te responderemos al instante.</p>
-            <a href="https://wa.me/573045428015" class="footer-whatsapp-btn">
-              <svg class="footer-whatsapp-icon" fill="currentColor" viewBox="0 0 24 24">
+          <div class="footer__section">
+            <h3 class="footer__subtitle">Contáctanos</h3>
+            <p class="footer__contact-text">¿Tienes preguntas? Escríbenos por WhatsApp y te responderemos al instante.</p>
+            <a href="https://wa.me/573045428015" class="footer__whatsapp-btn btn btn--primary">
+              <svg class="footer__whatsapp-icon" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M20.448 3.538a11.996 11.996 0 00-8.53-3.526C5.361.012 0 5.373 0 11.93c0 2.126.547 4.178 1.595 6.004L0 24l6.281-1.646a11.946 11.946 0 005.723 1.456h.006c6.554 0 11.917-5.363 11.917-11.92 0-3.181-1.242-6.18-3.479-8.352zM11.93 21.782h-.004a9.932 9.932 0 01-5.055-1.385l-.363-.215-3.759.986 1.004-3.665-.236-.375a9.923 9.923 0 01-1.524-5.26c0-5.445 4.435-9.88 9.886-9.88a9.87 9.87 0 017.006 2.906 9.872 9.872 0 012.867 7.01c-.004 5.447-4.436 9.878-9.822 9.878z"></path>
               </svg>
               Contactar por WhatsApp
             </a>
           </div>
         </div>
-        <div class="footer-bottom">
-          <p class="footer-copyright">&copy; {new Date().getFullYear()} Visandi Store. Todos los derechos reservados.</p>
+        <div class="footer__bottom">
+          <p class="footer__copyright">&copy; {new Date().getFullYear()} Visandi Store. Todos los derechos reservados.</p>
         </div>
       </div>
     </footer>
   </body>
 </html>
-
-<style is:global>
-  /* Header Styles */
-  .header {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(12px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    border-bottom: 1px solid rgba(229, 231, 235, 0.5);
-  }
-
-  .header-container {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 1rem 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .logo-link {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: #059669;
-    font-size: 1.5rem;
-    font-weight: 700;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .logo-link:hover {
-    transform: translateY(-2px);
-    color: #047857;
-  }
-
-  .logo-icon {
-    font-size: 1.875rem;
-    margin-right: 0.5rem;
-  }
-
-  .logo-text {
-    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    font-weight: 700;
-  }
-
-  .navigation {
-    display: flex;
-  }
-
-  .nav-list {
-    display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    gap: 2rem;
-  }
-
-  .nav-link {
-    position: relative;
-    font-weight: 500;
-    color: #374151;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    display: block;
-  }
-
-  .nav-link:hover {
-    color: #059669;
-  }
-
-  .nav-underline {
-    position: absolute;
-    bottom: -4px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: #059669;
-    transition: width 0.3s ease;
-  }
-
-  .nav-link:hover .nav-underline {
-    width: 100%;
-  }
-
-  /* Footer Styles */
-  .footer {
-    background: linear-gradient(135deg, #1f2937 0%, #111827 50%, #1f2937 100%);
-    color: white;
-    padding: 4rem 0;
-    margin-top: 5rem;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .footer-decoration {
-    position: absolute;
-    inset: 0;
-    opacity: 0.05;
-  }
-
-  .footer-decoration-circle {
-    position: absolute;
-    border-radius: 50%;
-    mix-blend-mode: multiply;
-    filter: blur(40px);
-    animation: pulse 4s ease-in-out infinite;
-  }
-
-  .footer-decoration-circle-1 {
-    top: 0;
-    left: 0;
-    width: 18rem;
-    height: 18rem;
-    background: #10b981;
-  }
-
-  .footer-decoration-circle-2 {
-    top: 0;
-    right: 0;
-    width: 18rem;
-    height: 18rem;
-    background: #3b82f6;
-    animation-delay: 2s;
-  }
-
-  .footer-decoration-circle-3 {
-    bottom: -2rem;
-    left: 5rem;
-    width: 18rem;
-    height: 18rem;
-    background: #8b5cf6;
-    animation-delay: 4s;
-  }
-
-  .footer-container {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1.5rem;
-    position: relative;
-    z-index: 10;
-  }
-
-  .footer-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 3rem;
-  }
-
-  .footer-section {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  .footer-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    margin: 0;
-  }
-
-  .footer-icon {
-    font-size: 1.875rem;
-    margin-right: 0.75rem;
-  }
-
-  .footer-brand {
-    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    font-weight: 700;
-  }
-
-  .footer-description {
-    color: #d1d5db;
-    font-size: 1.125rem;
-    line-height: 1.75;
-    margin: 0;
-  }
-
-  .social-links {
-    display: flex;
-    gap: 1rem;
-  }
-
-  .social-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 3rem;
-    height: 3rem;
-    background: #374151;
-    color: white;
-    border-radius: 50%;
-    text-decoration: none;
-    transition: all 0.3s ease;
-  }
-
-  .social-link:hover {
-    transform: scale(1.1);
-  }
-
-  .social-link-facebook:hover {
-    background: #1877f2;
-  }
-
-  .social-link-instagram:hover {
-    background: #e4405f;
-  }
-
-  .social-link-whatsapp:hover {
-    background: #25d366;
-  }
-
-  .social-icon {
-    width: 1.5rem;
-    height: 1.5rem;
-  }
-
-  .footer-subtitle {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: white;
-    margin: 0 0 1.5rem 0;
-  }
-
-  .footer-links {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .footer-link {
-    display: flex;
-    align-items: center;
-    color: #d1d5db;
-    text-decoration: none;
-    transition: color 0.3s ease;
-  }
-
-  .footer-link:hover {
-    color: white;
-  }
-
-  .footer-link-indicator {
-    width: 0;
-    height: 2px;
-    background: #10b981;
-    margin-right: 0;
-    transition: all 0.3s ease;
-  }
-
-  .footer-link:hover .footer-link-indicator {
-    width: 1rem;
-    margin-right: 0.5rem;
-  }
-
-  .footer-contact-text {
-    color: #d1d5db;
-    font-size: 1.125rem;
-    margin: 0 0 1.5rem 0;
-  }
-
-  .footer-whatsapp-btn {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.75rem 1.5rem;
-    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-    color: white;
-    text-decoration: none;
-    border-radius: 0.5rem;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  }
-
-  .footer-whatsapp-btn:hover {
-    background: linear-gradient(135deg, #047857 0%, #059669 100%);
-    transform: scale(1.05);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  }
-
-  .footer-whatsapp-icon {
-    width: 1.25rem;
-    height: 1.25rem;
-    margin-right: 0.5rem;
-  }
-
-  .footer-bottom {
-    margin-top: 3rem;
-    padding-top: 2rem;
-    border-top: 1px solid #374151;
-    text-align: center;
-  }
-
-  .footer-copyright {
-    color: #9ca3af;
-    margin: 0;
-  }
-
-  /* Responsive */
-  @media (min-width: 768px) {
-    .footer-grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
-
-  @media (max-width: 768px) {
-    .header-container {
-      padding: 1rem;
-    }
-
-    .nav-list {
-      gap: 1.5rem;
-    }
-
-    .footer-container {
-      padding: 0 1rem;
-    }
-
-    .footer-grid {
-      gap: 2rem;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .nav-list {
-      gap: 1rem;
-    }
-
-    .footer-container {
-      padding: 0 0.75rem;
-    }
-  }
-</style>

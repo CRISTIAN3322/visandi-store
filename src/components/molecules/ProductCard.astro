@@ -6,393 +6,204 @@ interface Props {
   id: string;
   name: string;
   price: number;
+  originalPrice?: number;
   images: string[];
   description: string;
+  stock?: number;
+  discount?: number;
+  isNew?: boolean;
+  isFeatured?: boolean;
+  rating?: number;
+  category?: string;
 }
 
-const { id, name, price, images, description } = Astro.props;
+const { 
+  id, 
+  name, 
+  price, 
+  originalPrice, 
+  images, 
+  description, 
+  stock = 10, 
+  discount = 0, 
+  isNew = true, 
+  isFeatured = false,
+  rating = 4.5,
+  category = 'vela'
+} = Astro.props;
 ---
 
-<div class="product-card" data-product-id={id}>
-  <div class="product-images">
+<div class="product-card" data-product-id={id} data-category={category}>
+  <!-- Imagen del producto -->
+  <div class="product-card__images">
     {images.map((image, index) => (
-      <div class={`product-image ${index === 0 ? 'active' : ''}`} data-index={index}>
-        <ProductImage src={image} alt={`${name} - Imagen ${index + 1}`} class="product-img" />
+      <div class={`product-card__image ${index === 0 ? 'product-card__image--active' : ''}`} data-index={index}>
+        <ProductImage src={image} alt={`${name} - Imagen ${index + 1}`} class="product-card__image-content" />
       </div>
     ))}
     
-    <div class="image-gradient"></div>
+    <!-- Overlay con gradiente -->
+    <div class="product-card__gradient"></div>
     
+    <!-- Controles de navegación de imágenes -->
     {images.length > 1 && (
       <>
-        <div class="image-controls">
+        <div class="product-card__controls">
           {images.map((_, index) => (
             <button 
-              class={`image-dot ${index === 0 ? 'active-dot' : ''}`}
+              class={`product-card__dot ${index === 0 ? 'product-card__dot--active' : ''}`}
               data-control={index}
               aria-label={`Ver imagen ${index + 1}`}
             ></button>
           ))}
         </div>
         
-        <button class="nav-button nav-button-prev" aria-label="Imagen anterior">
-          <svg xmlns="http://www.w3.org/2000/svg" class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <button class="product-card__nav product-card__nav--prev" aria-label="Imagen anterior">
+          <svg xmlns="http://www.w3.org/2000/svg" class="product-card__nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
           </svg>
         </button>
         
-        <button class="nav-button nav-button-next" aria-label="Imagen siguiente">
-          <svg xmlns="http://www.w3.org/2000/svg" class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <button class="product-card__nav product-card__nav--next" aria-label="Imagen siguiente">
+          <svg xmlns="http://www.w3.org/2000/svg" class="product-card__nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
           </svg>
         </button>
       </>
     )}
     
-    <div class="badge-new">
-      <span class="badge-new-text">Nuevo</span>
+    <!-- Badges superiores -->
+    <div class="product-card__badges">
+      {discount > 0 && (
+        <div class="product-card__badge product-card__badge--discount">
+          <span class="product-card__badge-text">-{discount}%</span>
+        </div>
+      )}
+      
+      {isNew && (
+        <div class="product-card__badge product-card__badge--new">
+          <span class="product-card__badge-text">Nuevo</span>
+        </div>
+      )}
+      
+      {isFeatured && (
+        <div class="product-card__badge product-card__badge--featured">
+          <span class="product-card__badge-text">⭐ Destacado</span>
+        </div>
+      )}
+    </div>
+    
+    <!-- Botón de favoritos -->
+    <button class="product-card__favorite" aria-label="Agregar a favoritos" data-product-id={id}>
+      <svg xmlns="http://www.w3.org/2000/svg" class="product-card__favorite-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+      </svg>
+    </button>
+    
+    <!-- Botón de vista rápida -->
+    <button class="product-card__quick-view" aria-label="Vista rápida" data-product-id={id}>
+      <svg xmlns="http://www.w3.org/2000/svg" class="product-card__quick-view-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+      </svg>
+    </button>
+    
+    <!-- Indicador de stock -->
+    <div class="product-card__stock-indicator">
+      {stock > 5 ? (
+        <span class="product-card__stock product-card__stock--available">
+          <svg xmlns="http://www.w3.org/2000/svg" class="product-card__stock-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+          En stock
+        </span>
+      ) : stock > 0 ? (
+        <span class="product-card__stock product-card__stock--low">
+          <svg xmlns="http://www.w3.org/2000/svg" class="product-card__stock-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+          </svg>
+          Solo {stock} disponibles
+        </span>
+      ) : (
+        <span class="product-card__stock product-card__stock--out">
+          <svg xmlns="http://www.w3.org/2000/svg" class="product-card__stock-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+          Agotado
+        </span>
+      )}
     </div>
   </div>
   
-  <div class="card-content">
-    <h3 class="product-title">{name}</h3>
-    <p class="product-description">{description}</p>
-    <div class="card-footer">
-      <span class="product-price">${price.toFixed(2)}</span>
+  <!-- Contenido de la tarjeta -->
+  <div class="product-card__content">
+    <!-- Categoría -->
+    <div class="product-card__category">
+      <span class="product-card__category-text">{category}</span>
+    </div>
+    
+    <!-- Título -->
+    <h3 class="product-card__title">{name}</h3>
+    
+    <!-- Rating -->
+    <div class="product-card__rating">
+      <div class="product-card__stars">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <svg 
+            class={`product-card__star ${star <= Math.floor(rating) ? 'product-card__star--filled' : ''} ${star === Math.ceil(rating) && rating % 1 !== 0 ? 'product-card__star--half' : ''}`}
+            fill="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        ))}
+      </div>
+      <span class="product-card__rating-text">({rating})</span>
+    </div>
+    
+    <!-- Descripción -->
+    <p class="product-card__description">{description}</p>
+    
+    <!-- Precios -->
+    <div class="product-card__pricing">
+      <div class="product-card__price-container">
+        <span class="product-card__price">${price.toFixed(2)}</span>
+        {originalPrice && originalPrice > price && (
+          <span class="product-card__original-price">${originalPrice.toFixed(2)}</span>
+        )}
+      </div>
+      {discount > 0 && originalPrice && (
+        <span class="product-card__savings">Ahorras ${(originalPrice - price).toFixed(2)}</span>
+      )}
+    </div>
+    
+    <!-- Footer con botón -->
+    <div class="product-card__footer">
       <Button 
-        text="Agregar al carrito" 
-        type="primary" 
-        onClick={`addToCart('${id}', '${name}', ${price}, '${images[0]}')`}
-        
+        text={stock > 0 ? "Agregar al carrito" : "Agotado"} 
+        type={stock > 0 ? "primary" : "secondary"}
+        onClick={stock > 0 ? `addToCart('${id}', '${name}', ${price}, '${images[0]}')` : ''}
+        fullWidth={true}
       />
     </div>
   </div>
 </div>
 
-<style>
-  /* Estilos mejorados para la tarjeta de producto */
-  .product-card {
-    width: 100%;
-    max-width: 320px;
-    height: 480px;
-    background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
-    border: 1px solid rgba(229, 231, 235, 0.5);
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 
-      0 4px 6px rgba(0, 0, 0, 0.05),
-      0 10px 15px rgba(0, 0, 0, 0.1),
-      0 0 0 1px rgba(255, 255, 255, 0.05);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    backdrop-filter: blur(10px);
-  }
-  
-  .product-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-    border-radius: 20px;
-  }
-  
-  .product-card:hover {
-    box-shadow: 
-      0 20px 25px rgba(0, 0, 0, 0.1),
-      0 10px 10px rgba(0, 0, 0, 0.04),
-      0 0 0 1px rgba(5, 150, 105, 0.1);
-    transform: translateY(-12px) scale(1.02);
-    border-color: rgba(5, 150, 105, 0.2);
-  }
-  
-  .product-card:hover::before {
-    opacity: 1;
-  }
-  
-  /* Contenedor de imágenes mejorado */
-  .product-images {
-    position: relative;
-    height: 240px;
-    overflow: hidden;
-    border-radius: 20px 20px 0 0;
-    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-  }
-  
-  /* Imágenes con efectos mejorados */
-  .product-image {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    transform: scale(1.1);
-  }
-  
-  .product-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    filter: brightness(0.95) contrast(1.05);
-  }
-  
-  .product-card:hover .product-img {
-    transform: scale(1.08);
-    filter: brightness(1) contrast(1.1) saturate(1.1);
-  }
-  
-  .product-image.active {
-    opacity: 1;
-    z-index: 1;
-    transform: scale(1);
-  }
-  
-  /* Gradiente mejorado sobre la imagen */
-  .image-gradient {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      135deg, 
-      rgba(0,0,0,0.1) 0%, 
-      transparent 30%, 
-      transparent 70%, 
-      rgba(0,0,0,0.3) 100%
-    );
-    opacity: 0;
-    transition: all 0.4s ease;
-    z-index: 2;
-  }
-  
-  .product-card:hover .image-gradient {
-    opacity: 1;
-    background: linear-gradient(
-      135deg, 
-      rgba(5, 150, 105, 0.2) 0%, 
-      transparent 30%, 
-      transparent 70%, 
-      rgba(0,0,0,0.4) 100%
-    );
-  }
-  
-  /* Controles de navegación mejorados */
-  .image-controls {
-    position: absolute;
-    bottom: 15px;
-    left: 0;
-    right: 0;
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    z-index: 3;
-  }
-  
-  .image-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.4);
-    border: 2px solid rgba(255, 255, 255, 0.6);
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    backdrop-filter: blur(10px);
-  }
-  
-  .image-dot:hover, .active-dot {
-    background-color: white;
-    border-color: white;
-    transform: scale(1.4);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-  }
-  
-  /* Botones de navegación mejorados */
-  .nav-button {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    cursor: pointer;
-    box-shadow: 
-      0 4px 8px rgba(5, 150, 105, 0.3),
-      0 0 0 2px rgba(255, 255, 255, 0.1);
-    opacity: 0;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 3;
-    backdrop-filter: blur(10px);
-  }
-  
-  .nav-button-prev {
-    left: 12px;
-  }
-  
-  .nav-button-next {
-    right: 12px;
-  }
-  
-  .product-card:hover .nav-button {
-    opacity: 1;
-  }
-  
-  .nav-button:hover {
-    background: linear-gradient(135deg, #047857 0%, #059669 100%);
-    transform: translateY(-50%) scale(1.15);
-    box-shadow: 
-      0 6px 12px rgba(5, 150, 105, 0.4),
-      0 0 0 3px rgba(255, 255, 255, 0.2);
-  }
-  
-  .nav-icon {
-    width: 18px;
-    height: 18px;
-    color: white;
-    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
-  }
-  
-  /* Etiqueta de nuevo mejorada */
-  .badge-new {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    z-index: 3;
-  }
-  
-  .badge-new-text {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
-    color: white;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 6px 12px;
-    border-radius: 15px;
-    box-shadow: 
-      0 4px 8px rgba(245, 158, 11, 0.3),
-      0 0 0 2px rgba(255, 255, 255, 0.2);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-  
-  /* Contenido de la tarjeta mejorado */
-  .card-content {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.9) 100%);
-  }
-  
-  .product-title {
-    font-size: 18px;
-    font-weight: 700;
-    color: #1f2937;
-    margin-bottom: 10px;
-    transition: all 0.3s ease;
-    line-height: 1.3;
-  }
-  
-  .product-card:hover .product-title {
-    color: #059669;
-    transform: translateY(-2px);
-  }
-  
-  .product-description {
-    font-size: 14px;
-    color: #6b7280;
-    margin-bottom: 20px;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    flex-grow: 1;
-    line-height: 1.5;
-  }
-  
-  .card-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: auto;
-    padding-top: 16px;
-    border-top: 1px solid rgba(229, 231, 235, 0.3);
-  }
-  
-  .product-price {
-    font-size: 22px;
-    font-weight: 800;
-    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-shadow: 0 2px 4px rgba(5, 150, 105, 0.1);
-  }
-  
-  /* Estilos mejorados para el botón de agregar al carrito */
-  :global(.add-to-cart-btn) {
-    background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
-    padding: 10px 16px !important;
-    font-size: 13px !important;
-    font-weight: 700 !important;
-    border-radius: 12px !important;
-    color: white !important;
-    box-shadow: 
-      0 4px 8px rgba(5, 150, 105, 0.3),
-      0 0 0 2px rgba(255, 255, 255, 0.1) !important;
-    transform: translateY(0);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    border: none !important;
-    cursor: pointer !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.5px !important;
-    backdrop-filter: blur(10px) !important;
-  }
-  
-  :global(.add-to-cart-btn:hover) {
-    background: linear-gradient(135deg, #047857 0%, #059669 100%) !important;
-    transform: translateY(-3px) scale(1.05);
-    box-shadow: 
-      0 8px 16px rgba(5, 150, 105, 0.4),
-      0 0 0 3px rgba(255, 255, 255, 0.2) !important;
-  }
-  
-  :global(.add-to-cart-btn:active) {
-    transform: translateY(-1px) scale(1.02);
-    box-shadow: 
-      0 4px 8px rgba(5, 150, 105, 0.3),
-      0 0 0 2px rgba(255, 255, 255, 0.1) !important;
-  }
-</style>
 
 <script define:vars={{ id }}>
   document.addEventListener('DOMContentLoaded', () => {
     const productCard = document.querySelector(`.product-card[data-product-id="${id}"]`);
     if (!productCard) return;
     
-    const images = productCard.querySelectorAll('.product-image');
+    const images = productCard.querySelectorAll('.product-card__image');
     const controls = productCard.querySelectorAll('[data-control]');
-    const prevButton = productCard.querySelector('.nav-button-prev');
-    const nextButton = productCard.querySelector('.nav-button-next');
+    const prevButton = productCard.querySelector('.product-card__nav--prev');
+    const nextButton = productCard.querySelector('.product-card__nav--next');
+    const favoriteButton = productCard.querySelector('.product-card__favorite');
+    const quickViewButton = productCard.querySelector('.product-card__quick-view');
     
-    if (images.length <= 1) return;
-    
+    // Funcionalidad de navegación de imágenes
+    if (images.length > 1) {
     let currentIndex = 0;
     
     // Función para actualizar la imagen activa
@@ -403,16 +214,20 @@ const { id, name, price, images, description } = Astro.props;
       
       currentIndex = index;
       
-      // Actualizar imágenes
-      images.forEach(img => img.classList.remove('active'));
-      images[currentIndex].classList.add('active');
+        // Actualizar imágenes con animación
+        images.forEach((img, i) => {
+          img.classList.remove('product-card__image--active');
+          if (i === currentIndex) {
+            setTimeout(() => img.classList.add('product-card__image--active'), 50);
+          }
+        });
       
       // Actualizar controles
       controls.forEach((ctrl, i) => {
         if (i === currentIndex) {
-          ctrl.classList.add('active-dot');
+            ctrl.classList.add('product-card__dot--active');
         } else {
-          ctrl.classList.remove('active-dot');
+            ctrl.classList.remove('product-card__dot--active');
         }
       });
     };
@@ -440,13 +255,13 @@ const { id, name, price, images, description } = Astro.props;
       });
     }
     
-    // Cambio automático de imágenes cada 5 segundos
+      // Cambio automático de imágenes cada 4 segundos
     let autoplayInterval;
     
     const startAutoplay = () => {
       autoplayInterval = setInterval(() => {
         updateActiveImage(currentIndex + 1);
-      }, 5000);
+        }, 4000);
     };
     
     const stopAutoplay = () => {
@@ -456,8 +271,295 @@ const { id, name, price, images, description } = Astro.props;
     // Iniciar autoplay
     startAutoplay();
     
-    // Detener autoplay al pasar el ratón por encima
+      // Detener autoplay al interactuar
     productCard.addEventListener('mouseenter', stopAutoplay);
     productCard.addEventListener('mouseleave', startAutoplay);
+      
+      // Detener autoplay al hacer clic en controles
+      [...controls, prevButton, nextButton].forEach(control => {
+        if (control) {
+          control.addEventListener('click', stopAutoplay);
+          setTimeout(startAutoplay, 2000);
+        }
+      });
+    }
+    
+    // Funcionalidad de favoritos
+    if (favoriteButton) {
+      const isFavorited = localStorage.getItem(`favorite-${id}`) === 'true';
+      if (isFavorited) {
+        favoriteButton.classList.add('product-card__favorite--active');
+      }
+      
+      favoriteButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const isCurrentlyFavorited = favoriteButton.classList.contains('product-card__favorite--active');
+        
+        if (isCurrentlyFavorited) {
+          favoriteButton.classList.remove('product-card__favorite--active');
+          localStorage.removeItem(`favorite-${id}`);
+          showNotification('Producto removido de favoritos', 'info');
+        } else {
+          favoriteButton.classList.add('product-card__favorite--active');
+          localStorage.setItem(`favorite-${id}`, 'true');
+          showNotification('Producto agregado a favoritos', 'success');
+        }
+      });
+    }
+    
+    // Funcionalidad de vista rápida
+    if (quickViewButton) {
+      quickViewButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        // Crear modal de vista rápida
+        createQuickViewModal(productCard);
+      });
+    }
+    
+    // Efecto de zoom en la imagen al hover
+    const imageContainer = productCard.querySelector('.product-card__images');
+    if (imageContainer) {
+      imageContainer.addEventListener('mouseenter', () => {
+        const activeImage = productCard.querySelector('.product-card__image--active img');
+        if (activeImage) {
+          activeImage.style.transform = 'scale(1.1)';
+        }
+      });
+      
+      imageContainer.addEventListener('mouseleave', () => {
+        const activeImage = productCard.querySelector('.product-card__image--active img');
+        if (activeImage) {
+          activeImage.style.transform = 'scale(1)';
+        }
+      });
+    }
   });
+  
+  // Función para crear modal de vista rápida
+  function createQuickViewModal(productCard) {
+    const productId = productCard.getAttribute('data-product-id');
+    const productTitle = productCard.querySelector('.product-card__title').textContent;
+    const productPrice = productCard.querySelector('.product-card__price').textContent;
+    const productDescription = productCard.querySelector('.product-card__description').textContent;
+    const productImages = Array.from(productCard.querySelectorAll('.product-card__image img')).map(img => img.src);
+    
+    // Crear overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'quick-view-overlay';
+    overlay.innerHTML = `
+      <div class="quick-view-modal">
+        <div class="quick-view-modal__header">
+          <h3 class="quick-view-modal__title">${productTitle}</h3>
+          <button class="quick-view-modal__close" aria-label="Cerrar vista rápida">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        
+        <div class="quick-view-modal__content">
+          <div class="quick-view-modal__image">
+            <img src="${productImages[0]}" alt="${productTitle}" class="quick-view-modal__img">
+          </div>
+          
+          <div class="quick-view-modal__details">
+            <div class="quick-view-modal__price">${productPrice}</div>
+            <p class="quick-view-modal__description">${productDescription}</p>
+            
+            <div class="quick-view-modal__actions">
+              <button class="btn btn--primary btn--full" onclick="addToCart('${productId}', '${productTitle}', ${parseFloat(productPrice.replace('$', ''))}, '${productImages[0]}'); closeQuickView();">
+                Agregar al carrito
+              </button>
+              <button class="btn btn--secondary btn--full" onclick="closeQuickView();">
+                Ver detalles completos
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    // Agregar estilos para el modal
+    const style = document.createElement('style');
+    style.textContent = `
+      .quick-view-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(8px);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        animation: fadeIn 0.3s ease-out;
+      }
+      
+      .quick-view-modal {
+        background: white;
+        border-radius: 1rem;
+        max-width: 800px;
+        width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+        animation: slideInUp 0.3s ease-out;
+      }
+      
+      .quick-view-modal__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem;
+        border-bottom: 1px solid #e5e7eb;
+      }
+      
+      .quick-view-modal__title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin: 0;
+      }
+      
+      .quick-view-modal__close {
+        background: none;
+        border: none;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        color: #6b7280;
+        transition: all 0.2s ease;
+      }
+      
+      .quick-view-modal__close:hover {
+        background: #f3f4f6;
+        color: #374151;
+      }
+      
+      .quick-view-modal__close svg {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+      
+      .quick-view-modal__content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        padding: 1.5rem;
+      }
+      
+      .quick-view-modal__image {
+        aspect-ratio: 1;
+        border-radius: 0.75rem;
+        overflow: hidden;
+      }
+      
+      .quick-view-modal__img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      
+      .quick-view-modal__price {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #059669;
+        margin-bottom: 1rem;
+      }
+      
+      .quick-view-modal__description {
+        color: #6b7280;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+      }
+      
+      .quick-view-modal__actions {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      @media (max-width: 768px) {
+        .quick-view-modal__content {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+      }
+      
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      
+      @keyframes slideInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    `;
+    
+    document.head.appendChild(style);
+    document.body.appendChild(overlay);
+    document.body.style.overflow = 'hidden';
+    
+    // Cerrar modal al hacer clic en el overlay
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) {
+        closeQuickView();
+      }
+    });
+    
+    // Cerrar modal con botón
+    overlay.querySelector('.quick-view-modal__close').addEventListener('click', closeQuickView);
+    
+    // Cerrar modal con Escape
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') {
+        closeQuickView();
+      }
+    };
+    document.addEventListener('keydown', handleEscape);
+    
+    // Función para cerrar el modal
+    window.closeQuickView = () => {
+      overlay.style.animation = 'fadeOut 0.3s ease-out forwards';
+      setTimeout(() => {
+        document.body.removeChild(overlay);
+        document.head.removeChild(style);
+        document.body.style.overflow = '';
+        document.removeEventListener('keydown', handleEscape);
+        delete window.closeQuickView;
+      }, 300);
+    };
+  }
+  
+  // Función para mostrar notificaciones
+  function showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.className = `notification notification--${type}`;
+    notification.innerHTML = `
+      <div class="notification__content">
+        <span class="notification__icon">${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'}</span>
+        <span class="notification__message">${message}</span>
+        <button class="notification__close" onclick="this.parentElement.parentElement.remove()">×</button>
+      </div>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Auto-remove after 3 seconds
+    setTimeout(() => {
+      if (notification.parentElement) {
+        notification.remove();
+      }
+    }, 3000);
+  }
 </script>
