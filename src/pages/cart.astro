@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import products from '../data/products.json';
+import { DEFAULT_WHATSAPP_NUMBER } from '../config/whatsapp';
 
 // Función para obtener productos del carrito desde localStorage
 const getCartItems = (): any[] => {
@@ -16,6 +17,7 @@ const cartItems = getCartItems();
 const subtotal = cartItems.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0);
 const shipping = subtotal > 50000 ? 0 : 5000; // Envío gratis sobre $50,000
 const total = subtotal + shipping;
+const defaultWhatsAppNumber = DEFAULT_WHATSAPP_NUMBER;
 ---
 
 <Layout title="Carrito de Compras - Visandi Store">
@@ -32,6 +34,128 @@ const total = subtotal + shipping;
 
       <!-- Contenido principal -->
       <div class="cart-page__content">
+        <!-- Resumen del pedido -->
+        <div class="cart-page__summary-section">
+          <div class="order-summary">
+            <div class="order-summary__header">
+              <h2 class="order-summary__title">
+                <span class="order-summary__icon">📋</span>
+                Resumen del Pedido
+              </h2>
+              <div class="order-summary__count" id="itemCount">
+                {cartItems.length} {cartItems.length === 1 ? 'producto' : 'productos'}
+              </div>
+            </div>
+
+            <!-- Lista de productos como tabla -->
+            <div class="order-summary__products" id="cartProducts">
+              {cartItems.length === 0 ? (
+                <div class="empty-cart">
+                  <div class="empty-cart__icon">🛒</div>
+                  <h3 class="empty-cart__title">Tu carrito está vacío</h3>
+                  <p class="empty-cart__description">Agrega algunos productos para continuar</p>
+                  <a href="/" class="btn btn--primary btn--full">
+                    <span class="btn__icon">🏠</span>
+                    <span class="btn__text">Ir a la tienda</span>
+                  </a>
+                </div>
+              ) : (
+                <table class="cart-table">
+                  <thead>
+                    <tr>
+                      <th>Producto</th>
+                      <th class="th--qty">Cant.</th>
+                      <th class="th--price">Precio</th>
+                      <th class="th--subtotal">Subtotal</th>
+                      <th class="th--actions">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {cartItems.map((item) => (
+                      <tr class="cart-row" data-product-id={item.id}>
+                        <td class="td--name">{item.name}</td>
+                        <td class="td--qty"><input type="number" class="qty-input" data-id={item.id} min="1" value={item.quantity} /></td>
+                        <td class="td--price">${item.price.toLocaleString()}</td>
+                        <td class="td--subtotal">${(item.price * item.quantity).toLocaleString()}</td>
+                        <td class="td--actions"><button class="btn btn--secondary btn--sm row-delete" data-id={item.id}>Eliminar</button></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+
+            <!-- Totales -->
+            {cartItems.length > 0 && (
+              <div class="order-summary__totals">
+                <div class="total-row">
+                  <span class="total-label">Subtotal</span>
+                  <span class="total-value">${subtotal.toLocaleString()}</span>
+                </div>
+                
+                <div class="total-row">
+                  <span class="total-label">Envío</span>
+                  <span class="total-value">
+                    {shipping === 0 ? (
+                      <span class="free-shipping">¡GRATIS!</span>
+                    ) : (
+                      `$${shipping.toLocaleString()}`
+                    )}
+                  </span>
+                </div>
+                
+                {shipping > 0 && (
+                  <div class="shipping-note">
+                    <span class="shipping-note__icon">🚚</span>
+                    <span class="shipping-note__text">
+                      Agrega $${(50000 - subtotal).toLocaleString()} más para envío gratis
+                    </span>
+                  </div>
+                )}
+                
+                <div class="total-row total-row--final">
+                  <span class="total-label">Total</span>
+                  <span class="total-value">${total.toLocaleString()}</span>
+                </div>
+              </div>
+            )}
+
+            <!-- Botón de WhatsApp -->
+            {cartItems.length > 0 && (
+              <div class="order-summary__actions">
+                <div class="order-summary__actions-row">
+                  <button type="button" class="btn btn--secondary" id="clearCart">
+                    Vaciar carrito
+                  </button>
+                  <button type="button" class="btn btn--whatsapp" id="sendWhatsApp">
+                    <span class="btn__icon">📱</span>
+                    <span class="btn__text">Enviar Pedido por WhatsApp</span>
+                  </button>
+                </div>
+                
+                <div class="wa-config">
+                  <label for="whatsappNumber" class="wa-config__label">Número de WhatsApp del distribuidor</label>
+                  <input 
+                    type="tel"
+                    id="whatsappNumber"
+                    class="form-input wa-config__input"
+                    placeholder="Ej: 573001234567"
+                  >
+                  <div class="wa-config__help">Ingresa el número donde recibes pedidos por WhatsApp</div>
+                </div>
+
+                <div class="payment-info">
+                  <div class="payment-info__icon">💳</div>
+                  <div class="payment-info__text">
+                    <strong>Métodos de pago:</strong><br>
+                    Efectivo, Transferencia, Nequi, Daviplata
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+        
         <!-- Formulario de datos del cliente -->
         <div class="cart-page__form-section">
           <div class="form-card">
@@ -73,7 +197,9 @@ const total = subtotal + shipping;
                     id="phone" 
                     name="phone" 
                     class="form-input" 
-                    placeholder="Ej: 300 123 4567"
+                    placeholder="Ej: 3001234567"
+                    maxlength="10"
+                    inputmode="numeric"
                     required
                   >
                   <div class="form-error" id="phoneError"></div>
@@ -147,120 +273,38 @@ const total = subtotal + shipping;
             </form>
           </div>
         </div>
-
-        <!-- Resumen del pedido -->
-        <div class="cart-page__summary-section">
-          <div class="order-summary">
-            <div class="order-summary__header">
-              <h2 class="order-summary__title">
-                <span class="order-summary__icon">📋</span>
-                Resumen del Pedido
-              </h2>
-              <div class="order-summary__count" id="itemCount">
-                {cartItems.length} {cartItems.length === 1 ? 'producto' : 'productos'}
-              </div>
-            </div>
-
-            <!-- Lista de productos -->
-            <div class="order-summary__products" id="cartProducts">
-              {cartItems.length === 0 ? (
-                <div class="empty-cart">
-                  <div class="empty-cart__icon">🛒</div>
-                  <h3 class="empty-cart__title">Tu carrito está vacío</h3>
-                  <p class="empty-cart__description">Agrega algunos productos para continuar</p>
-                  <a href="/" class="btn btn--primary btn--full">
-                    <span class="btn__icon">🏠</span>
-                    <span class="btn__text">Ir a la tienda</span>
-                  </a>
-                </div>
-              ) : (
-                cartItems.map((item) => (
-                  <div class="cart-item" data-product-id={item.id}>
-                    <div class="cart-item__image">
-                      <img src={item.image} alt={item.name} class="cart-item__img">
-                    </div>
-                    
-                    <div class="cart-item__details">
-                      <h3 class="cart-item__name">{item.name}</h3>
-                      <div class="cart-item__price">${item.price.toLocaleString()}</div>
-                      <div class="cart-item__quantity">
-                        <span class="cart-item__quantity-label">Cantidad:</span>
-                        <span class="cart-item__quantity-value">{item.quantity}</span>
-                      </div>
-                    </div>
-                    
-                    <div class="cart-item__total">
-                      <div class="cart-item__total-label">Subtotal</div>
-                      <div class="cart-item__total-price">${(item.price * item.quantity).toLocaleString()}</div>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-
-            <!-- Totales -->
-            {cartItems.length > 0 && (
-              <div class="order-summary__totals">
-                <div class="total-row">
-                  <span class="total-label">Subtotal</span>
-                  <span class="total-value">${subtotal.toLocaleString()}</span>
-                </div>
-                
-                <div class="total-row">
-                  <span class="total-label">Envío</span>
-                  <span class="total-value">
-                    {shipping === 0 ? (
-                      <span class="free-shipping">¡GRATIS!</span>
-                    ) : (
-                      `$${shipping.toLocaleString()}`
-                    )}
-                  </span>
-                </div>
-                
-                {shipping > 0 && (
-                  <div class="shipping-note">
-                    <span class="shipping-note__icon">🚚</span>
-                    <span class="shipping-note__text">
-                      Agrega $${(50000 - subtotal).toLocaleString()} más para envío gratis
-                    </span>
-                  </div>
-                )}
-                
-                <div class="total-row total-row--final">
-                  <span class="total-label">Total</span>
-                  <span class="total-value">${total.toLocaleString()}</span>
-                </div>
-              </div>
-            )}
-
-            <!-- Botón de WhatsApp -->
-            {cartItems.length > 0 && (
-              <div class="order-summary__actions">
-                <button type="button" class="btn btn--whatsapp btn--full" id="sendWhatsApp">
-                  <span class="btn__icon">📱</span>
-                  <span class="btn__text">Enviar Pedido por WhatsApp</span>
-                </button>
-                
-                <div class="payment-info">
-                  <div class="payment-info__icon">💳</div>
-                  <div class="payment-info__text">
-                    <strong>Métodos de pago:</strong><br>
-                    Efectivo, Transferencia, Nequi, Daviplata
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
       </div>
+      
+      <!-- CTA inferior WhatsApp -->
+      {cartItems.length > 0 && (
+        <div class="page-bottom-cta">
+          <button type="button" class="btn btn--whatsapp btn--full" id="sendWhatsAppBottom">
+            <span class="btn__icon">📱</span>
+            <span class="btn__text">Enviar Pedido por WhatsApp</span>
+          </button>
+        </div>
+      )}
     </div>
   </main>
+  
+  <!-- Botones flotantes -->
+  <div class="fab-container">
+    <button class="fab fab--whatsapp" id="fabWhatsApp" aria-label="Enviar pedido por WhatsApp">
+      <span class="fab__icon">💬</span>
+    </button>
+  </div>
 </Layout>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
+    const CONFIG_DEFAULT_WA = "{defaultWhatsAppNumber}";
     const form = document.getElementById('customerForm');
     const sendWhatsAppBtn = document.getElementById('sendWhatsApp');
+    const clearCartBtn = document.getElementById('clearCart');
+    const sendWhatsAppBottomBtn = document.getElementById('sendWhatsAppBottom');
+    const fabWhatsAppBtn = document.getElementById('fabWhatsApp');
+    const fabCartCount = document.getElementById('fabCartCount');
+    const whatsappNumberInput = document.getElementById('whatsappNumber') as HTMLInputElement | null;
     const cartProducts = document.getElementById('cartProducts');
     const itemCount = document.getElementById('itemCount');
 
@@ -282,46 +326,120 @@ const total = subtotal + shipping;
           `;
         }
         if (itemCount) {
-          itemCount.textContent = '0 productos';
+          itemCount.textContent = '0 unidades';
         }
         if (sendWhatsAppBtn) {
           sendWhatsAppBtn.style.display = 'none';
         }
+        const bottomBtn = document.getElementById('sendWhatsAppBottom');
+        if (bottomBtn) {
+          (bottomBtn as HTMLButtonElement).style.display = 'none';
+        }
+      if (fabCartCount) {
+        fabCartCount.textContent = '0';
+      }
+      const headerBadgeZero = document.getElementById('headerCartCount');
+      if (headerBadgeZero) headerBadgeZero.textContent = '0';
         return;
       }
 
-      // Actualizar contador
+      // Actualizar contador (total de unidades)
+      const totalUnitsInit = cart.reduce((s: number, it: any) => s + (it.quantity || 0), 0);
       if (itemCount) {
-        itemCount.textContent = `${cart.length} ${cart.length === 1 ? 'producto' : 'productos'}`;
+        itemCount.textContent = `${totalUnitsInit} ${totalUnitsInit === 1 ? 'unidad' : 'unidades'}`;
       }
+      if (fabCartCount) {
+        fabCartCount.textContent = String(totalUnitsInit);
+      }
+      const headerBadgeInit = document.getElementById('headerCartCount');
+      if (headerBadgeInit) headerBadgeInit.textContent = String(totalUnitsInit);
       
-      // Mostrar productos
+      // Mostrar productos (tabla)
       if (cartProducts) {
-        cartProducts.innerHTML = cart.map((item: any) => `
-          <div class="cart-item" data-product-id="${item.id}">
-            <div class="cart-item__image">
-              <img src="${item.image}" alt="${item.name}" class="cart-item__img">
-            </div>
-            
-            <div class="cart-item__details">
-              <h3 class="cart-item__name">${item.name}</h3>
-              <div class="cart-item__price">$${item.price.toLocaleString()}</div>
-              <div class="cart-item__quantity">
-                <span class="cart-item__quantity-label">Cantidad:</span>
-                <span class="cart-item__quantity-value">${item.quantity}</span>
-              </div>
-            </div>
-            
-            <div class="cart-item__total">
-              <div class="cart-item__total-label">Subtotal</div>
-              <div class="cart-item__total-price">$${(item.price * item.quantity).toLocaleString()}</div>
-            </div>
-          </div>
-        `).join('');
+        cartProducts.innerHTML = `
+          <table class="cart-table">
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th class="th--qty">Cant.</th>
+                <th class="th--price">Precio</th>
+                <th class="th--subtotal">Subtotal</th>
+                <th class="th--actions">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${cart.map((item: any) => `
+                <tr class="cart-row" data-product-id="${item.id}">
+                  <td class="td--name">${item.name}</td>
+                  <td class="td--qty"><input type="number" class="qty-input" data-id="${item.id}" min="1" value="${item.quantity}" /></td>
+                  <td class="td--price">$${item.price.toLocaleString()}</td>
+                  <td class="td--subtotal">$${(item.price * item.quantity).toLocaleString()}</td>
+                  <td class="td--actions"><button class="btn btn--secondary btn--sm row-delete" data-id="${item.id}">Eliminar</button></td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        `;
+
+        // Listeners para cambios de cantidad
+        cartProducts.querySelectorAll('.qty-input').forEach((input: any) => {
+          input.addEventListener('change', (e: any) => {
+            const id = e.target.getAttribute('data-id');
+            let qty = parseInt(e.target.value, 10);
+            if (isNaN(qty) || qty < 1) qty = 1;
+            e.target.value = String(qty);
+            const current = JSON.parse(localStorage.getItem('shopping-cart') || '[]');
+            const idx = current.findIndex((it: any) => String(it.id) === String(id));
+            if (idx !== -1) {
+              current[idx].quantity = qty;
+              localStorage.setItem('shopping-cart', JSON.stringify(current));
+              // Recalcular fila
+              const row = e.target.closest('tr');
+              const subtotalCell = row?.querySelector('.td--subtotal');
+              if (subtotalCell) {
+                subtotalCell.textContent = `$${(current[idx].price * qty).toLocaleString()}`;
+              }
+              // Recalcular totales
+              updateTotals(current);
+              // Actualizar contador
+              const totalUnits = current.reduce((s: number, it: any) => s + (it.quantity || 0), 0);
+              if (itemCount) {
+                itemCount.textContent = `${totalUnits} ${totalUnits === 1 ? 'unidad' : 'unidades'}`;
+              }
+              const headerBadge = document.getElementById('headerCartCount');
+              if (headerBadge) headerBadge.textContent = String(totalUnits);
+              if (fabCartCount) fabCartCount.textContent = String(current.length);
+            }
+          });
+        });
+
+        // Listeners para eliminar fila
+        cartProducts.querySelectorAll('.row-delete').forEach((btn: any) => {
+          btn.addEventListener('click', (e: any) => {
+            const id = e.target.getAttribute('data-id');
+            let current = JSON.parse(localStorage.getItem('shopping-cart') || '[]');
+            current = current.filter((it: any) => String(it.id) !== String(id));
+            localStorage.setItem('shopping-cart', JSON.stringify(current));
+            loadCartProducts();
+            updateTotals(current);
+            const totalUnits = current.reduce((s: number, it: any) => s + (it.quantity || 0), 0);
+            if (itemCount) itemCount.textContent = `${totalUnits} ${totalUnits === 1 ? 'unidad' : 'unidades'}`;
+            const headerBadge = document.getElementById('headerCartCount');
+            if (headerBadge) headerBadge.textContent = String(totalUnits);
+            if (fabCartCount) fabCartCount.textContent = String(current.length);
+            showNotification('Producto eliminado del carrito', 'success');
+          });
+        });
       }
 
       // Actualizar totales
       updateTotals(cart);
+    }
+
+    // Cargar número de WhatsApp guardado
+    const savedWa = localStorage.getItem('whatsapp-number');
+    if (savedWa && whatsappNumberInput) {
+      whatsappNumberInput.value = savedWa;
     }
 
     // Actualizar totales
@@ -371,11 +489,11 @@ const total = subtotal + shipping;
         isValid = false;
       }
 
-      // Validar teléfono
+      // Validar teléfono: máximo 10 dígitos numéricos
       const phone = formData.get('phone') as string;
-      const phoneRegex = /^[0-9\s\+\-\(\)]{10,15}$/;
-      if (!phone?.trim() || !phoneRegex.test(phone.trim())) {
-        showError('phone', 'Ingresa un número de teléfono válido');
+      const digits = (phone || '').replace(/\D/g, '');
+      if (!digits || digits.length > 10) {
+        showError('phone', 'Ingresa hasta 10 dígitos numéricos');
         isValid = false;
       }
 
@@ -427,6 +545,12 @@ const total = subtotal + shipping;
         return;
       }
 
+      // Obtener número de WhatsApp del distribuidor (sin validar, permitir cualquiera)
+      let distributorNumber = (whatsappNumberInput?.value || localStorage.getItem('whatsapp-number') || CONFIG_DEFAULT_WA || '').trim();
+      if (whatsappNumberInput?.value) {
+        localStorage.setItem('whatsapp-number', distributorNumber);
+      }
+
       const formData = new FormData(form as HTMLFormElement);
       
       // Crear mensaje
@@ -471,8 +595,8 @@ const total = subtotal + shipping;
       message += '¡Gracias por tu pedido! 🎉\n';
       message += 'Te contactaremos pronto para confirmar los detalles.';
 
-      // Número de WhatsApp (reemplazar con el número real)
-      const whatsappNumber = '573001234567'; // Cambiar por el número real
+      // Número de WhatsApp dinámico (localStorage / input)
+      const whatsappNumber = distributorNumber;
       const encodedMessage = encodeURIComponent(message);
       const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
       
@@ -484,6 +608,22 @@ const total = subtotal + shipping;
 
     // Event listeners
     sendWhatsAppBtn?.addEventListener('click', sendToWhatsApp);
+    clearCartBtn?.addEventListener('click', () => {
+      localStorage.removeItem('shopping-cart');
+      showNotification('Carrito vaciado', 'success');
+      loadCartProducts();
+      // Reset totales y contador
+      const totalElements = document.querySelectorAll('.total-value');
+      if (totalElements.length >= 3) {
+        totalElements[0].textContent = '$0';
+        totalElements[1].textContent = '$5,000';
+        totalElements[2].textContent = '$5,000';
+      }
+      if (itemCount) itemCount.textContent = '0 productos';
+      if (fabCartCount) fabCartCount.textContent = '0';
+    });
+    sendWhatsAppBottomBtn?.addEventListener('click', sendToWhatsApp);
+    fabWhatsAppBtn?.addEventListener('click', sendToWhatsApp);
 
     // Cargar productos al inicio
     loadCartProducts();
@@ -510,3 +650,209 @@ const total = subtotal + shipping;
     }
   });
 </script>
+
+<style>
+  .cart-page {
+    background: #0e0f12;
+    min-height: 100vh;
+    padding: 24px 0 48px;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+
+  /* Header */
+  .cart-page__header {
+    margin: 8px 0 24px;
+    text-align: left;
+  }
+
+  .cart-page__title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #f5f7fb;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    margin: 0 0 8px;
+  }
+
+  .cart-page__icon {
+    font-size: 28px;
+  }
+
+  .cart-page__subtitle {
+    color: #aab2c8;
+    margin: 0;
+    font-size: 14px;
+  }
+
+  /* Layout */
+  .cart-page__content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .cart-page__form-section .form-card,
+  .order-summary {
+    background: #151821;
+    border: 1px solid #232837;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  }
+
+  .form-card { padding: 18px; }
+  .order-summary { padding: 16px; position: sticky; top: 16px; }
+
+  /* Formulario */
+  .form-card__header { margin-bottom: 10px; }
+  .form-card__title {
+    display: flex; align-items: center; gap: 10px;
+    color: #f5f7fb; font-size: 20px; margin: 0;
+  }
+  .form-card__description { color: #98a2b3; font-size: 13px; margin: 6px 0 0; }
+
+  .customer-form { margin-top: 8px; }
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group--full { grid-column: 1 / -1; }
+  .form-label { color: #c6cede; font-size: 13px; display: flex; align-items: center; gap: 8px; }
+  .form-label__icon { font-size: 16px; }
+
+  .form-input {
+    appearance: none;
+    background: #0f1218;
+    border: 1px solid #242a39;
+    color: #e9eef9;
+    border-radius: 10px;
+    padding: 12px 12px;
+    outline: none;
+    transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+  }
+  .form-input:focus { border-color: #3d7cff; box-shadow: 0 0 0 3px rgba(61,124,255,.15); background: #111520; }
+  .form-input--textarea { resize: vertical; }
+  .form-input--error { border-color: #ff626c; box-shadow: 0 0 0 3px rgba(255,98,108,.15); }
+  .form-error { color: #ff8087; font-size: 12px; min-height: 16px; }
+
+  /* Order summary */
+  .order-summary__header { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+  .order-summary__title { display: flex; align-items: center; gap: 8px; color: #f5f7fb; font-size: 18px; margin: 0; }
+  .order-summary__count { color: #9fb1d1; font-size: 13px; }
+
+  .order-summary__products { display: flex; flex-direction: column; gap: 10px; align-items: center; }
+  .cart-table { width: 100%; border-collapse: collapse; background: #0f1218; border: 1px solid #222839; border-radius: 12px; overflow: hidden; max-width: 700px; }
+  .cart-table thead { background: #121622; }
+  .cart-table th, .cart-table td { padding: 14px 16px; text-align: left; }
+  .cart-table th { color: #9fb1d1; font-weight: 700; font-size: 13px; }
+  .cart-table td { color: #e6ecf8; font-size: 14px; border-top: 1px solid #222839; }
+  .th--qty, .td--qty { text-align: center; width: 72px; }
+  .th--price, .td--price { text-align: right; width: 120px; color: #a9b5c9; }
+  .th--subtotal, .td--subtotal { text-align: right; width: 140px; font-weight: 800; }
+  .th--actions, .td--actions { text-align: right; width: 120px; }
+  .td--name { word-break: break-word; }
+  .qty-input { width: 72px; text-align: center; background: #0b0f16; border: 1px solid #2a3346; color: #e9eef9; border-radius: 8px; padding: 6px 8px; }
+
+  .cart-item {
+    display: grid;
+    grid-template-columns: 72px 1fr auto;
+    gap: 12px;
+    align-items: center;
+    background: #0f1218;
+    border: 1px solid #222839;
+    border-radius: 12px;
+    padding: 10px;
+    width: 100%;
+    max-width: 620px;
+  }
+  .cart-item__image { width: 72px; height: 72px; border-radius: 10px; overflow: hidden; background: #0b0d12; border: 1px solid #232a3a; }
+  .cart-item__img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .cart-item__details { display: grid; gap: 4px; align-items: center; justify-items: center; text-align: center; }
+  .cart-item__name { margin: 0; color: #e6ecf8; font-size: 15px; font-weight: 600; }
+  .cart-item__price { color: #98a2b3; font-size: 13px; }
+  .cart-item__quantity { display: flex; align-items: center; gap: 6px; color: #a9b5c9; font-size: 13px; }
+  .cart-item__quantity-label { color: #8f9ab1; }
+  .cart-item__total { text-align: center; }
+  .cart-item__total-label { color: #8fa1bf; font-size: 12px; }
+  .cart-item__total-price { color: #f2f6ff; font-weight: 700; font-size: 15px; }
+
+  .order-summary__totals { margin-top: 10px; border-top: 1px dashed #2a3346; padding-top: 10px; display: grid; gap: 8px; }
+  .total-row { display: flex; justify-content: space-between; color: #dfe7f7; font-size: 14px; }
+  .total-row--final { padding-top: 6px; border-top: 1px solid #2a3346; font-size: 16px; font-weight: 700; }
+  .total-label { color: #9fb1d1; }
+  .free-shipping { color: #4ade80; font-weight: 700; }
+
+  .shipping-note { display: flex; align-items: center; gap: 8px; background: #0d1612; border: 1px solid #193a2b; color: #97e0bb; padding: 8px 10px; border-radius: 10px; }
+  .shipping-note__icon { font-size: 16px; }
+
+  .order-summary__actions { margin-top: 12px; display: grid; gap: 8px; }
+  .order-summary__actions-row { display: flex; gap: 8px; justify-content: space-between; }
+
+  /* Botones */
+  .btn { appearance: none; border: 0; cursor: pointer; border-radius: 10px; padding: 12px 14px; font-weight: 700; color: #0b0d12; display: inline-flex; align-items: center; justify-content: center; gap: 10px; transition: transform .08s ease, filter .2s ease; }
+  .btn--full { width: 100%; }
+  .btn:active { transform: translateY(1px); }
+  .btn__icon { font-size: 18px; }
+
+  .btn--primary { background: linear-gradient(180deg, #ffffff, #cfd8ff); color: #0b0d12; box-shadow: 0 6px 14px rgba(172, 187, 255, 0.25); }
+  .btn--primary:hover { filter: brightness(1.02); }
+
+  .btn--whatsapp { background: linear-gradient(180deg, #25d366, #1ab855); color: #07150f; box-shadow: 0 6px 14px rgba(37, 211, 102, 0.25); }
+  .btn--whatsapp:hover { filter: brightness(1.03); }
+  .btn--secondary { background: #121622; color: #cdd7ee; border: 1px solid #2a3346; }
+  .btn--secondary:hover { filter: brightness(1.02); }
+
+  /* Estado vacío */
+  .empty-cart { text-align: center; padding: 18px; background: #0f1218; border: 1px dashed #263044; border-radius: 12px; }
+  .empty-cart__icon { font-size: 40px; margin-bottom: 8px; }
+  .empty-cart__title { color: #e9eef9; margin: 0 0 6px; font-size: 18px; }
+  .empty-cart__description { color: #9fb1d1; margin: 0 0 10px; font-size: 13px; }
+
+  /* Notificaciones */
+  .notification { position: fixed; right: 16px; bottom: 16px; z-index: 1000; }
+  .notification__content { display: flex; align-items: center; gap: 10px; background: #121721; border: 1px solid #2a3346; padding: 10px 12px; border-radius: 12px; color: #e9eef9; box-shadow: 0 10px 24px rgba(0,0,0,.35); }
+  .notification__icon { font-size: 18px; }
+  .notification__message { font-size: 14px; }
+  .notification__close { background: transparent; color: #9fb1d1; border: 0; font-size: 18px; line-height: 1; cursor: pointer; }
+  .notification--success .notification__content { border-color: #1d3e2e; background: #0d1612; color: #b0f1d1; }
+  .notification--error .notification__content { border-color: #3a1e26; background: #1a0f13; color: #ffc4cb; }
+  .notification--info .notification__content { border-color: #23324b; background: #0f1420; color: #cddcff; }
+
+  /* Config WA */
+  .wa-config { display: grid; gap: 6px; margin-top: 6px; }
+  .wa-config__label { color: #9fb1d1; font-size: 12px; }
+  .wa-config__help { color: #7f8aa3; font-size: 12px; }
+
+  /* Responsivo */
+  @media (max-width: 980px) {
+    .cart-page__content { grid-template-columns: 1fr; }
+    .order-summary { position: static; top: auto; }
+  }
+
+  @media (max-width: 580px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .cart-table th, .cart-table td { padding: 10px; font-size: 13px; }
+    .order-summary__actions-row { flex-direction: column; }
+  }
+
+  /* CTA inferior */
+  .page-bottom-cta { margin-top: 18px; }
+
+  /* FABs */
+  .fab-container { position: fixed; right: 16px; bottom: 16px; display: grid; gap: 10px; z-index: 1010; }
+  .fab { width: 54px; height: 54px; border-radius: 50%; border: 0; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 8px 24px rgba(0,0,0,.35); transition: transform .1s ease, filter .2s ease; }
+  .fab:active { transform: translateY(1px); }
+  .fab__icon { font-size: 22px; }
+  .fab--whatsapp { background: linear-gradient(180deg, #25d366, #1ab855); color: #07150f; }
+  .fab--cart { position: relative; background: linear-gradient(180deg, #ffffff, #cfd8ff); color: #0b0d12; }
+  .fab__badge { position: absolute; top: -6px; right: -6px; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; background: #ef4444; color: #fff; font-weight: 800; font-size: 12px; display: inline-flex; align-items: center; justify-content: center; border: 2px solid #0e0f12; }
+</style>

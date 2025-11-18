@@ -154,6 +154,10 @@ const { phoneNumber } = Astro.props;
         cartToggle.style.animation = 'cartBounce 0.4s ease';
       }, 10);
     }
+
+    // Actualizar badge del header
+    const headerBadge = document.getElementById('headerCartCount');
+    if (headerBadge) headerBadge.textContent = String(totalItems);
   }
   
   // Función para vaciar el carrito

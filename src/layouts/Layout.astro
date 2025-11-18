@@ -1,4 +1,6 @@
 ---
+import { DEFAULT_WHATSAPP_NUMBER } from '../config/whatsapp';
+
 interface Props {
   title: string;
   description?: string;
@@ -24,6 +26,24 @@ const { title, description = 'Tienda online con sistema de pedidos por WhatsApp'
     <link rel="stylesheet" href="/src/styles/pages.css">
     <link rel="stylesheet" href="/src/styles/accessibility.css">
     <link rel="stylesheet" href="/src/styles/performance.css">
+    <style>
+      /* FABs globales para usar también en Inicio */
+      .fab-container { position: fixed; right: calc(16px + env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); display: grid; gap: 10px; z-index: 1010; }
+      .fab { width: 56px; height: 56px; border-radius: 50%; border: 0; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 10px 26px rgba(0,0,0,.35); transition: transform .12s ease, filter .2s ease, box-shadow .2s ease; }
+      .fab:hover { transform: translateY(-2px); box-shadow: 0 14px 34px rgba(0,0,0,.45); }
+      .fab:active { transform: translateY(0); }
+      .fab__icon { font-size: 22px; }
+      .fab--whatsapp { background: linear-gradient(180deg, #25d366, #1ab855); color: #07150f; animation: fabPulse 2.8s ease-in-out infinite; }
+      .fab--cart { position: relative; background: linear-gradient(180deg, #ffffff, #cfd8ff); color: #0b0d12; }
+      .fab__badge { position: absolute; top: -6px; right: -6px; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; background: #ef4444; color: #fff; font-weight: 800; font-size: 12px; display: inline-flex; align-items: center; justify-content: center; border: 2px solid #0e0f12; }
+      @keyframes fabPulse {
+        0%, 100% { box-shadow: 0 10px 26px rgba(0,0,0,.35), 0 0 0 0 rgba(37, 211, 102, 0.0); }
+        50% { box-shadow: 0 12px 30px rgba(0,0,0,.45), 0 0 0 10px rgba(37, 211, 102, 0.12); }
+      }
+      @media (max-width: 480px) {
+        .fab { width: 54px; height: 54px; }
+      }
+      .header__cart-badge { margin-left: 6px; background: #ef4444; color: #fff; border-radius: 999px; padding: 2px 6px; font-size: 12px; font-weight: 800; line-height: 1; vertical-align: middle; }
     </style>
   </head>
   <body>
@@ -51,6 +71,7 @@ const { title, description = 'Tienda online con sistema de pedidos por WhatsApp'
               <a href="/cart" class="header__nav-link">
                 <span class="header__nav-icon">🛒</span>
                 Carrito
+                <span id="headerCartCount" class="header__cart-badge">0</span>
                 <span class="header__nav-underline"></span>
               </a>
             </li>
@@ -132,7 +153,7 @@ const { title, description = 'Tienda online con sistema de pedidos por WhatsApp'
           <div class="footer__section">
             <h3 class="footer__subtitle">Contáctanos</h3>
             <p class="footer__contact-text">¿Tienes preguntas? Escríbenos por WhatsApp y te responderemos al instante.</p>
-            <a href="https://wa.me/573045428015" class="footer__whatsapp-btn btn btn--primary">
+            <a href={`https://wa.me/${DEFAULT_WHATSAPP_NUMBER}`} class="footer__whatsapp-btn btn btn--primary">
               <svg class="footer__whatsapp-icon" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M20.448 3.538a11.996 11.996 0 00-8.53-3.526C5.361.012 0 5.373 0 11.93c0 2.126.547 4.178 1.595 6.004L0 24l6.281-1.646a11.946 11.946 0 005.723 1.456h.006c6.554 0 11.917-5.363 11.917-11.92 0-3.181-1.242-6.18-3.479-8.352zM11.93 21.782h-.004a9.932 9.932 0 01-5.055-1.385l-.363-.215-3.759.986 1.004-3.665-.236-.375a9.923 9.923 0 01-1.524-5.26c0-5.445 4.435-9.88 9.886-9.88a9.87 9.87 0 017.006 2.906 9.872 9.872 0 012.867 7.01c-.004 5.447-4.436 9.878-9.822 9.878z"></path>
               </svg>
@@ -146,4 +167,16 @@ const { title, description = 'Tienda online con sistema de pedidos por WhatsApp'
       </div>
     </footer>
   </body>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const badge = document.getElementById('headerCartCount');
+      const update = () => {
+        const cart = JSON.parse(localStorage.getItem('shopping-cart') || '[]');
+        const totalUnits = Array.isArray(cart) ? cart.reduce((s, it) => s + (it.quantity || 0), 0) : 0;
+        if (badge) badge.textContent = String(totalUnits || 0);
+      };
+      update();
+      window.addEventListener('storage', (e) => { if (e.key === 'shopping-cart') update(); });
+    });
+  </script>
 </html>
