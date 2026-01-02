@@ -1,17 +1,9 @@
 ---
 import Button from '../atoms/Button.astro';
-import type { CartItem } from '../../types/Product';
-
-interface Props {
-  phoneNumber: string;
-}
-
-const { phoneNumber } = Astro.props;
 ---
 
 <div class="shopping-cart">
   <div class="shopping-cart__header">
-    <!-- Elementos decorativos de fondo -->
     <div class="shopping-cart__decoration">
       <div class="shopping-cart__decoration-circle shopping-cart__decoration-circle--1"></div>
       <div class="shopping-cart__decoration-circle shopping-cart__decoration-circle--2"></div>
@@ -52,7 +44,7 @@ const { phoneNumber } = Astro.props;
     </div>
   </div>
   
-  <div class="shopping-cart__footer">
+  <div class="shopping-cart__footer hidden" id="cartFooter">
     <div class="shopping-cart__total-card">
       <div class="shopping-cart__total-row">
         <span class="shopping-cart__total-label">Total a Pagar:</span>
@@ -81,212 +73,485 @@ const { phoneNumber } = Astro.props;
   </div>
 </div>
 
-<a href="/cart" class="shopping-cart-toggle" id="cartToggle">
-  <div class="shopping-cart-toggle__icon-container">
-    <svg xmlns="http://www.w3.org/2000/svg" class="shopping-cart-toggle__icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-    </svg>
-    <span class="shopping-cart-toggle__count cart-count">0</span>
-  </div>
-  <div class="shopping-cart-toggle__tooltip">
-    Ver Carrito
-  </div>
-</a>
-
-<div class="shopping-cart-overlay cart-overlay hidden"></div>
-
-<script define:vars={{ phoneNumber }}>
-  let cart = [];
+<script>
+  // Importar funciones del servicio (simulado para Astro)
+  // En producción, esto se haría con un bundler o módulos ES
   
-  // Cargar carrito desde localStorage si existe
-  document.addEventListener('DOMContentLoaded', () => {
-    const savedCart = localStorage.getItem('shopping-cart');
-    if (savedCart) {
-      cart = JSON.parse(savedCart);
-      updateCartCount();
-    }
-  });
-  
-  // Función para agregar productos al carrito
-  window.addToCart = (id, name, price, image) => {
-    const existingItem = cart.find(item => item.id === id);
-    
-    if (existingItem) {
-      existingItem.quantity += 1;
-    } else {
-      cart.push({
-        id,
-        name,
-        price,
-        images: [image],
-        quantity: 1
-      });
-    }
-    
-    // Guardar en localStorage y actualizar UI
-    localStorage.setItem('shopping-cart', JSON.stringify(cart));
-    updateCartCount();
-    showNotification(`${name} agregado al carrito`, 'success');
-  };
-  
-  // Actualizar el contador del carrito
-  function updateCartCount() {
-    const cartCountElement = document.querySelector('.cart-count');
-    const cartToggle = document.querySelector('.shopping-cart-toggle');
-    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-    
-    if (cartCountElement) {
-      cartCountElement.textContent = totalItems;
-      
-      // Efecto de bounce cuando hay productos
-      if (totalItems > 0) {
-        cartCountElement.style.animation = 'none';
-        setTimeout(() => {
-          cartCountElement.style.animation = 'bounce 0.6s ease';
-        }, 10);
-      }
-    }
-    
-    // Efecto en el botón cuando se agregan productos
-    if (cartToggle && totalItems > 0) {
-      cartToggle.style.animation = 'none';
-      setTimeout(() => {
-        cartToggle.style.animation = 'cartBounce 0.4s ease';
-      }, 10);
-    }
-
-    // Actualizar badge del header
-    const headerBadge = document.getElementById('headerCartCount');
-    if (headerBadge) headerBadge.textContent = String(totalItems);
-  }
-  
-  // Función para vaciar el carrito
-  window.clearCart = () => {
-    cart = [];
-    localStorage.removeItem('shopping-cart');
-    updateCartCount();
-    showNotification('Carrito vaciado', 'info');
-  };
-  
-  // Función para enviar pedido por WhatsApp
-  window.sendOrderByWhatsApp = () => {
-    if (cart.length === 0) {
-      showNotification('El carrito está vacío', 'error');
-      return;
-    }
-    
-    // Mostrar formulario para datos de contacto
-    const overlay = document.createElement('div');
-    overlay.className = 'fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center';
-    
-    const form = document.createElement('div');
-    form.className = 'bg-white rounded-lg p-6 max-w-md w-full mx-4 shadow-xl';
-    form.innerHTML = `
-      <h3 class="text-xl font-bold mb-4">Completa tus datos</h3>
-      <p class="text-gray-600 mb-4">Para finalizar tu pedido, necesitamos algunos datos:</p>
-      
-      <div class="space-y-4">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Nombre completo</label>
-          <input type="text" id="customer-name" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Ej: Juan Pérez">
-        </div>
-        
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Dirección de entrega</label>
-          <input type="text" id="customer-address" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Ej: Calle 123 #45-67">
-        </div>
-        
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Teléfono de contacto</label>
-          <input type="tel" id="customer-phone" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Ej: 300 123 4567">
-        </div>
-        
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Notas adicionales (opcional)</label>
-          <textarea id="customer-notes" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" rows="2" placeholder="Instrucciones especiales para la entrega"></textarea>
-        </div>
-      </div>
-      
-      <div class="mt-6 flex space-x-3">
-        <button id="cancel-order" class="flex-1 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-md font-medium transition-colors">Cancelar</button>
-        <button id="confirm-order" class="flex-1 px-4 py-2 bg-primary hover:bg-primary-light text-white rounded-md font-medium transition-colors">Confirmar Pedido</button>
-      </div>
-    `;
-    
-    overlay.appendChild(form);
-    document.body.appendChild(overlay);
-    
-    // Manejar eventos de los botones
-    document.getElementById('cancel-order').addEventListener('click', () => {
-      document.body.removeChild(overlay);
-    });
-    
-    document.getElementById('confirm-order').addEventListener('click', () => {
-      const name = document.getElementById('customer-name').value.trim();
-      const address = document.getElementById('customer-address').value.trim();
-      const phone = document.getElementById('customer-phone').value.trim();
-      const notes = document.getElementById('customer-notes').value.trim();
-      
-      if (!name || !address) {
-        alert('Por favor completa los campos obligatorios');
+  // Definir addToCart globalmente usando el servicio
+  window.addToCart = function(id, name, price, image) {
+    try {
+      const priceNum = typeof price === 'string' ? parseFloat(price) : Number(price);
+      if (isNaN(priceNum)) {
+        console.error('Precio inválido:', price);
         return;
       }
       
-      // Crear mensaje para WhatsApp
-      let message = "*🛒 NUEVO PEDIDO - VISANDI STORE*\n\n";
+      const cartStr = localStorage.getItem('shopping-cart');
+      let cart = cartStr ? JSON.parse(cartStr) : [];
+      if (!Array.isArray(cart)) cart = [];
       
-      // Datos del cliente
-      message += "*DATOS DEL CLIENTE:*\n";
-      message += `👤 Nombre: ${name}\n`;
-      message += `📍 Dirección: ${address}\n`;
-      if (phone) message += `📱 Teléfono: ${phone}\n`;
-      if (notes) message += `📝 Notas: ${notes}\n`;
-      message += "\n";
+      const existingItem = cart.find(item => String(item.id) === String(id));
       
-      // Agregar items
-      message += "*PRODUCTOS:*\n\n";
-      cart.forEach((item, index) => {
-        message += `${index + 1}. *${item.name}*\n`;
-        message += `   • Cantidad: ${item.quantity}\n`;
-        message += `   • Precio unitario: $${item.price.toFixed(2)}\n`;
-        message += `   • Subtotal: $${(item.price * item.quantity).toFixed(2)}\n\n`;
-      });
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        cart.push({
+          id: String(id),
+          name: String(name),
+          price: priceNum,
+          images: [String(image)],
+          quantity: 1
+        });
+      }
       
-      // Agregar total
-      const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-      message += `*💰 TOTAL A PAGAR: $${total.toFixed(2)}*\n\n`;
-      message += "¡Gracias por tu compra! Procesaremos tu pedido lo antes posible.";
+      localStorage.setItem('shopping-cart', JSON.stringify(cart));
+      window.dispatchEvent(new CustomEvent('cartUpdated'));
       
-      // Codificar mensaje para URL
-      const encodedMessage = encodeURIComponent(message);
-      
-      // Cerrar el formulario
-      document.body.removeChild(overlay);
-      
-      // Mostrar notificación
-      showNotification('¡Pedido confirmado! Abriendo WhatsApp...', 'success');
-      
-      // Abrir WhatsApp con el mensaje después de un breve retraso
-      setTimeout(() => {
-        window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');
-      }, 1000);
-    });
+      if (typeof showNotification === 'function') {
+        showNotification(`${name} agregado al carrito`, 'success');
+      }
+    } catch (error) {
+      console.error('Error al agregar producto:', error);
+    }
   };
   
-  // Función para mostrar notificaciones
-  function showNotification(message, type = 'success') {
-    const notification = document.createElement('div');
-    notification.className = `fixed bottom-20 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-lg text-white ${type === 'success' ? 'bg-green-500' : 'bg-red-500'} shadow-lg z-50`;
-    notification.textContent = message;
-    
-    document.body.appendChild(notification);
-    
-    // Eliminar notificación después de 3 segundos
-    setTimeout(() => {
-      notification.classList.add('opacity-0', 'transition-opacity', 'duration-300');
-      setTimeout(() => {
-        document.body.removeChild(notification);
-      }, 300);
-    }, 3000);
+  // Cargar y mostrar carrito
+  function loadCart() {
+    try {
+      const cartStr = localStorage.getItem('shopping-cart');
+      const cart = cartStr ? JSON.parse(cartStr) : [];
+      
+      if (!Array.isArray(cart) || cart.length === 0) {
+        document.querySelector('.shopping-cart__empty')?.classList.remove('hidden');
+        document.querySelector('.shopping-cart__items')?.classList.add('hidden');
+        document.getElementById('cartFooter')?.classList.add('hidden');
+        return;
+      }
+      
+      document.querySelector('.shopping-cart__empty')?.classList.add('hidden');
+      document.querySelector('.shopping-cart__items')?.classList.remove('hidden');
+      document.getElementById('cartFooter')?.classList.remove('hidden');
+      
+      const itemsContainer = document.querySelector('.shopping-cart__items');
+      if (itemsContainer) {
+        itemsContainer.innerHTML = cart.map(item => `
+          <div class="shopping-cart__item">
+            <div class="shopping-cart__item-content">
+              <div class="shopping-cart__item-image-container">
+                <img src="${item.images[0]}" alt="${item.name}" class="shopping-cart__item-image">
+                <span class="shopping-cart__item-quantity-badge">${item.quantity}</span>
+              </div>
+              <div class="shopping-cart__item-details">
+                <h4 class="shopping-cart__item-name">${item.name}</h4>
+                <p class="shopping-cart__item-price">$${Number(item.price).toLocaleString()}</p>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }
+      
+      // Actualizar total
+      const subtotal = cart.reduce((sum, item) => sum + (Number(item.price) * Number(item.quantity)), 0);
+      const shipping = subtotal > 50000 ? 0 : 5000;
+      const total = subtotal + shipping;
+      const totalEl = document.querySelector('.cart-total');
+      if (totalEl) totalEl.textContent = `$${total.toLocaleString()}`;
+    } catch (error) {
+      console.error('Error al cargar carrito:', error);
+    }
   }
+  
+  // Funciones globales
+  window.clearCart = function() {
+    localStorage.removeItem('shopping-cart');
+    window.dispatchEvent(new CustomEvent('cartUpdated'));
+    loadCart();
+    if (typeof showNotification === 'function') {
+      showNotification('Carrito vaciado', 'info');
+    }
+  };
+  
+  window.sendOrderByWhatsApp = function() {
+    try {
+      // Obtener carrito
+      const cartStr = localStorage.getItem('shopping-cart');
+      if (!cartStr) {
+        alert('Tu carrito está vacío');
+        return;
+      }
+      
+      let cart;
+      try {
+        cart = JSON.parse(cartStr);
+      } catch (e) {
+        console.error('Error al parsear carrito:', e);
+        alert('Error al leer el carrito');
+        return;
+      }
+      
+      if (!Array.isArray(cart) || cart.length === 0) {
+        alert('Tu carrito está vacío');
+        return;
+      }
+      
+      // Obtener número de WhatsApp del distribuidor
+      const DEFAULT_WHATSAPP_NUMBER = '573123293314';
+      let distributorNumber = DEFAULT_WHATSAPP_NUMBER;
+      
+      // Intentar obtener del localStorage
+      const saved = localStorage.getItem('whatsapp-number');
+      if (saved && saved.replace(/[^0-9]/g, '').length >= 10) {
+        distributorNumber = saved.replace(/[^0-9]/g, '');
+      }
+      
+      // Crear mensaje personalizado
+      let message = `*🛒 NUEVO PEDIDO - VISANDI STORE*\n\n`;
+      message += `*📦 PRODUCTOS A COMPRAR:*\n\n`;
+      
+      cart.forEach((item, index) => {
+        const itemPrice = Number(item.price) || 0;
+        const itemQuantity = Number(item.quantity) || 0;
+        const itemSubtotal = itemPrice * itemQuantity;
+        
+        message += `${index + 1}. *${String(item.name || 'Producto').replace(/\*/g, '')}*\n`;
+        message += `   • Cantidad: ${itemQuantity}\n`;
+        message += `   • Precio unitario: $${itemPrice.toLocaleString()}\n`;
+        message += `   • Subtotal: $${itemSubtotal.toLocaleString()}\n\n`;
+      });
+      
+      // Calcular totales
+      const subtotal = cart.reduce((sum, item) => {
+        const price = Number(item.price) || 0;
+        const quantity = Number(item.quantity) || 0;
+        return sum + (price * quantity);
+      }, 0);
+      
+      const shipping = subtotal > 50000 ? 0 : 5000;
+      const total = subtotal + shipping;
+      
+      message += `*💰 RESUMEN DEL PEDIDO:*\n`;
+      message += `• Subtotal: $${subtotal.toLocaleString()}\n`;
+      message += `• Envío: ${shipping === 0 ? 'GRATIS' : `$${shipping.toLocaleString()}`}\n`;
+      message += `• *TOTAL A PAGAR: $${total.toLocaleString()}*\n\n`;
+      message += `¡Gracias por tu pedido! 🎉\n`;
+      message += `Te contactaremos pronto para confirmar los detalles.`;
+      
+      // Codificar mensaje y crear URL
+      const encodedMessage = encodeURIComponent(message);
+      const whatsappUrl = `https://wa.me/${distributorNumber}?text=${encodedMessage}`;
+      
+      // Abrir WhatsApp en nueva ventana
+      const whatsappWindow = window.open(whatsappUrl, '_blank');
+      
+      if (!whatsappWindow) {
+        // Si el popup fue bloqueado, mostrar el enlace
+        alert('Por favor, permite ventanas emergentes o copia este enlace:\n' + whatsappUrl);
+        console.error('Popup bloqueado. URL:', whatsappUrl);
+      }
+    } catch (error) {
+      console.error('Error completo al enviar pedido:', error);
+      alert('Error al enviar el pedido: ' + (error instanceof Error ? error.message : 'Error desconocido'));
+    }
+  };
+  
+  // Inicializar
+  document.addEventListener('DOMContentLoaded', () => {
+    loadCart();
+    window.addEventListener('cartUpdated', loadCart);
+  });
 </script>
+
+<style>
+  /* Estilos del carrito lateral - mantener los existentes */
+  .shopping-cart {
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100vh;
+    width: 100%;
+    max-width: 28rem;
+    background: var(--color-background-surface);
+    box-shadow: var(--shadow-2xl);
+    transform: translateX(100%);
+    transition: all var(--transition-slow);
+    z-index: var(--z-index-modal);
+    display: flex;
+    flex-direction: column;
+    backdrop-filter: blur(20px);
+    border-left: var(--border-width-1) solid var(--blue-200);
+    overflow-y: auto;
+  }
+
+  .shopping-cart--open {
+    transform: translateX(0);
+  }
+
+  .shopping-cart__header {
+    padding: var(--space-6);
+    border-bottom: var(--border-width-1) solid var(--blue-200);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--gradient-hero);
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .shopping-cart__decoration {
+    position: absolute;
+    inset: 0;
+    opacity: 0.2;
+  }
+
+  .shopping-cart__decoration-circle {
+    position: absolute;
+    background: white;
+    border-radius: var(--border-radius-full);
+    mix-blend-mode: multiply;
+    filter: blur(40px);
+    animation: pulse 4s ease-in-out infinite;
+  }
+
+  .shopping-cart__decoration-circle--1 {
+    top: var(--space-2);
+    left: var(--space-2);
+    width: 4rem;
+    height: 4rem;
+  }
+
+  .shopping-cart__decoration-circle--2 {
+    bottom: var(--space-2);
+    right: var(--space-2);
+    width: 5rem;
+    height: 5rem;
+    animation-delay: 2s;
+  }
+
+  .shopping-cart__header-content {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+  }
+
+  .shopping-cart__icon-container {
+    padding: var(--space-2);
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: var(--border-radius-full);
+    margin-right: var(--space-3);
+    backdrop-filter: blur(10px);
+  }
+
+  .shopping-cart__icon {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .shopping-cart__title {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    margin: 0;
+  }
+
+  .shopping-cart__close {
+    position: relative;
+    z-index: 10;
+    color: white;
+    background: none;
+    border: none;
+    padding: var(--space-2);
+    border-radius: var(--border-radius-full);
+    transition: all var(--transition-normal);
+    cursor: pointer;
+  }
+
+  .shopping-cart__close:hover {
+    color: var(--slate-300);
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+    backdrop-filter: blur(10px);
+  }
+
+  .shopping-cart__close-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .shopping-cart__body {
+    flex: 1;
+    overflow-y: auto;
+    background: linear-gradient(180deg, var(--color-background-primary) 0%, var(--color-background-surface) 100%);
+  }
+
+  .shopping-cart__empty {
+    text-align: center;
+    padding: var(--space-16) var(--space-6);
+  }
+
+  .shopping-cart__empty-icon-container {
+    width: 6rem;
+    height: 6rem;
+    margin: 0 auto var(--space-6);
+    background: linear-gradient(135deg, var(--blue-100) 0%, var(--blue-200) 100%);
+    border-radius: var(--border-radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .shopping-cart__empty-icon {
+    width: 3rem;
+    height: 3rem;
+    color: var(--color-primary);
+  }
+
+  .shopping-cart__empty-title {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin: 0 0 var(--space-3) 0;
+  }
+
+  .shopping-cart__empty-description {
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+    margin: 0 0 var(--space-6) 0;
+  }
+
+  .shopping-cart__empty-btn {
+    display: inline-block;
+    margin-top: var(--space-6);
+    padding: var(--space-3) var(--space-6);
+    background: var(--gradient-primary);
+    color: white;
+    text-decoration: none;
+    border-radius: var(--border-radius-full);
+    font-weight: var(--font-weight-medium);
+    transition: all var(--transition-normal);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .shopping-cart__empty-btn:hover {
+    background: linear-gradient(135deg, var(--blue-700) 0%, var(--blue-600) 100%);
+    transform: scale(1.05);
+    box-shadow: var(--shadow-xl);
+  }
+
+  .shopping-cart__items {
+    padding: var(--space-6);
+  }
+
+  .shopping-cart__item {
+    background: var(--color-background-surface);
+    border-radius: var(--border-radius-xl);
+    padding: var(--space-4);
+    box-shadow: var(--shadow-lg);
+    border: var(--border-width-1) solid var(--blue-200);
+    margin-bottom: var(--space-4);
+  }
+
+  .shopping-cart__item-content {
+    display: flex;
+    align-items: center;
+  }
+
+  .shopping-cart__item-image-container {
+    position: relative;
+  }
+
+  .shopping-cart__item-image {
+    width: 5rem;
+    height: 5rem;
+    object-fit: cover;
+    border-radius: var(--border-radius-xl);
+    box-shadow: var(--shadow-md);
+  }
+
+  .shopping-cart__item-quantity-badge {
+    position: absolute;
+    top: -var(--space-1);
+    right: -var(--space-1);
+    background: var(--gradient-primary);
+    color: white;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+    border-radius: var(--border-radius-full);
+    height: 1.25rem;
+    width: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .shopping-cart__item-details {
+    margin-left: var(--space-4);
+    flex: 1;
+  }
+
+  .shopping-cart__item-name {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin: 0 0 var(--space-1) 0;
+  }
+
+  .shopping-cart__item-price {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  .shopping-cart__footer {
+    padding: var(--space-6);
+    border-top: var(--border-width-1) solid var(--blue-200);
+    background: linear-gradient(135deg, var(--color-background-primary) 0%, var(--color-background-surface) 100%);
+  }
+
+  .shopping-cart__total-card {
+    background: var(--color-background-surface);
+    border-radius: var(--border-radius-xl);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-lg);
+    border: var(--border-width-1) solid var(--blue-200);
+    margin-bottom: var(--space-6);
+  }
+
+  .shopping-cart__total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-4);
+  }
+
+  .shopping-cart__total-label {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+  }
+
+  .shopping-cart__total-amount {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .shopping-cart__total-note {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    text-align: center;
+  }
+
+  .shopping-cart__buttons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .hidden {
+    display: none !important;
+  }
+</style>

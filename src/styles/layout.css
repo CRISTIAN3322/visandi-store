@@ -98,6 +98,40 @@
     font-size: var(--font-size-base);
 }
 
+/* Botón del carrito en el header */
+.header__nav-link--cart {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    border-radius: 999px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.header__nav-link--cart:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+    color: white;
+}
+
+.header__nav-link--cart .header__nav-underline {
+    display: none;
+}
+
+.header__nav-text {
+    font-weight: 600;
+}
+
+.header__nav-link--cart .header__nav-icon {
+    font-size: 1.25rem;
+    margin-right: 0;
+}
+
 
 /* === FOOTER === */
 

@@ -1120,7 +1120,7 @@
 .shopping-cart-toggle {
     position: fixed;
     bottom: var(--space-6);
-    right: var(--space-6);
+    right: 20px;
     background: var(--gradient-primary);
     color: white;
     padding: var(--space-5);
@@ -1315,7 +1315,7 @@
     }
     .shopping-cart-toggle {
         bottom: var(--space-4);
-        right: var(--space-4);
+        right: 20px;
         width: 56px;
         height: 56px;
     }
@@ -1332,7 +1332,7 @@
 @media (max-width: 480px) {
     .shopping-cart-toggle {
         bottom: var(--space-3);
-        right: var(--space-3);
+        right: 20px;
         width: 52px;
         height: 52px;
     }

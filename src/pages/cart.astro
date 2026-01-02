@@ -1,29 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import products from '../data/products.json';
+import CartSummary from '../components/organisms/CartSummary.astro';
 import { DEFAULT_WHATSAPP_NUMBER } from '../config/whatsapp';
 
-// Función para obtener productos del carrito desde localStorage
-const getCartItems = (): any[] => {
-  if (typeof window !== 'undefined') {
-    const cart = localStorage.getItem('shopping-cart');
-    return cart ? JSON.parse(cart) : [];
-  }
-  return [];
-};
-
-// Calcular totales
-const cartItems = getCartItems();
-const subtotal = cartItems.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0);
-const shipping = subtotal > 50000 ? 0 : 5000; // Envío gratis sobre $50,000
-const total = subtotal + shipping;
 const defaultWhatsAppNumber = DEFAULT_WHATSAPP_NUMBER;
 ---
 
 <Layout title="Carrito de Compras - Visandi Store">
   <main class="cart-page">
-    <div class="container">
-      <!-- Header de la página -->
+    <div class="cart-page__container">
       <div class="cart-page__header">
         <h1 class="cart-page__title">
           <span class="cart-page__icon">🛒</span>
@@ -32,408 +17,134 @@ const defaultWhatsAppNumber = DEFAULT_WHATSAPP_NUMBER;
         <p class="cart-page__subtitle">Revisa tu pedido y completa tus datos</p>
       </div>
 
-      <!-- Contenido principal -->
       <div class="cart-page__content">
-        <!-- Resumen del pedido -->
-        <div class="cart-page__summary-section">
-          <div class="order-summary">
-            <div class="order-summary__header">
-              <h2 class="order-summary__title">
-                <span class="order-summary__icon">📋</span>
-                Resumen del Pedido
-              </h2>
-              <div class="order-summary__count" id="itemCount">
-                {cartItems.length} {cartItems.length === 1 ? 'producto' : 'productos'}
-              </div>
-            </div>
-
-            <!-- Lista de productos como tabla -->
-            <div class="order-summary__products" id="cartProducts">
-              {cartItems.length === 0 ? (
-                <div class="empty-cart">
-                  <div class="empty-cart__icon">🛒</div>
-                  <h3 class="empty-cart__title">Tu carrito está vacío</h3>
-                  <p class="empty-cart__description">Agrega algunos productos para continuar</p>
-                  <a href="/" class="btn btn--primary btn--full">
-                    <span class="btn__icon">🏠</span>
-                    <span class="btn__text">Ir a la tienda</span>
-                  </a>
-                </div>
-              ) : (
-                <table class="cart-table">
-                  <thead>
-                    <tr>
-                      <th>Producto</th>
-                      <th class="th--qty">Cant.</th>
-                      <th class="th--price">Precio</th>
-                      <th class="th--subtotal">Subtotal</th>
-                      <th class="th--actions">Acciones</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {cartItems.map((item) => (
-                      <tr class="cart-row" data-product-id={item.id}>
-                        <td class="td--name">{item.name}</td>
-                        <td class="td--qty"><input type="number" class="qty-input" data-id={item.id} min="1" value={item.quantity} /></td>
-                        <td class="td--price">${item.price.toLocaleString()}</td>
-                        <td class="td--subtotal">${(item.price * item.quantity).toLocaleString()}</td>
-                        <td class="td--actions"><button class="btn btn--secondary btn--sm row-delete" data-id={item.id}>Eliminar</button></td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
-            </div>
-
-            <!-- Totales -->
-            {cartItems.length > 0 && (
-              <div class="order-summary__totals">
-                <div class="total-row">
-                  <span class="total-label">Subtotal</span>
-                  <span class="total-value">${subtotal.toLocaleString()}</span>
-                </div>
-                
-                <div class="total-row">
-                  <span class="total-label">Envío</span>
-                  <span class="total-value">
-                    {shipping === 0 ? (
-                      <span class="free-shipping">¡GRATIS!</span>
-                    ) : (
-                      `$${shipping.toLocaleString()}`
-                    )}
-                  </span>
-                </div>
-                
-                {shipping > 0 && (
-                  <div class="shipping-note">
-                    <span class="shipping-note__icon">🚚</span>
-                    <span class="shipping-note__text">
-                      Agrega $${(50000 - subtotal).toLocaleString()} más para envío gratis
-                    </span>
-                  </div>
-                )}
-                
-                <div class="total-row total-row--final">
-                  <span class="total-label">Total</span>
-                  <span class="total-value">${total.toLocaleString()}</span>
-                </div>
-              </div>
-            )}
-
-            <!-- Botón de WhatsApp -->
-            {cartItems.length > 0 && (
-              <div class="order-summary__actions">
-                <div class="order-summary__actions-row">
-                  <button type="button" class="btn btn--secondary" id="clearCart">
-                    Vaciar carrito
-                  </button>
-                  <button type="button" class="btn btn--whatsapp" id="sendWhatsApp">
-                    <span class="btn__icon">📱</span>
-                    <span class="btn__text">Enviar Pedido por WhatsApp</span>
-                  </button>
-                </div>
-                
-                <div class="wa-config">
-                  <label for="whatsappNumber" class="wa-config__label">Número de WhatsApp del distribuidor</label>
-                  <input 
-                    type="tel"
-                    id="whatsappNumber"
-                    class="form-input wa-config__input"
-                    placeholder="Ej: 573001234567"
-                  >
-                  <div class="wa-config__help">Ingresa el número donde recibes pedidos por WhatsApp</div>
-                </div>
-
-                <div class="payment-info">
-                  <div class="payment-info__icon">💳</div>
-                  <div class="payment-info__text">
-                    <strong>Métodos de pago:</strong><br>
-                    Efectivo, Transferencia, Nequi, Daviplata
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
+        <div class="cart-page__summary">
+          <CartSummary />
         </div>
         
-        <!-- Formulario de datos del cliente -->
-        <div class="cart-page__form-section">
-          <div class="form-card">
-            <div class="form-card__header">
-              <h2 class="form-card__title">
-                <span class="form-card__icon">👤</span>
+        <div class="cart-page__form">
+          <div class="cart-page__form-card">
+            <div class="cart-page__form-header">
+              <h2 class="cart-page__form-title">
+                <span class="cart-page__form-icon">👤</span>
                 Datos del Cliente
               </h2>
-              <p class="form-card__description">Completa tus datos para procesar el pedido</p>
+              <p class="cart-page__form-description">Completa tus datos para procesar el pedido</p>
             </div>
 
-            <form class="customer-form" id="customerForm">
-              <div class="form-grid">
-                <!-- Nombre completo -->
-                <div class="form-group form-group--full">
-                  <label for="fullName" class="form-label">
-                    <span class="form-label__icon">👤</span>
+            <form class="cart-page__form-form" id="customerForm">
+              <div class="cart-page__form-grid">
+                <div class="cart-page__form-group">
+                  <label for="fullName" class="cart-page__form-label">
+                    <span class="cart-page__form-label-icon">👤</span>
                     Nombre Completo *
                   </label>
                   <input 
                     type="text" 
                     id="fullName" 
                     name="fullName" 
-                    class="form-input" 
+                    class="cart-page__form-input" 
                     placeholder="Ej: Juan Pérez"
                     required
+                    autocomplete="name"
                   >
-                  <div class="form-error" id="fullNameError"></div>
+                  <div class="cart-page__form-error" id="fullNameError"></div>
                 </div>
 
-                <!-- Teléfono -->
-                <div class="form-group">
-                  <label for="phone" class="form-label">
-                    <span class="form-label__icon">📱</span>
+                <div class="cart-page__form-group">
+                  <label for="phone" class="cart-page__form-label">
+                    <span class="cart-page__form-label-icon">📱</span>
                     Teléfono *
                   </label>
                   <input 
                     type="tel" 
                     id="phone" 
                     name="phone" 
-                    class="form-input" 
+                    class="cart-page__form-input" 
                     placeholder="Ej: 3001234567"
-                    maxlength="10"
+                    maxlength="15"
                     inputmode="numeric"
                     required
+                    autocomplete="tel"
                   >
-                  <div class="form-error" id="phoneError"></div>
-                </div>
-
-                <!-- Email -->
-                <div class="form-group">
-                  <label for="email" class="form-label">
-                    <span class="form-label__icon">📧</span>
-                    Email
-                  </label>
-                  <input 
-                    type="email" 
-                    id="email" 
-                    name="email" 
-                    class="form-input" 
-                    placeholder="Ej: juan@email.com"
-                  >
-                  <div class="form-error" id="emailError"></div>
-                </div>
-
-                <!-- Dirección -->
-                <div class="form-group form-group--full">
-                  <label for="address" class="form-label">
-                    <span class="form-label__icon">📍</span>
-                    Dirección de Entrega *
-                  </label>
-                  <textarea 
-                    id="address" 
-                    name="address" 
-                    class="form-input form-input--textarea" 
-                    placeholder="Ej: Calle 123 #45-67, Barrio Centro, Medellín"
-                    rows="3"
-                    required
-                  ></textarea>
-                  <div class="form-error" id="addressError"></div>
-                </div>
-
-                <!-- Ciudad -->
-                <div class="form-group">
-                  <label for="city" class="form-label">
-                    <span class="form-label__icon">🏙️</span>
-                    Ciudad *
-                  </label>
-                  <input 
-                    type="text" 
-                    id="city" 
-                    name="city" 
-                    class="form-input" 
-                    placeholder="Ej: Medellín"
-                    required
-                  >
-                  <div class="form-error" id="cityError"></div>
-                </div>
-
-                <!-- Notas adicionales -->
-                <div class="form-group">
-                  <label for="notes" class="form-label">
-                    <span class="form-label__icon">📝</span>
-                    Notas Adicionales
-                  </label>
-                  <textarea 
-                    id="notes" 
-                    name="notes" 
-                    class="form-input form-input--textarea" 
-                    placeholder="Instrucciones especiales para la entrega..."
-                    rows="2"
-                  ></textarea>
+                  <div class="cart-page__form-error" id="phoneError"></div>
                 </div>
               </div>
+              
             </form>
+            
+            <!-- Botón destacado para enviar pedido -->
+            <div class="cart-page__form-submit">
+              <button type="button" class="cart-page__submit-btn" id="sendWhatsAppFromForm">
+                <span class="cart-page__submit-btn-icon">📱</span>
+                <span class="cart-page__submit-btn-text">Enviar Pedido por WhatsApp</span>
+                <span class="cart-page__submit-btn-arrow">→</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
       
-      <!-- CTA inferior WhatsApp -->
-      {cartItems.length > 0 && (
-        <div class="page-bottom-cta">
-          <button type="button" class="btn btn--whatsapp btn--full" id="sendWhatsAppBottom">
-            <span class="btn__icon">📱</span>
-            <span class="btn__text">Enviar Pedido por WhatsApp</span>
+      <div class="cart-page__actions" id="cartPageActions" style="display: none;">
+        <div class="cart-page__actions-row">
+          <button type="button" class="cart-page__btn cart-page__btn--secondary" id="clearCart">
+            Vaciar carrito
+          </button>
+          <button type="button" class="cart-page__btn cart-page__btn--whatsapp" id="sendWhatsApp">
+            <span class="cart-page__btn-icon">📱</span>
+            <span class="cart-page__btn-text">Enviar Pedido por WhatsApp</span>
           </button>
         </div>
-      )}
+        
+        <div class="cart-page__wa-config">
+          <label for="whatsappNumber" class="cart-page__wa-label">Número de WhatsApp del distribuidor</label>
+          <input 
+            type="tel"
+            id="whatsappNumber"
+            class="cart-page__form-input cart-page__wa-input"
+            placeholder="Ej: 573001234567"
+          >
+          <div class="cart-page__wa-help">Ingresa el número donde recibes pedidos por WhatsApp</div>
+        </div>
+
+        <div class="cart-page__payment-info">
+          <div class="cart-page__payment-icon">💳</div>
+          <div class="cart-page__payment-text">
+            <strong>Métodos de pago:</strong><br>
+            Efectivo, Transferencia, Nequi, Daviplata
+          </div>
+        </div>
+      </div>
     </div>
   </main>
-  
-  <!-- Botones flotantes -->
-  <div class="fab-container">
-    <button class="fab fab--whatsapp" id="fabWhatsApp" aria-label="Enviar pedido por WhatsApp">
-      <span class="fab__icon">💬</span>
-    </button>
-  </div>
 </Layout>
 
-<script>
+<script define:vars={{ defaultWhatsAppNumber }}>
   document.addEventListener('DOMContentLoaded', function() {
-    const CONFIG_DEFAULT_WA = "{defaultWhatsAppNumber}";
+    const CONFIG_DEFAULT_WA = defaultWhatsAppNumber;
     const form = document.getElementById('customerForm');
     const sendWhatsAppBtn = document.getElementById('sendWhatsApp');
+    const sendWhatsAppFromForm = document.getElementById('sendWhatsAppFromForm');
     const clearCartBtn = document.getElementById('clearCart');
-    const sendWhatsAppBottomBtn = document.getElementById('sendWhatsAppBottom');
-    const fabWhatsAppBtn = document.getElementById('fabWhatsApp');
-    const fabCartCount = document.getElementById('fabCartCount');
-    const whatsappNumberInput = document.getElementById('whatsappNumber') as HTMLInputElement | null;
-    const cartProducts = document.getElementById('cartProducts');
-    const itemCount = document.getElementById('itemCount');
+    const whatsappNumberInput = document.getElementById('whatsappNumber');
+    const cartPageActions = document.getElementById('cartPageActions');
 
-    // Cargar productos del carrito desde localStorage
-    function loadCartProducts() {
-      const cart = JSON.parse(localStorage.getItem('shopping-cart') || '[]');
-      if (cart.length === 0) {
-        if (cartProducts) {
-          cartProducts.innerHTML = `
-            <div class="empty-cart">
-              <div class="empty-cart__icon">🛒</div>
-              <h3 class="empty-cart__title">Tu carrito está vacío</h3>
-              <p class="empty-cart__description">Agrega algunos productos para continuar</p>
-              <a href="/" class="btn btn--primary btn--full">
-                <span class="btn__icon">🏠</span>
-                <span class="btn__text">Ir a la tienda</span>
-              </a>
-            </div>
-          `;
+    // Mostrar/ocultar acciones según el carrito
+    function updateCartActions() {
+      try {
+        const cartStr = localStorage.getItem('shopping-cart');
+        const cart = cartStr ? JSON.parse(cartStr) : [];
+        
+        if (cartPageActions) {
+          if (Array.isArray(cart) && cart.length > 0) {
+            cartPageActions.style.display = 'block';
+          } else {
+            cartPageActions.style.display = 'none';
+          }
         }
-        if (itemCount) {
-          itemCount.textContent = '0 unidades';
-        }
-        if (sendWhatsAppBtn) {
-          sendWhatsAppBtn.style.display = 'none';
-        }
-        const bottomBtn = document.getElementById('sendWhatsAppBottom');
-        if (bottomBtn) {
-          (bottomBtn as HTMLButtonElement).style.display = 'none';
-        }
-      if (fabCartCount) {
-        fabCartCount.textContent = '0';
+      } catch (error) {
+        console.error('Error al actualizar acciones:', error);
       }
-      const headerBadgeZero = document.getElementById('headerCartCount');
-      if (headerBadgeZero) headerBadgeZero.textContent = '0';
-        return;
-      }
-
-      // Actualizar contador (total de unidades)
-      const totalUnitsInit = cart.reduce((s: number, it: any) => s + (it.quantity || 0), 0);
-      if (itemCount) {
-        itemCount.textContent = `${totalUnitsInit} ${totalUnitsInit === 1 ? 'unidad' : 'unidades'}`;
-      }
-      if (fabCartCount) {
-        fabCartCount.textContent = String(totalUnitsInit);
-      }
-      const headerBadgeInit = document.getElementById('headerCartCount');
-      if (headerBadgeInit) headerBadgeInit.textContent = String(totalUnitsInit);
-      
-      // Mostrar productos (tabla)
-      if (cartProducts) {
-        cartProducts.innerHTML = `
-          <table class="cart-table">
-            <thead>
-              <tr>
-                <th>Producto</th>
-                <th class="th--qty">Cant.</th>
-                <th class="th--price">Precio</th>
-                <th class="th--subtotal">Subtotal</th>
-                <th class="th--actions">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${cart.map((item: any) => `
-                <tr class="cart-row" data-product-id="${item.id}">
-                  <td class="td--name">${item.name}</td>
-                  <td class="td--qty"><input type="number" class="qty-input" data-id="${item.id}" min="1" value="${item.quantity}" /></td>
-                  <td class="td--price">$${item.price.toLocaleString()}</td>
-                  <td class="td--subtotal">$${(item.price * item.quantity).toLocaleString()}</td>
-                  <td class="td--actions"><button class="btn btn--secondary btn--sm row-delete" data-id="${item.id}">Eliminar</button></td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
-        `;
-
-        // Listeners para cambios de cantidad
-        cartProducts.querySelectorAll('.qty-input').forEach((input: any) => {
-          input.addEventListener('change', (e: any) => {
-            const id = e.target.getAttribute('data-id');
-            let qty = parseInt(e.target.value, 10);
-            if (isNaN(qty) || qty < 1) qty = 1;
-            e.target.value = String(qty);
-            const current = JSON.parse(localStorage.getItem('shopping-cart') || '[]');
-            const idx = current.findIndex((it: any) => String(it.id) === String(id));
-            if (idx !== -1) {
-              current[idx].quantity = qty;
-              localStorage.setItem('shopping-cart', JSON.stringify(current));
-              // Recalcular fila
-              const row = e.target.closest('tr');
-              const subtotalCell = row?.querySelector('.td--subtotal');
-              if (subtotalCell) {
-                subtotalCell.textContent = `$${(current[idx].price * qty).toLocaleString()}`;
-              }
-              // Recalcular totales
-              updateTotals(current);
-              // Actualizar contador
-              const totalUnits = current.reduce((s: number, it: any) => s + (it.quantity || 0), 0);
-              if (itemCount) {
-                itemCount.textContent = `${totalUnits} ${totalUnits === 1 ? 'unidad' : 'unidades'}`;
-              }
-              const headerBadge = document.getElementById('headerCartCount');
-              if (headerBadge) headerBadge.textContent = String(totalUnits);
-              if (fabCartCount) fabCartCount.textContent = String(current.length);
-            }
-          });
-        });
-
-        // Listeners para eliminar fila
-        cartProducts.querySelectorAll('.row-delete').forEach((btn: any) => {
-          btn.addEventListener('click', (e: any) => {
-            const id = e.target.getAttribute('data-id');
-            let current = JSON.parse(localStorage.getItem('shopping-cart') || '[]');
-            current = current.filter((it: any) => String(it.id) !== String(id));
-            localStorage.setItem('shopping-cart', JSON.stringify(current));
-            loadCartProducts();
-            updateTotals(current);
-            const totalUnits = current.reduce((s: number, it: any) => s + (it.quantity || 0), 0);
-            if (itemCount) itemCount.textContent = `${totalUnits} ${totalUnits === 1 ? 'unidad' : 'unidades'}`;
-            const headerBadge = document.getElementById('headerCartCount');
-            if (headerBadge) headerBadge.textContent = String(totalUnits);
-            if (fabCartCount) fabCartCount.textContent = String(current.length);
-            showNotification('Producto eliminado del carrito', 'success');
-          });
-        });
-      }
-
-      // Actualizar totales
-      updateTotals(cart);
     }
 
     // Cargar número de WhatsApp guardado
@@ -442,201 +153,268 @@ const defaultWhatsAppNumber = DEFAULT_WHATSAPP_NUMBER;
       whatsappNumberInput.value = savedWa;
     }
 
-    // Actualizar totales
-    function updateTotals(cart: any[]) {
-      const subtotal = cart.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0);
-      const shipping = subtotal > 50000 ? 0 : 5000;
-      const total = subtotal + shipping;
-
-      // Actualizar elementos de totales si existen
-      const totalElements = document.querySelectorAll('.total-value');
-      if (totalElements.length >= 3) {
-        totalElements[0].textContent = `$${subtotal.toLocaleString()}`;
-        totalElements[1].innerHTML = shipping === 0 ? '<span class="free-shipping">¡GRATIS!</span>' : `$${shipping.toLocaleString()}`;
-        totalElements[2].textContent = `$${total.toLocaleString()}`;
-      }
-
-      // Actualizar nota de envío gratis
-      const shippingNote = document.querySelector('.shipping-note') as HTMLElement;
-      if (shippingNote) {
-        if (shipping > 0) {
-          shippingNote.innerHTML = `
-            <span class="shipping-note__icon">🚚</span>
-            <span class="shipping-note__text">
-              Agrega $${(50000 - subtotal).toLocaleString()} más para envío gratis
-            </span>
-          `;
-          shippingNote.style.display = 'flex';
-        } else {
-          shippingNote.style.display = 'none';
-        }
-      }
-    }
-
     // Validación del formulario
     function validateForm() {
-      const formData = new FormData(form as HTMLFormElement);
+      const fullNameInput = document.getElementById('fullName');
+      const phoneInput = document.getElementById('phone');
       let isValid = true;
 
       // Limpiar errores anteriores
-      document.querySelectorAll('.form-error').forEach(error => error.textContent = '');
-      document.querySelectorAll('.form-input').forEach(input => input.classList.remove('form-input--error'));
+      document.querySelectorAll('.cart-page__form-error').forEach(error => error.textContent = '');
+      document.querySelectorAll('.cart-page__form-input').forEach(input => input.classList.remove('cart-page__form-input--error'));
 
       // Validar nombre
-      const fullName = formData.get('fullName') as string;
-      if (!fullName?.trim() || fullName.trim().length < 2) {
-        showError('fullName', 'El nombre debe tener al menos 2 caracteres');
+      if (!fullNameInput) {
+        showError('fullName', 'Campo no encontrado');
         isValid = false;
-      }
-
-      // Validar teléfono: máximo 10 dígitos numéricos
-      const phone = formData.get('phone') as string;
-      const digits = (phone || '').replace(/\D/g, '');
-      if (!digits || digits.length > 10) {
-        showError('phone', 'Ingresa hasta 10 dígitos numéricos');
-        isValid = false;
-      }
-
-      // Validar email si se proporciona
-      const email = formData.get('email') as string;
-      if (email?.trim()) {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email.trim())) {
-          showError('email', 'Ingresa un email válido');
+      } else {
+        const fullName = fullNameInput.value.trim();
+        if (!fullName || fullName.length < 2) {
+          showError('fullName', 'El nombre debe tener al menos 2 caracteres');
           isValid = false;
         }
       }
 
-      // Validar dirección
-      const address = formData.get('address') as string;
-      if (!address?.trim() || address.trim().length < 10) {
-        showError('address', 'La dirección debe tener al menos 10 caracteres');
+      // Validar teléfono
+      if (!phoneInput) {
+        showError('phone', 'Campo no encontrado');
         isValid = false;
-      }
-
-      // Validar ciudad
-      const city = formData.get('city') as string;
-      if (!city?.trim() || city.trim().length < 2) {
-        showError('city', 'Ingresa una ciudad válida');
-        isValid = false;
+      } else {
+        const phone = phoneInput.value.trim();
+        const digits = phone.replace(/\D/g, '');
+        if (!digits || digits.length < 7) {
+          showError('phone', 'Ingresa un teléfono válido (mínimo 7 dígitos)');
+          isValid = false;
+        }
       }
 
       return isValid;
     }
 
-    function showError(fieldName: string, message: string) {
+    function showError(fieldName, message) {
       const field = document.getElementById(fieldName);
       const errorElement = document.getElementById(fieldName + 'Error');
       
-      if (field) field.classList.add('form-input--error');
+      if (field) field.classList.add('cart-page__form-input--error');
       if (errorElement) errorElement.textContent = message;
     }
 
     // Enviar por WhatsApp
     function sendToWhatsApp() {
+      console.log('=== INICIANDO ENVÍO DE PEDIDO ===');
+      
+      // Validar formulario primero
       if (!validateForm()) {
-        showNotification('Por favor, corrige los errores en el formulario', 'error');
+        console.log('Validación del formulario falló');
+        showNotification('Por favor, completa todos los campos requeridos', 'error');
         return;
       }
 
-      const cart = JSON.parse(localStorage.getItem('shopping-cart') || '[]');
-      if (cart.length === 0) {
-        showNotification('Tu carrito está vacío', 'error');
-        return;
-      }
+      try {
+        // Obtener carrito
+        const cartStr = localStorage.getItem('shopping-cart');
+        console.log('Carrito desde localStorage:', cartStr);
+        
+        if (!cartStr) {
+          showNotification('Tu carrito está vacío', 'error');
+          return;
+        }
+        
+        let cart;
+        try {
+          cart = JSON.parse(cartStr);
+        } catch (e) {
+          console.error('Error al parsear carrito:', e);
+          showNotification('Error al leer el carrito', 'error');
+          return;
+        }
+        
+        if (!Array.isArray(cart) || cart.length === 0) {
+          showNotification('Tu carrito está vacío', 'error');
+          return;
+        }
+        
+        console.log('Productos en el carrito:', cart);
 
-      // Obtener número de WhatsApp del distribuidor (sin validar, permitir cualquiera)
-      let distributorNumber = (whatsappNumberInput?.value || localStorage.getItem('whatsapp-number') || CONFIG_DEFAULT_WA || '').trim();
-      if (whatsappNumberInput?.value) {
-        localStorage.setItem('whatsapp-number', distributorNumber);
-      }
+        // Obtener número de WhatsApp del distribuidor
+        let distributorNumber = CONFIG_DEFAULT_WA;
+        
+        // Intentar obtener del input de WhatsApp (en la sección de acciones)
+        const waInput = document.getElementById('whatsappNumber');
+        if (waInput && waInput.value && waInput.value.trim()) {
+          const inputValue = waInput.value.trim().replace(/[^0-9]/g, '');
+          if (inputValue.length >= 10) {
+            distributorNumber = inputValue;
+            localStorage.setItem('whatsapp-number', distributorNumber);
+            console.log('Número de WhatsApp del input:', distributorNumber);
+          }
+        } else {
+          // Intentar obtener del localStorage
+          const saved = localStorage.getItem('whatsapp-number');
+          if (saved && saved.replace(/[^0-9]/g, '').length >= 10) {
+            distributorNumber = saved.replace(/[^0-9]/g, '');
+            console.log('Número de WhatsApp guardado:', distributorNumber);
+          } else {
+            distributorNumber = CONFIG_DEFAULT_WA;
+            console.log('Usando número de WhatsApp por defecto:', distributorNumber);
+          }
+        }
 
-      const formData = new FormData(form as HTMLFormElement);
-      
-      // Crear mensaje
-      let message = '🛒 *NUEVO PEDIDO - VISANDI STORE* 🛒\n\n';
-      
-      // Datos del cliente
-      message += '👤 *DATOS DEL CLIENTE:*\n';
-      message += `• Nombre: ${formData.get('fullName')}\n`;
-      message += `• Teléfono: ${formData.get('phone')}\n`;
-      if (formData.get('email')) {
-        message += `• Email: ${formData.get('email')}\n`;
-      }
-      message += `• Dirección: ${formData.get('address')}\n`;
-      message += `• Ciudad: ${formData.get('city')}\n`;
-      if (formData.get('notes')) {
-        message += `• Notas: ${formData.get('notes')}\n`;
-      }
-      
-      message += '\n📦 *PRODUCTOS:*\n';
-      cart.forEach((item: any, index: number) => {
-        message += `${index + 1}. ${item.name}\n`;
-        message += `   Cantidad: ${item.quantity}\n`;
-        message += `   Precio: $${item.price.toLocaleString()}\n`;
-        message += `   Subtotal: $${(item.price * item.quantity).toLocaleString()}\n\n`;
-      });
-      
-      // Totales
-      const subtotal = cart.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0);
-      const shipping = subtotal > 50000 ? 0 : 5000;
-      const total = subtotal + shipping;
-      
-      message += '💰 *RESUMEN:*\n';
-      message += `• Subtotal: $${subtotal.toLocaleString()}\n`;
-      message += `• Envío: ${shipping === 0 ? 'GRATIS' : `$${shipping.toLocaleString()}`}\n`;
-      message += `• *TOTAL: $${total.toLocaleString()}*\n\n`;
-      
-      message += '💳 *MÉTODOS DE PAGO:*\n';
-      message += '• Efectivo contra entrega\n';
-      message += '• Transferencia bancaria\n';
-      message += '• Nequi / Daviplata\n\n';
-      
-      message += '¡Gracias por tu pedido! 🎉\n';
-      message += 'Te contactaremos pronto para confirmar los detalles.';
+        // Obtener datos del cliente del formulario
+        const fullNameInput = document.getElementById('fullName');
+        const phoneInput = document.getElementById('phone');
+        
+        if (!fullNameInput || !phoneInput) {
+          console.error('Campos del formulario no encontrados');
+          showNotification('Error: No se encontraron los campos del formulario', 'error');
+          return;
+        }
+        
+        const fullName = fullNameInput.value.trim();
+        const phone = phoneInput.value.trim();
+        
+        console.log('Datos del cliente:', { fullName, phone });
+        
+        if (!fullName || !phone) {
+          showNotification('Por favor, completa todos los campos', 'error');
+          return;
+        }
+        
+        // Crear mensaje personalizado
+        let message = `*🛒 NUEVO PEDIDO - VISANDI STORE*\n\n`;
+        message += `*👤 DATOS DEL CLIENTE:*\n`;
+        message += `• Nombre: ${fullName}\n`;
+        message += `• Teléfono: ${phone}\n\n`;
+        message += `*📦 PRODUCTOS A COMPRAR:*\n\n`;
+        
+        cart.forEach(function(item, index) {
+          const itemPrice = Number(item.price) || 0;
+          const itemQuantity = Number(item.quantity) || 0;
+          const itemSubtotal = itemPrice * itemQuantity;
+          
+          message += `${index + 1}. *${String(item.name || 'Producto').replace(/\*/g, '')}*\n`;
+          message += `   • Cantidad: ${itemQuantity}\n`;
+          message += `   • Precio unitario: $${itemPrice.toLocaleString()}\n`;
+          message += `   • Subtotal: $${itemSubtotal.toLocaleString()}\n\n`;
+        });
+        
+        // Calcular totales
+        const subtotal = cart.reduce(function(sum, item) {
+          const price = Number(item.price) || 0;
+          const quantity = Number(item.quantity) || 0;
+          return sum + (price * quantity);
+        }, 0);
+        
+        const shipping = subtotal > 50000 ? 0 : 5000;
+        const total = subtotal + shipping;
+        
+        message += `*💰 RESUMEN DEL PEDIDO:*\n`;
+        message += `• Subtotal: $${subtotal.toLocaleString()}\n`;
+        message += `• Envío: ${shipping === 0 ? 'GRATIS' : `$${shipping.toLocaleString()}`}\n`;
+        message += `• *TOTAL A PAGAR: $${total.toLocaleString()}*\n\n`;
+        message += `¡Gracias por tu pedido! 🎉\n`;
+        message += `Te contactaremos pronto para confirmar los detalles.`;
 
-      // Número de WhatsApp dinámico (localStorage / input)
-      const whatsappNumber = distributorNumber;
-      const encodedMessage = encodeURIComponent(message);
-      const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
-      
-      // Abrir WhatsApp
-      window.open(whatsappUrl, '_blank');
-      
-      showNotification('¡Pedido enviado por WhatsApp!', 'success');
+        // Codificar mensaje y crear URL
+        const encodedMessage = encodeURIComponent(message);
+        const whatsappUrl = `https://wa.me/${distributorNumber}?text=${encodedMessage}`;
+        
+        console.log('URL de WhatsApp generada:', whatsappUrl);
+        console.log('Mensaje completo:', message);
+        
+        // Abrir WhatsApp en nueva ventana
+        const whatsappWindow = window.open(whatsappUrl, '_blank');
+        
+        if (whatsappWindow) {
+          showNotification('¡Redirigiendo a WhatsApp...', 'success');
+        } else {
+          // Si el popup fue bloqueado, mostrar el enlace
+          showNotification('Por favor, permite ventanas emergentes o haz clic aquí', 'error');
+          console.error('Popup bloqueado. URL:', whatsappUrl);
+        }
+        
+      } catch (error) {
+        console.error('Error completo al enviar pedido:', error);
+        showNotification('Error al enviar el pedido: ' + (error instanceof Error ? error.message : 'Error desconocido'), 'error');
+      }
     }
 
-    // Event listeners
-    sendWhatsAppBtn?.addEventListener('click', sendToWhatsApp);
-    clearCartBtn?.addEventListener('click', () => {
-      localStorage.removeItem('shopping-cart');
-      showNotification('Carrito vaciado', 'success');
-      loadCartProducts();
-      // Reset totales y contador
-      const totalElements = document.querySelectorAll('.total-value');
-      if (totalElements.length >= 3) {
-        totalElements[0].textContent = '$0';
-        totalElements[1].textContent = '$5,000';
-        totalElements[2].textContent = '$5,000';
-      }
-      if (itemCount) itemCount.textContent = '0 productos';
-      if (fabCartCount) fabCartCount.textContent = '0';
-    });
-    sendWhatsAppBottomBtn?.addEventListener('click', sendToWhatsApp);
-    fabWhatsAppBtn?.addEventListener('click', sendToWhatsApp);
+    // Hacer sendToWhatsApp disponible globalmente
+    window.sendToWhatsApp = sendToWhatsApp;
 
-    // Cargar productos al inicio
-    loadCartProducts();
+    // Event listeners
+    if (sendWhatsAppBtn) {
+      sendWhatsAppBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('Botón sendWhatsApp clickeado');
+        sendToWhatsApp();
+        return false;
+      });
+      console.log('Event listener agregado a sendWhatsApp');
+    } else {
+      console.warn('Botón sendWhatsApp no encontrado');
+    }
+    
+    if (sendWhatsAppFromForm) {
+      sendWhatsAppFromForm.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('Botón sendWhatsAppFromForm clickeado');
+        sendToWhatsApp();
+        return false;
+      });
+      console.log('Event listener agregado a sendWhatsAppFromForm');
+    } else {
+      console.warn('Botón sendWhatsAppFromForm no encontrado');
+    }
+    
+    // Prevenir submit del formulario al presionar Enter
+    if (form) {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('Formulario submit interceptado');
+        sendToWhatsApp();
+        return false;
+      });
+    }
+    clearCartBtn?.addEventListener('click', () => {
+      if (confirm('¿Estás seguro de que quieres vaciar el carrito?')) {
+      localStorage.removeItem('shopping-cart');
+        window.dispatchEvent(new CustomEvent('cartUpdated'));
+      showNotification('Carrito vaciado', 'success');
+        updateCartActions();
+      }
+    });
+
+    // Escuchar evento del botón de la tabla
+    window.addEventListener('cartTableSendOrder', () => {
+      // Hacer scroll al formulario y luego intentar enviar si está completo
+      setTimeout(() => {
+        if (validateForm()) {
+          sendToWhatsApp();
+        }
+      }, 500);
+    });
+
+    // Actualizar acciones cuando cambia el carrito
+    updateCartActions();
+    window.addEventListener('cartUpdated', updateCartActions);
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'shopping-cart') updateCartActions();
+    });
 
     // Función para mostrar notificaciones
-    function showNotification(message: string, type = 'success') {
+    function showNotification(message, type) {
+      if (!type) type = 'success';
       const notification = document.createElement('div');
-      notification.className = `notification notification--${type}`;
+      notification.className = `cart-page__notification cart-page__notification--${type}`;
       notification.innerHTML = `
-        <div class="notification__content">
-          <span class="notification__icon">${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'}</span>
-          <span class="notification__message">${message}</span>
-          <button class="notification__close" onclick="this.parentElement.parentElement.remove()">×</button>
+        <div class="cart-page__notification-content">
+          <span class="cart-page__notification-icon">${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'}</span>
+          <span class="cart-page__notification-message">${message}</span>
+          <button class="cart-page__notification-close" onclick="this.parentElement.parentElement.remove()">×</button>
         </div>
       `;
       
@@ -658,14 +436,13 @@ const defaultWhatsAppNumber = DEFAULT_WHATSAPP_NUMBER;
     padding: 24px 0 48px;
   }
 
-  .container {
+  .cart-page__container {
     width: 100%;
     max-width: 1100px;
     margin: 0 auto;
     padding: 0 16px;
   }
 
-  /* Header */
   .cart-page__header {
     margin: 8px 0 24px;
     text-align: left;
@@ -692,167 +469,348 @@ const defaultWhatsAppNumber = DEFAULT_WHATSAPP_NUMBER;
     font-size: 14px;
   }
 
-  /* Layout */
   .cart-page__content {
     display: grid;
     grid-template-columns: 1fr;
     gap: 20px;
   }
 
-  .cart-page__form-section .form-card,
-  .order-summary {
+  .cart-page__form-card {
     background: #151821;
     border: 1px solid #232837;
     border-radius: 14px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    padding: 18px;
   }
 
-  .form-card { padding: 18px; }
-  .order-summary { padding: 16px; position: sticky; top: 16px; }
-
-  /* Formulario */
-  .form-card__header { margin-bottom: 10px; }
-  .form-card__title {
-    display: flex; align-items: center; gap: 10px;
-    color: #f5f7fb; font-size: 20px; margin: 0;
+  .cart-page__form-header {
+    margin-bottom: 16px;
   }
-  .form-card__description { color: #98a2b3; font-size: 13px; margin: 6px 0 0; }
 
-  .customer-form { margin-top: 8px; }
-  .form-grid {
+  .cart-page__form-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #f5f7fb;
+    font-size: 20px;
+    margin: 0;
+    font-weight: 600;
+  }
+
+  .cart-page__form-icon {
+    font-size: 20px;
+  }
+
+  .cart-page__form-description {
+    color: #98a2b3;
+    font-size: 13px;
+    margin: 6px 0 0;
+  }
+
+  .cart-page__form-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
-  .form-group { display: flex; flex-direction: column; gap: 6px; }
-  .form-group--full { grid-column: 1 / -1; }
-  .form-label { color: #c6cede; font-size: 13px; display: flex; align-items: center; gap: 8px; }
-  .form-label__icon { font-size: 16px; }
 
-  .form-input {
+  .cart-page__form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .cart-page__form-label {
+    color: #c6cede;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+  }
+
+  .cart-page__form-label-icon {
+    font-size: 16px;
+  }
+
+  .cart-page__form-input {
     appearance: none;
     background: #0f1218;
     border: 1px solid #242a39;
     color: #e9eef9;
     border-radius: 10px;
-    padding: 12px 12px;
+    padding: 12px;
     outline: none;
-    transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    font-size: 14px;
   }
-  .form-input:focus { border-color: #3d7cff; box-shadow: 0 0 0 3px rgba(61,124,255,.15); background: #111520; }
-  .form-input--textarea { resize: vertical; }
-  .form-input--error { border-color: #ff626c; box-shadow: 0 0 0 3px rgba(255,98,108,.15); }
-  .form-error { color: #ff8087; font-size: 12px; min-height: 16px; }
 
-  /* Order summary */
-  .order-summary__header { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
-  .order-summary__title { display: flex; align-items: center; gap: 8px; color: #f5f7fb; font-size: 18px; margin: 0; }
-  .order-summary__count { color: #9fb1d1; font-size: 13px; }
+  .cart-page__form-input:focus {
+    border-color: #3d7cff;
+    box-shadow: 0 0 0 3px rgba(61,124,255,0.15);
+    background: #111520;
+  }
 
-  .order-summary__products { display: flex; flex-direction: column; gap: 10px; align-items: center; }
-  .cart-table { width: 100%; border-collapse: collapse; background: #0f1218; border: 1px solid #222839; border-radius: 12px; overflow: hidden; max-width: 700px; }
-  .cart-table thead { background: #121622; }
-  .cart-table th, .cart-table td { padding: 14px 16px; text-align: left; }
-  .cart-table th { color: #9fb1d1; font-weight: 700; font-size: 13px; }
-  .cart-table td { color: #e6ecf8; font-size: 14px; border-top: 1px solid #222839; }
-  .th--qty, .td--qty { text-align: center; width: 72px; }
-  .th--price, .td--price { text-align: right; width: 120px; color: #a9b5c9; }
-  .th--subtotal, .td--subtotal { text-align: right; width: 140px; font-weight: 800; }
-  .th--actions, .td--actions { text-align: right; width: 120px; }
-  .td--name { word-break: break-word; }
-  .qty-input { width: 72px; text-align: center; background: #0b0f16; border: 1px solid #2a3346; color: #e9eef9; border-radius: 8px; padding: 6px 8px; }
+  .cart-page__form-input--error {
+    border-color: #ff626c;
+    box-shadow: 0 0 0 3px rgba(255,98,108,0.15);
+  }
 
-  .cart-item {
-    display: grid;
-    grid-template-columns: 72px 1fr auto;
-    gap: 12px;
-    align-items: center;
-    background: #0f1218;
-    border: 1px solid #222839;
-    border-radius: 12px;
-    padding: 10px;
+  .cart-page__form-error {
+    color: #ff8087;
+    font-size: 12px;
+    min-height: 16px;
+  }
+  
+  .cart-page__form-submit {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 2px solid #232837;
+  }
+  
+  .cart-page__submit-btn {
     width: 100%;
-    max-width: 620px;
+    background: linear-gradient(135deg, #25d366 0%, #1ab855 100%);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    padding: 20px 32px;
+    font-size: 18px;
+    font-weight: 800;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 24px rgba(37, 211, 102, 0.4), 0 0 0 0 rgba(37, 211, 102, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
   }
-  .cart-item__image { width: 72px; height: 72px; border-radius: 10px; overflow: hidden; background: #0b0d12; border: 1px solid #232a3a; }
-  .cart-item__img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .cart-item__details { display: grid; gap: 4px; align-items: center; justify-items: center; text-align: center; }
-  .cart-item__name { margin: 0; color: #e6ecf8; font-size: 15px; font-weight: 600; }
-  .cart-item__price { color: #98a2b3; font-size: 13px; }
-  .cart-item__quantity { display: flex; align-items: center; gap: 6px; color: #a9b5c9; font-size: 13px; }
-  .cart-item__quantity-label { color: #8f9ab1; }
-  .cart-item__total { text-align: center; }
-  .cart-item__total-label { color: #8fa1bf; font-size: 12px; }
-  .cart-item__total-price { color: #f2f6ff; font-weight: 700; font-size: 15px; }
+  
+  .cart-page__submit-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+  }
+  
+  .cart-page__submit-btn:hover::before {
+    left: 100%;
+  }
+  
+  .cart-page__submit-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(37, 211, 102, 0.6), 0 0 20px rgba(37, 211, 102, 0.3);
+    filter: brightness(1.1);
+  }
+  
+  .cart-page__submit-btn:active {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+  }
+  
+  .cart-page__submit-btn-icon {
+    font-size: 28px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    animation: pulse 2s ease-in-out infinite;
+  }
+  
+  @keyframes pulse {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+  }
+  
+  .cart-page__submit-btn-text {
+    font-weight: 800;
+    font-size: 17px;
+    letter-spacing: 1px;
+  }
+  
+  .cart-page__submit-btn-arrow {
+    font-size: 22px;
+    transition: transform 0.3s ease;
+  }
+  
+  .cart-page__submit-btn:hover .cart-page__submit-btn-arrow {
+    transform: translateX(6px);
+  }
 
-  .order-summary__totals { margin-top: 10px; border-top: 1px dashed #2a3346; padding-top: 10px; display: grid; gap: 8px; }
-  .total-row { display: flex; justify-content: space-between; color: #dfe7f7; font-size: 14px; }
-  .total-row--final { padding-top: 6px; border-top: 1px solid #2a3346; font-size: 16px; font-weight: 700; }
-  .total-label { color: #9fb1d1; }
-  .free-shipping { color: #4ade80; font-weight: 700; }
+  .cart-page__actions {
+    margin-top: 24px;
+    display: grid;
+    gap: 12px;
+  }
 
-  .shipping-note { display: flex; align-items: center; gap: 8px; background: #0d1612; border: 1px solid #193a2b; color: #97e0bb; padding: 8px 10px; border-radius: 10px; }
-  .shipping-note__icon { font-size: 16px; }
+  .cart-page__actions-row {
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+  }
 
-  .order-summary__actions { margin-top: 12px; display: grid; gap: 8px; }
-  .order-summary__actions-row { display: flex; gap: 8px; justify-content: space-between; }
+  .cart-page__btn {
+    appearance: none;
+    border: 0;
+    cursor: pointer;
+    border-radius: 10px;
+    padding: 12px 24px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: transform 0.08s ease, filter 0.2s ease;
+    font-size: 14px;
+  }
 
-  /* Botones */
-  .btn { appearance: none; border: 0; cursor: pointer; border-radius: 10px; padding: 12px 14px; font-weight: 700; color: #0b0d12; display: inline-flex; align-items: center; justify-content: center; gap: 10px; transition: transform .08s ease, filter .2s ease; }
-  .btn--full { width: 100%; }
-  .btn:active { transform: translateY(1px); }
-  .btn__icon { font-size: 18px; }
+  .cart-page__btn:active {
+    transform: translateY(1px);
+  }
 
-  .btn--primary { background: linear-gradient(180deg, #ffffff, #cfd8ff); color: #0b0d12; box-shadow: 0 6px 14px rgba(172, 187, 255, 0.25); }
-  .btn--primary:hover { filter: brightness(1.02); }
+  .cart-page__btn-icon {
+    font-size: 18px;
+  }
 
-  .btn--whatsapp { background: linear-gradient(180deg, #25d366, #1ab855); color: #07150f; box-shadow: 0 6px 14px rgba(37, 211, 102, 0.25); }
-  .btn--whatsapp:hover { filter: brightness(1.03); }
-  .btn--secondary { background: #121622; color: #cdd7ee; border: 1px solid #2a3346; }
-  .btn--secondary:hover { filter: brightness(1.02); }
+  .cart-page__btn--secondary {
+    background: #121622;
+    color: #cdd7ee;
+    border: 1px solid #2a3346;
+  }
 
-  /* Estado vacío */
-  .empty-cart { text-align: center; padding: 18px; background: #0f1218; border: 1px dashed #263044; border-radius: 12px; }
-  .empty-cart__icon { font-size: 40px; margin-bottom: 8px; }
-  .empty-cart__title { color: #e9eef9; margin: 0 0 6px; font-size: 18px; }
-  .empty-cart__description { color: #9fb1d1; margin: 0 0 10px; font-size: 13px; }
+  .cart-page__btn--secondary:hover {
+    filter: brightness(1.02);
+  }
 
-  /* Notificaciones */
-  .notification { position: fixed; right: 16px; bottom: 16px; z-index: 1000; }
-  .notification__content { display: flex; align-items: center; gap: 10px; background: #121721; border: 1px solid #2a3346; padding: 10px 12px; border-radius: 12px; color: #e9eef9; box-shadow: 0 10px 24px rgba(0,0,0,.35); }
-  .notification__icon { font-size: 18px; }
-  .notification__message { font-size: 14px; }
-  .notification__close { background: transparent; color: #9fb1d1; border: 0; font-size: 18px; line-height: 1; cursor: pointer; }
-  .notification--success .notification__content { border-color: #1d3e2e; background: #0d1612; color: #b0f1d1; }
-  .notification--error .notification__content { border-color: #3a1e26; background: #1a0f13; color: #ffc4cb; }
-  .notification--info .notification__content { border-color: #23324b; background: #0f1420; color: #cddcff; }
+  .cart-page__btn--whatsapp {
+    background: linear-gradient(180deg, #25d366, #1ab855);
+    color: #07150f;
+    box-shadow: 0 6px 14px rgba(37, 211, 102, 0.25);
+  }
 
-  /* Config WA */
-  .wa-config { display: grid; gap: 6px; margin-top: 6px; }
-  .wa-config__label { color: #9fb1d1; font-size: 12px; }
-  .wa-config__help { color: #7f8aa3; font-size: 12px; }
+  .cart-page__btn--whatsapp:hover {
+    filter: brightness(1.03);
+  }
 
-  /* Responsivo */
+  .cart-page__wa-config {
+    display: grid;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .cart-page__wa-label {
+    color: #9fb1d1;
+    font-size: 12px;
+  }
+
+  .cart-page__wa-input {
+    margin-top: 4px;
+  }
+
+  .cart-page__wa-help {
+    color: #7f8aa3;
+    font-size: 12px;
+  }
+
+  .cart-page__payment-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #0f1218;
+    border: 1px solid #232837;
+    border-radius: 10px;
+    padding: 12px;
+    margin-top: 12px;
+  }
+
+  .cart-page__payment-icon {
+    font-size: 24px;
+  }
+
+  .cart-page__payment-text {
+    color: #c6cede;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .cart-page__notification {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 1000;
+  }
+
+  .cart-page__notification-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #121721;
+    border: 1px solid #2a3346;
+    padding: 10px 12px;
+    border-radius: 12px;
+    color: #e9eef9;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.35);
+  }
+
+  .cart-page__notification-icon {
+    font-size: 18px;
+  }
+
+  .cart-page__notification-message {
+    font-size: 14px;
+  }
+
+  .cart-page__notification-close {
+    background: transparent;
+    color: #9fb1d1;
+    border: 0;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .cart-page__notification--success .cart-page__notification-content {
+    border-color: #1d3e2e;
+    background: #0d1612;
+    color: #b0f1d1;
+  }
+
+  .cart-page__notification--error .cart-page__notification-content {
+    border-color: #3a1e26;
+    background: #1a0f13;
+    color: #ffc4cb;
+  }
+
   @media (max-width: 980px) {
-    .cart-page__content { grid-template-columns: 1fr; }
-    .order-summary { position: static; top: auto; }
+    .cart-page__content {
+      grid-template-columns: 1fr;
+    }
   }
 
   @media (max-width: 580px) {
-    .form-grid { grid-template-columns: 1fr; }
-    .cart-table th, .cart-table td { padding: 10px; font-size: 13px; }
-    .order-summary__actions-row { flex-direction: column; }
+    .cart-page__actions-row {
+      flex-direction: column;
+    }
   }
-
-  /* CTA inferior */
-  .page-bottom-cta { margin-top: 18px; }
-
-  /* FABs */
-  .fab-container { position: fixed; right: 16px; bottom: 16px; display: grid; gap: 10px; z-index: 1010; }
-  .fab { width: 54px; height: 54px; border-radius: 50%; border: 0; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 8px 24px rgba(0,0,0,.35); transition: transform .1s ease, filter .2s ease; }
-  .fab:active { transform: translateY(1px); }
-  .fab__icon { font-size: 22px; }
-  .fab--whatsapp { background: linear-gradient(180deg, #25d366, #1ab855); color: #07150f; }
-  .fab--cart { position: relative; background: linear-gradient(180deg, #ffffff, #cfd8ff); color: #0b0d12; }
-  .fab__badge { position: absolute; top: -6px; right: -6px; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; background: #ef4444; color: #fff; font-weight: 800; font-size: 12px; display: inline-flex; align-items: center; justify-content: center; border: 2px solid #0e0f12; }
+  
+  .cart-page__form--highlight {
+    animation: highlightForm 2s ease;
+  }
+  
+  @keyframes highlightForm {
+    0%, 100% {
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    }
+    50% {
+      box-shadow: 0 10px 30px rgba(61, 124, 255, 0.5), 0 0 0 4px rgba(61, 124, 255, 0.2);
+    }
+  }
 </style>

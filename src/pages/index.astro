@@ -61,12 +61,12 @@ const whatsappNumber = DEFAULT_WHATSAPP_NUMBER;
   </div>
 </Layout>
 
-<script>
+<script define:vars={{ whatsappNumber }}>
   document.addEventListener('DOMContentLoaded', function() {
     const fab = document.getElementById('homeFabWhatsApp');
     fab?.addEventListener('click', () => {
       const saved = (localStorage.getItem('whatsapp-number') || '').replace(/[^0-9]/g, '');
-      const fallback = '573123293314';
+      const fallback = whatsappNumber;
       const number = saved && saved.length >= 10 ? saved : fallback;
       const message = encodeURIComponent('Hola, me gustaría recibir asesoría 🌟');
       window.open(`https://wa.me/${number}?text=${message}`, '_blank');
