@@ -92,6 +92,17 @@
     box-shadow: var(--shadow-lg);
 }
 
+.btn--danger {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.btn--danger:hover {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
+}
+
 
 /* Tamaños del botón */
 
@@ -735,15 +746,17 @@
 .product-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-8);
-    justify-items: center;
+    gap: var(--space-6);
     padding: var(--space-8) 0;
+    width: 100%;
 }
 
 .product-grid__item {
     animation: fadeInUp 0.8s ease-out both;
     width: 100%;
-    max-width: 320px;
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 
@@ -1285,27 +1298,45 @@
 
 /* === RESPONSIVE === */
 
-@media (min-width: 640px) {
+/* Responsive Product Grid */
+@media (min-width: 480px) {
     .product-grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-6);
     }
     .product-grid__item {
-        max-width: 280px;
+        max-width: 100%;
+    }
+}
+
+@media (min-width: 768px) {
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-8);
     }
 }
 
 @media (min-width: 1024px) {
     .product-grid {
         grid-template-columns: repeat(3, 1fr);
+        gap: var(--space-8);
     }
     .product-grid__item {
-        max-width: 320px;
+        max-width: 100%;
     }
 }
 
 @media (min-width: 1280px) {
     .product-grid {
         grid-template-columns: repeat(4, 1fr);
+        gap: var(--space-8);
+    }
+}
+
+@media (min-width: 1536px) {
+    .product-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--space-10);
     }
 }
 

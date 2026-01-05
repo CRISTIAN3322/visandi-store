@@ -554,4 +554,117 @@ import Button from '../atoms/Button.astro';
   .hidden {
     display: none !important;
   }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .shopping-cart {
+      max-width: 100%;
+    }
+    
+    .shopping-cart__header {
+      padding: var(--space-4);
+    }
+    
+    .shopping-cart__title {
+      font-size: var(--font-size-lg);
+    }
+    
+    .shopping-cart__items {
+      padding: var(--space-4);
+    }
+    
+    .shopping-cart__item {
+      padding: var(--space-3);
+    }
+    
+    .shopping-cart__item-image {
+      width: 4rem;
+      height: 4rem;
+    }
+    
+    .shopping-cart__item-name {
+      font-size: var(--font-size-sm);
+    }
+    
+    .shopping-cart__item-price {
+      font-size: var(--font-size-xs);
+    }
+    
+    .shopping-cart__footer {
+      padding: var(--space-4);
+    }
+    
+    .shopping-cart__total-card {
+      padding: var(--space-4);
+    }
+    
+    .shopping-cart__total-label {
+      font-size: var(--font-size-base);
+    }
+    
+    .shopping-cart__total-amount {
+      font-size: var(--font-size-xl);
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .shopping-cart__header {
+      padding: var(--space-3);
+    }
+    
+    .shopping-cart__title {
+      font-size: var(--font-size-base);
+    }
+    
+    .shopping-cart__icon {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+    
+    .shopping-cart__items {
+      padding: var(--space-3);
+    }
+    
+    .shopping-cart__item {
+      padding: var(--space-2);
+      margin-bottom: var(--space-3);
+    }
+    
+    .shopping-cart__item-image {
+      width: 3.5rem;
+      height: 3.5rem;
+    }
+    
+    .shopping-cart__item-details {
+      margin-left: var(--space-3);
+    }
+    
+    .shopping-cart__item-name {
+      font-size: var(--font-size-xs);
+    }
+    
+    .shopping-cart__item-price {
+      font-size: 11px;
+    }
+    
+    .shopping-cart__footer {
+      padding: var(--space-3);
+    }
+    
+    .shopping-cart__total-card {
+      padding: var(--space-3);
+    }
+    
+    .shopping-cart__total-label {
+      font-size: var(--font-size-sm);
+    }
+    
+    .shopping-cart__total-amount {
+      font-size: var(--font-size-lg);
+    }
+    
+    .shopping-cart__total-note {
+      font-size: var(--font-size-xs);
+    }
+  }
 </style>

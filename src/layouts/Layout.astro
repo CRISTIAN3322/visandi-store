@@ -1,6 +1,14 @@
 ---
 import { DEFAULT_WHATSAPP_NUMBER } from '../config/whatsapp';
 import CartBadge from '../components/atoms/CartBadge.astro';
+// Importar estilos CSS
+import '../styles/tokens.css';
+import '../styles/base.css';
+import '../styles/components.css';
+import '../styles/layout.css';
+import '../styles/pages.css';
+import '../styles/accessibility.css';
+import '../styles/performance.css';
 
 interface Props {
   title: string;
@@ -20,13 +28,6 @@ const { title, description = 'Tienda online con sistema de pedidos por WhatsApp'
     <meta name="description" content={description} />
     <title>{title}</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/src/styles/tokens.css">
-    <link rel="stylesheet" href="/src/styles/base.css">
-    <link rel="stylesheet" href="/src/styles/components.css">
-    <link rel="stylesheet" href="/src/styles/layout.css">
-    <link rel="stylesheet" href="/src/styles/pages.css">
-    <link rel="stylesheet" href="/src/styles/accessibility.css">
-    <link rel="stylesheet" href="/src/styles/performance.css">
     <style>
       /* FABs globales para usar también en Inicio */
       .fab-container { position: fixed; right: calc(16px + env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); display: grid; gap: 10px; z-index: 1010; }
@@ -67,26 +68,36 @@ const { title, description = 'Tienda online con sistema de pedidos por WhatsApp'
   <body>
     <header class="header">
       <div class="header__container container">
-        <a href="/" class="header__logo">
-          <span class="header__logo-icon">🛒</span>
-          <span class="header__logo-text">Visandi Store</span>
+        <a href="/login" class="header__logo">
+          <img src="/images/products/logo.png" alt="Visandi Store" class="header__logo-image" />
         </a>
-        <nav class="header__navigation">
+        
+        <!-- Botón hamburguesa para móviles -->
+        <button class="header__menu-toggle" id="menuToggle" aria-label="Abrir menú" aria-expanded="false">
+          <span class="header__menu-toggle-line"></span>
+          <span class="header__menu-toggle-line"></span>
+          <span class="header__menu-toggle-line"></span>
+        </button>
+        
+        <!-- Overlay para móviles -->
+        <div class="header__overlay" id="menuOverlay"></div>
+        
+        <nav class="header__navigation" id="headerNavigation">
           <ul class="header__nav-list">
             <li class="header__nav-item">
-              <a href="/" class="header__nav-link">
+              <a href="/" class="header__nav-link" data-menu-link>
                 Inicio
                 <span class="header__nav-underline"></span>
               </a>
             </li>
             <li class="header__nav-item">
-              <a href="/#productos" class="header__nav-link">
+              <a href="/#productos" class="header__nav-link" data-menu-link>
                 Productos
                 <span class="header__nav-underline"></span>
               </a>
             </li>
             <li class="header__nav-item">
-              <a href="/cart" class="header__nav-link header__nav-link--cart" id="headerCartLink">
+              <a href="/cart" class="header__nav-link header__nav-link--cart" id="headerCartLink" data-menu-link>
                 <span class="header__nav-icon">🛒</span>
                 <span class="header__nav-text">Carrito</span>
                 <CartBadge />
@@ -94,7 +105,7 @@ const { title, description = 'Tienda online con sistema de pedidos por WhatsApp'
               </a>
             </li>
             <li class="header__nav-item">
-              <a href="/#contacto" class="header__nav-link">
+              <a href="/#contacto" class="header__nav-link" data-menu-link>
                 Contacto
                 <span class="header__nav-underline"></span>
               </a>
@@ -103,6 +114,66 @@ const { title, description = 'Tienda online con sistema de pedidos por WhatsApp'
         </nav>
       </div>
     </header>
+    
+    <script>
+      // Menú móvil hamburguesa
+      document.addEventListener('DOMContentLoaded', function() {
+        const menuToggle = document.getElementById('menuToggle');
+        const menuOverlay = document.getElementById('menuOverlay');
+        const headerNavigation = document.getElementById('headerNavigation');
+        const menuLinks = document.querySelectorAll('[data-menu-link]');
+        const body = document.body;
+        
+        function openMenu() {
+          menuToggle?.setAttribute('aria-expanded', 'true');
+          menuToggle?.classList.add('header__menu-toggle--active');
+          menuOverlay?.classList.add('header__overlay--active');
+          headerNavigation?.classList.add('header__navigation--active');
+          body.style.overflow = 'hidden';
+        }
+        
+        function closeMenu() {
+          menuToggle?.setAttribute('aria-expanded', 'false');
+          menuToggle?.classList.remove('header__menu-toggle--active');
+          menuOverlay?.classList.remove('header__overlay--active');
+          headerNavigation?.classList.remove('header__navigation--active');
+          body.style.overflow = '';
+        }
+        
+        function toggleMenu() {
+          const isOpen = menuToggle?.getAttribute('aria-expanded') === 'true';
+          if (isOpen) {
+            closeMenu();
+          } else {
+            openMenu();
+          }
+        }
+        
+        menuToggle?.addEventListener('click', toggleMenu);
+        menuOverlay?.addEventListener('click', closeMenu);
+        
+        // Cerrar menú al hacer clic en un enlace
+        menuLinks.forEach(link => {
+          link.addEventListener('click', () => {
+            closeMenu();
+          });
+        });
+        
+        // Cerrar menú con Escape
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape' && menuToggle?.getAttribute('aria-expanded') === 'true') {
+            closeMenu();
+          }
+        });
+        
+        // Cerrar menú al redimensionar a desktop
+        window.addEventListener('resize', function() {
+          if (window.innerWidth >= 768 && menuToggle?.getAttribute('aria-expanded') === 'true') {
+            closeMenu();
+          }
+        });
+      });
+    </script>
     
     <main>
       <slot />
