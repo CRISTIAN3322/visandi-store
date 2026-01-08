@@ -319,6 +319,12 @@ const defaultWhatsAppNumber = DEFAULT_WHATSAPP_NUMBER;
         
         if (whatsappWindow) {
           showNotification('¡Redirigiendo a WhatsApp...', 'success');
+          
+          // Vaciar el carrito después de enviar el pedido
+          localStorage.removeItem('shopping-cart');
+          window.dispatchEvent(new CustomEvent('cartUpdated'));
+          updateCartActions();
+          showNotification('Pedido enviado. El carrito ha sido vaciado.', 'success');
         } else {
           // Si el popup fue bloqueado, mostrar el enlace
           showNotification('Por favor, permite ventanas emergentes o haz clic aquí', 'error');

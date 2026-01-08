@@ -256,7 +256,17 @@ const { phoneNumber = '573123293314' } = Astro.props;
       // Abrir WhatsApp en nueva ventana
       const whatsappWindow = window.open(whatsappUrl, '_blank');
       
-      if (!whatsappWindow) {
+      if (whatsappWindow) {
+        // Vaciar el carrito después de enviar el pedido
+        localStorage.removeItem('shopping-cart');
+        window.dispatchEvent(new CustomEvent('cartUpdated'));
+        loadCart();
+        if (typeof showNotification === 'function') {
+          showNotification('Pedido enviado. El carrito ha sido vaciado.', 'success');
+        } else {
+          alert('Pedido enviado. El carrito ha sido vaciado.');
+        }
+      } else {
         // Si el popup fue bloqueado, mostrar el enlace
         alert('Por favor, permite ventanas emergentes o copia este enlace:\n' + whatsappUrl);
         console.error('Popup bloqueado. URL:', whatsappUrl);
