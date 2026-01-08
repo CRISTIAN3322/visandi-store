@@ -1,0 +1,379 @@
+---
+// Componente para mostrar el resumen del carrito en la página de carrito
+---
+
+<div class="order-summary">
+  <div class="order-summary__header">
+    <h2 class="order-summary__title">
+      <span class="order-summary__icon">🛒</span>
+      Resumen del Pedido
+    </h2>
+    <span class="order-summary__count" id="orderSummaryCount">0 items</span>
+  </div>
+  
+  <div class="order-summary__products" id="orderSummaryProducts">
+    <div class="empty-cart">
+      <div class="empty-cart__icon">🛒</div>
+      <h3 class="empty-cart__title">Tu carrito está vacío</h3>
+      <p class="empty-cart__description">Agrega productos para ver el resumen aquí</p>
+      <a href="/" class="empty-cart__btn btn btn--primary">Ver Productos</a>
+    </div>
+  </div>
+  
+  <div class="order-summary__totals hidden" id="orderSummaryTotals">
+    <div class="total-row">
+      <span class="total-label">Subtotal:</span>
+      <span class="total-value" id="orderSubtotal">$0</span>
+    </div>
+    <div class="total-row">
+      <span class="total-label">Envío:</span>
+      <span class="total-value" id="orderShipping">$0</span>
+    </div>
+    <div class="total-row total-row--final">
+      <span class="total-label">Total:</span>
+      <span class="total-value" id="orderTotal">$0</span>
+    </div>
+    <div class="shipping-note" id="shippingNote">
+      <span class="shipping-note__icon">🚚</span>
+      <span class="shipping-note__text">Envío gratis en compras mayores a $50,000</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  function updateCartSummary() {
+    try {
+      const cartStr = localStorage.getItem('shopping-cart');
+      const cart = cartStr ? JSON.parse(cartStr) : [];
+      
+      const productsContainer = document.getElementById('orderSummaryProducts');
+      const totalsContainer = document.getElementById('orderSummaryTotals');
+      const countElement = document.getElementById('orderSummaryCount');
+      
+      if (!Array.isArray(cart) || cart.length === 0) {
+        // Mostrar carrito vacío
+        if (productsContainer) {
+          productsContainer.innerHTML = `
+            <div class="empty-cart">
+              <div class="empty-cart__icon">🛒</div>
+              <h3 class="empty-cart__title">Tu carrito está vacío</h3>
+              <p class="empty-cart__description">Agrega productos para ver el resumen aquí</p>
+              <a href="/" class="empty-cart__btn btn btn--primary">Ver Productos</a>
+            </div>
+          `;
+        }
+        if (totalsContainer) {
+          totalsContainer.classList.add('hidden');
+        }
+        if (countElement) {
+          countElement.textContent = '0 items';
+        }
+        return;
+      }
+      
+      // Calcular totales
+      const subtotal = cart.reduce((sum, item) => {
+        const price = Number(item.price) || 0;
+        const quantity = Number(item.quantity) || 0;
+        return sum + (price * quantity);
+      }, 0);
+      
+      const shipping = subtotal > 50000 ? 0 : 5000;
+      const total = subtotal + shipping;
+      const totalItems = cart.reduce((sum, item) => sum + (Number(item.quantity) || 0), 0);
+      
+      // Mostrar productos
+      if (productsContainer) {
+        productsContainer.innerHTML = cart.map(item => {
+          const itemPrice = Number(item.price) || 0;
+          const itemQuantity = Number(item.quantity) || 0;
+          const itemTotal = itemPrice * itemQuantity;
+          
+          return `
+            <div class="cart-item">
+              <div class="cart-item__image-container">
+                <img src="${item.images?.[0] || '/images/products/logo.png'}" alt="${item.name}" class="cart-item__image">
+                <span class="cart-item__quantity-badge">${itemQuantity}</span>
+              </div>
+              <div class="cart-item__details">
+                <h4 class="cart-item__name">${item.name}</h4>
+                <p class="cart-item__price">$${itemPrice.toLocaleString()} c/u</p>
+              </div>
+              <div class="cart-item__total">
+                <span class="cart-item__total-label">Total</span>
+                <span class="cart-item__total-price">$${itemTotal.toLocaleString()}</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+      
+      // Actualizar totales
+      const subtotalEl = document.getElementById('orderSubtotal');
+      const shippingEl = document.getElementById('orderShipping');
+      const totalEl = document.getElementById('orderTotal');
+      const shippingNote = document.getElementById('shippingNote');
+      
+      if (subtotalEl) subtotalEl.textContent = `$${subtotal.toLocaleString()}`;
+      if (shippingEl) {
+        shippingEl.textContent = shipping === 0 ? 'GRATIS' : `$${shipping.toLocaleString()}`;
+        shippingEl.classList.toggle('free-shipping', shipping === 0);
+      }
+      if (totalEl) totalEl.textContent = `$${total.toLocaleString()}`;
+      if (shippingNote) {
+        shippingNote.style.display = subtotal > 50000 ? 'none' : 'flex';
+      }
+      
+      if (totalsContainer) {
+        totalsContainer.classList.remove('hidden');
+      }
+      if (countElement) {
+        countElement.textContent = `${totalItems} ${totalItems === 1 ? 'item' : 'items'}`;
+      }
+    } catch (error) {
+      console.error('Error al actualizar resumen del carrito:', error);
+    }
+  }
+  
+  // Actualizar al cargar
+  document.addEventListener('DOMContentLoaded', updateCartSummary);
+  
+  // Actualizar cuando cambie el carrito
+  window.addEventListener('cartUpdated', updateCartSummary);
+  
+  // Escuchar cambios en localStorage
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'shopping-cart') {
+      updateCartSummary();
+    }
+  });
+</script>
+
+<style>
+  .order-summary {
+    background: white;
+    border-radius: var(--radius-xl, 1rem);
+    box-shadow: var(--shadow-lg, 0 10px 25px rgba(0, 0, 0, 0.1));
+    border: 1px solid var(--color-border, #e5e7eb);
+    overflow: hidden;
+    height: fit-content;
+    position: sticky;
+    top: 2rem;
+  }
+
+  .order-summary__header {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    padding: var(--spacing-xl, 1.5rem);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .order-summary__title {
+    font-size: var(--font-size-2xl, 1.5rem);
+    font-weight: 700;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm, 0.5rem);
+  }
+
+  .order-summary__icon {
+    font-size: var(--font-size-3xl, 1.875rem);
+  }
+
+  .order-summary__count {
+    background: rgba(255, 255, 255, 0.2);
+    padding: var(--spacing-sm, 0.5rem) var(--spacing-md, 1rem);
+    border-radius: var(--radius-md, 0.5rem);
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+  }
+
+  .order-summary__products {
+    padding: var(--spacing-xl, 1.5rem);
+    max-height: 400px;
+    overflow-y: auto;
+  }
+
+  .empty-cart {
+    text-align: center;
+    padding: 3rem var(--spacing-lg, 1rem);
+  }
+
+  .empty-cart__icon {
+    font-size: 4rem;
+    margin-bottom: var(--spacing-md, 1rem);
+  }
+
+  .empty-cart__title {
+    font-size: var(--font-size-xl, 1.25rem);
+    font-weight: 700;
+    color: var(--color-text-primary, #1f2937);
+    margin: 0 0 var(--spacing-sm, 0.5rem) 0;
+  }
+
+  .empty-cart__description {
+    color: var(--color-text-secondary, #6b7280);
+    margin: 0 0 var(--spacing-lg, 1rem) 0;
+  }
+
+  .empty-cart__btn {
+    display: inline-block;
+    padding: var(--spacing-md, 1rem) var(--spacing-xl, 1.5rem);
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: var(--radius-full, 9999px);
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .empty-cart__btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+  }
+
+  .cart-item {
+    display: flex;
+    gap: var(--spacing-md, 1rem);
+    padding: var(--spacing-md, 1rem);
+    border-bottom: 1px solid var(--color-border, #e5e7eb);
+  }
+
+  .cart-item:last-child {
+    border-bottom: none;
+  }
+
+  .cart-item__image-container {
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .cart-item__image {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: var(--radius-md, 0.5rem);
+  }
+
+  .cart-item__quantity-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: #ef4444;
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border: 2px solid white;
+  }
+
+  .cart-item__details {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .cart-item__name {
+    font-size: var(--font-size-base, 1rem);
+    font-weight: 600;
+    color: var(--color-text-primary, #1f2937);
+    margin: 0 0 var(--spacing-xs, 0.25rem) 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .cart-item__price {
+    font-size: var(--font-size-sm, 0.875rem);
+    color: var(--color-text-secondary, #6b7280);
+    margin: 0;
+  }
+
+  .cart-item__total {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    text-align: right;
+  }
+
+  .cart-item__total-label {
+    font-size: var(--font-size-sm, 0.875rem);
+    color: var(--color-text-light, #9ca3af);
+    margin-bottom: var(--spacing-xs, 0.25rem);
+  }
+
+  .cart-item__total-price {
+    font-size: var(--font-size-lg, 1.125rem);
+    font-weight: 700;
+    color: var(--color-primary, #3b82f6);
+  }
+
+  .order-summary__totals {
+    padding: var(--spacing-xl, 1.5rem);
+    border-top: 1px solid var(--color-border, #e5e7eb);
+    background: var(--color-background-alt, #f9fafb);
+  }
+
+  .total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-md, 1rem);
+  }
+
+  .total-row--final {
+    border-top: 2px solid var(--color-border, #e5e7eb);
+    padding-top: var(--spacing-md, 1rem);
+    margin-top: var(--spacing-md, 1rem);
+    font-size: var(--font-size-lg, 1.125rem);
+    font-weight: 700;
+  }
+
+  .total-label {
+    color: var(--color-text, #374151);
+    font-weight: 600;
+  }
+
+  .total-value {
+    color: var(--color-primary, #3b82f6);
+    font-weight: 700;
+  }
+
+  .free-shipping {
+    color: var(--color-success, #10b981);
+    font-weight: 700;
+    font-size: var(--font-size-sm, 0.875rem);
+  }
+
+  .shipping-note {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm, 0.5rem);
+    background: var(--color-accent-light, #dbeafe);
+    color: var(--color-text, #374151);
+    padding: var(--spacing-sm, 0.5rem) var(--spacing-md, 1rem);
+    border-radius: var(--radius-md, 0.5rem);
+    font-size: var(--font-size-sm, 0.875rem);
+    margin-top: var(--spacing-md, 1rem);
+  }
+
+  .shipping-note__icon {
+    font-size: var(--font-size-base, 1rem);
+  }
+
+  .shipping-note__text {
+    font-weight: 500;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+</style>

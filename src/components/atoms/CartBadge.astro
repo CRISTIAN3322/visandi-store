@@ -1,0 +1,38 @@
+---
+// Componente para mostrar la cantidad de items en el carrito
+---
+
+<span class="header__cart-badge" id="cartBadge">0</span>
+
+<script>
+  function updateCartBadge() {
+    try {
+      const cartStr = localStorage.getItem('shopping-cart');
+      const cart = cartStr ? JSON.parse(cartStr) : [];
+      const count = Array.isArray(cart) 
+        ? cart.reduce((sum, item) => sum + (Number(item.quantity) || 0), 0)
+        : 0;
+      
+      const badge = document.getElementById('cartBadge');
+      if (badge) {
+        badge.textContent = count > 0 ? count : '0';
+        badge.style.display = count > 0 ? 'inline-flex' : 'none';
+      }
+    } catch (error) {
+      console.error('Error al actualizar badge del carrito:', error);
+    }
+  }
+
+  // Actualizar badge al cargar
+  document.addEventListener('DOMContentLoaded', updateCartBadge);
+  
+  // Actualizar badge cuando cambie el carrito
+  window.addEventListener('cartUpdated', updateCartBadge);
+  
+  // También escuchar cambios en localStorage (por si se actualiza desde otra pestaña)
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'shopping-cart') {
+      updateCartBadge();
+    }
+  });
+</script>
