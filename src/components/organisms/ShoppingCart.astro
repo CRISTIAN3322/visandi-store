@@ -1,6 +1,15 @@
 ---
 import Button from '../atoms/Button.astro';
+
+interface Props {
+  phoneNumber?: string;
+}
+
+const { phoneNumber = '573123293314' } = Astro.props;
 ---
+
+<!-- Overlay para el carrito -->
+<div class="cart-overlay" id="cartOverlay"></div>
 
 <div class="shopping-cart">
   <div class="shopping-cart__header">
@@ -73,7 +82,7 @@ import Button from '../atoms/Button.astro';
   </div>
 </div>
 
-<script>
+<script define:vars={{ phoneNumber }}>
   // Importar funciones del servicio (simulado para Astro)
   // En producción, esto se haría con un bundler o módulos ES
   
@@ -134,20 +143,23 @@ import Button from '../atoms/Button.astro';
       
       const itemsContainer = document.querySelector('.shopping-cart__items');
       if (itemsContainer) {
-        itemsContainer.innerHTML = cart.map(item => `
+        itemsContainer.innerHTML = cart.map(item => {
+          const imageUrl = (item.images && item.images[0]) ? item.images[0] : '/images/products/logo.png';
+          return `
           <div class="shopping-cart__item">
             <div class="shopping-cart__item-content">
               <div class="shopping-cart__item-image-container">
-                <img src="${item.images[0]}" alt="${item.name}" class="shopping-cart__item-image">
+                <img src="${imageUrl}" alt="${String(item.name || 'Producto').replace(/"/g, '&quot;')}" class="shopping-cart__item-image" onerror="this.src='/images/products/logo.png'">
                 <span class="shopping-cart__item-quantity-badge">${item.quantity}</span>
               </div>
               <div class="shopping-cart__item-details">
-                <h4 class="shopping-cart__item-name">${item.name}</h4>
-                <p class="shopping-cart__item-price">$${Number(item.price).toLocaleString()}</p>
+                <h4 class="shopping-cart__item-name">${String(item.name || 'Producto').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</h4>
+                <p class="shopping-cart__item-price">$${Number(item.price || 0).toLocaleString()}</p>
               </div>
             </div>
           </div>
-        `).join('');
+        `;
+        }).join('');
       }
       
       // Actualizar total
@@ -195,8 +207,7 @@ import Button from '../atoms/Button.astro';
       }
       
       // Obtener número de WhatsApp del distribuidor
-      const DEFAULT_WHATSAPP_NUMBER = '573123293314';
-      let distributorNumber = DEFAULT_WHATSAPP_NUMBER;
+      let distributorNumber = phoneNumber || '573123293314'; // Usar prop o valor por defecto
       
       // Intentar obtener del localStorage
       const saved = localStorage.getItem('whatsapp-number');
@@ -254,10 +265,79 @@ import Button from '../atoms/Button.astro';
     }
   };
   
+  // Funciones para abrir/cerrar el carrito
+  function openCart() {
+    const cart = document.querySelector('.shopping-cart');
+    const overlay = document.getElementById('cartOverlay');
+    if (cart) {
+      cart.classList.add('shopping-cart--open');
+      document.body.style.overflow = 'hidden';
+    }
+    if (overlay) {
+      overlay.classList.add('cart-overlay--active');
+    }
+  }
+
+  function closeCart() {
+    const cart = document.querySelector('.shopping-cart');
+    const overlay = document.getElementById('cartOverlay');
+    if (cart) {
+      cart.classList.remove('shopping-cart--open');
+      document.body.style.overflow = '';
+    }
+    if (overlay) {
+      overlay.classList.remove('cart-overlay--active');
+    }
+  }
+
+  // Hacer funciones globales
+  window.openCart = openCart;
+  window.closeCart = closeCart;
+
   // Inicializar
   document.addEventListener('DOMContentLoaded', () => {
     loadCart();
     window.addEventListener('cartUpdated', loadCart);
+    
+    // Botón cerrar carrito
+    const closeBtn = document.querySelector('.shopping-cart__close');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', closeCart);
+    }
+    
+    // Abrir carrito automáticamente cuando se agrega un producto
+    window.addEventListener('cartUpdated', () => {
+      const cartStr = localStorage.getItem('shopping-cart');
+      const cart = cartStr ? JSON.parse(cartStr) : [];
+      if (Array.isArray(cart) && cart.length > 0) {
+        openCart();
+      }
+    });
+    
+    // Cerrar carrito al hacer clic en el overlay
+    const overlay = document.getElementById('cartOverlay');
+    if (overlay) {
+      overlay.addEventListener('click', closeCart);
+    }
+    
+    // Conectar enlace del header del carrito
+    const headerCartLink = document.getElementById('headerCartLink');
+    if (headerCartLink) {
+      headerCartLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        openCart();
+      });
+    }
+    
+    // Cerrar carrito con tecla Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const cart = document.querySelector('.shopping-cart');
+        if (cart && cart.classList.contains('shopping-cart--open')) {
+          closeCart();
+        }
+      }
+    });
   });
 </script>
 
@@ -553,6 +633,24 @@ import Button from '../atoms/Button.astro';
 
   .hidden {
     display: none !important;
+  }
+
+  /* Overlay del carrito */
+  .cart-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 1009;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .cart-overlay--active {
+    opacity: 1;
+    pointer-events: all;
+    cursor: pointer;
   }
   
   /* Responsive */
