@@ -1,0 +1,65 @@
+/* ===== ORGANISM: PRODUCT GRID - METODOLOGÍA BEM ===== */
+
+.product-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+  padding: var(--space-8) 0;
+  width: 100%;
+}
+
+.product-grid__item {
+  animation: fadeInUp 0.8s ease-out both;
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+/* Mobile: 1 columna (por defecto, < 768px) */
+
+/* Tablet: 2 columnas */
+@media (min-width: 768px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-8);
+  }
+}
+
+/* Desktop: 3 columnas */
+@media (min-width: 1024px) {
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-8);
+  }
+  .product-grid__item {
+    max-width: 100%;
+  }
+}
+
+/* Desktop grande: mantiene 3 columnas */
+@media (min-width: 1280px) {
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-8);
+  }
+}
+
+@media (min-width: 1536px) {
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-10);
+  }
+}
