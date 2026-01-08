@@ -97,11 +97,11 @@
               </div>
               <div class="cart-item__details">
                 <h4 class="cart-item__name">${item.name}</h4>
-                <p class="cart-item__price">$${itemPrice.toLocaleString()} c/u</p>
+                <p class="cart-item__price">$${window.formatPrice ? window.formatPrice(itemPrice) : itemPrice.toLocaleString()} c/u</p>
               </div>
               <div class="cart-item__total">
                 <span class="cart-item__total-label">Total</span>
-                <span class="cart-item__total-price">$${itemTotal.toLocaleString()}</span>
+                <span class="cart-item__total-price">$${window.formatPrice ? window.formatPrice(itemTotal) : itemTotal.toLocaleString()}</span>
               </div>
             </div>
           `;
@@ -114,12 +114,13 @@
       const totalEl = document.getElementById('orderTotal');
       const shippingNote = document.getElementById('shippingNote');
       
-      if (subtotalEl) subtotalEl.textContent = `$${subtotal.toLocaleString()}`;
+      const formatPrice = window.formatPrice || ((p) => p.toLocaleString());
+      if (subtotalEl) subtotalEl.textContent = `$${formatPrice(subtotal)}`;
       if (shippingEl) {
-        shippingEl.textContent = shipping === 0 ? 'GRATIS' : `$${shipping.toLocaleString()}`;
+        shippingEl.textContent = shipping === 0 ? 'GRATIS' : `$${formatPrice(shipping)}`;
         shippingEl.classList.toggle('free-shipping', shipping === 0);
       }
-      if (totalEl) totalEl.textContent = `$${total.toLocaleString()}`;
+      if (totalEl) totalEl.textContent = `$${formatPrice(total)}`;
       if (shippingNote) {
         shippingNote.style.display = subtotal > 50000 ? 'none' : 'flex';
       }

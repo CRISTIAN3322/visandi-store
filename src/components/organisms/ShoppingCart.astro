@@ -154,7 +154,7 @@ const { phoneNumber = '573123293314' } = Astro.props;
               </div>
               <div class="shopping-cart__item-details">
                 <h4 class="shopping-cart__item-name">${String(item.name || 'Producto').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</h4>
-                <p class="shopping-cart__item-price">$${Number(item.price || 0).toLocaleString()}</p>
+                <p class="shopping-cart__item-price">$${window.formatPrice ? window.formatPrice(Number(item.price || 0)) : Number(item.price || 0).toLocaleString()}</p>
               </div>
             </div>
           </div>
@@ -167,7 +167,7 @@ const { phoneNumber = '573123293314' } = Astro.props;
       const shipping = subtotal > 50000 ? 0 : 5000;
       const total = subtotal + shipping;
       const totalEl = document.querySelector('.cart-total');
-      if (totalEl) totalEl.textContent = `$${total.toLocaleString()}`;
+      if (totalEl) totalEl.textContent = `$${window.formatPrice ? window.formatPrice(total) : total.toLocaleString()}`;
     } catch (error) {
       console.error('Error al cargar carrito:', error);
     }
@@ -226,8 +226,9 @@ const { phoneNumber = '573123293314' } = Astro.props;
         
         message += `${index + 1}. *${String(item.name || 'Producto').replace(/\*/g, '')}*\n`;
         message += `   • Cantidad: ${itemQuantity}\n`;
-        message += `   • Precio unitario: $${itemPrice.toLocaleString()}\n`;
-        message += `   • Subtotal: $${itemSubtotal.toLocaleString()}\n\n`;
+        const formatPrice = window.formatPrice || ((p) => p.toLocaleString());
+        message += `   • Precio unitario: $${formatPrice(itemPrice)}\n`;
+        message += `   • Subtotal: $${formatPrice(itemSubtotal)}\n\n`;
       });
       
       // Calcular totales
@@ -241,9 +242,10 @@ const { phoneNumber = '573123293314' } = Astro.props;
       const total = subtotal + shipping;
       
       message += `*💰 RESUMEN DEL PEDIDO:*\n`;
-      message += `• Subtotal: $${subtotal.toLocaleString()}\n`;
-      message += `• Envío: ${shipping === 0 ? 'GRATIS' : `$${shipping.toLocaleString()}`}\n`;
-      message += `• *TOTAL A PAGAR: $${total.toLocaleString()}*\n\n`;
+      const formatPrice = window.formatPrice || ((p) => p.toLocaleString());
+      message += `• Subtotal: $${formatPrice(subtotal)}\n`;
+      message += `• Envío: ${shipping === 0 ? 'GRATIS' : `$${formatPrice(shipping)}`}\n`;
+      message += `• *TOTAL A PAGAR: $${formatPrice(total)}*\n\n`;
       message += `¡Gracias por tu pedido! 🎉\n`;
       message += `Te contactaremos pronto para confirmar los detalles.`;
       

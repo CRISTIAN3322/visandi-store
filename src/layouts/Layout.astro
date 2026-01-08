@@ -121,6 +121,14 @@ const { title, description = 'Tienda online con sistema de pedidos por WhatsApp'
     </header>
     
     <script>
+      // Función global para formatear precios con separador de miles (formato colombiano)
+      window.formatPrice = function(price) {
+        if (typeof price !== 'number') {
+          price = parseFloat(price) || 0;
+        }
+        return price.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+      };
+      
       // Menú móvil hamburguesa
       document.addEventListener('DOMContentLoaded', function() {
         const menuToggle = document.getElementById('menuToggle');

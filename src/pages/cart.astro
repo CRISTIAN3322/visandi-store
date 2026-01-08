@@ -284,8 +284,9 @@ const defaultWhatsAppNumber = DEFAULT_WHATSAPP_NUMBER;
           
           message += `${index + 1}. *${String(item.name || 'Producto').replace(/\*/g, '')}*\n`;
           message += `   • Cantidad: ${itemQuantity}\n`;
-          message += `   • Precio unitario: $${itemPrice.toLocaleString()}\n`;
-          message += `   • Subtotal: $${itemSubtotal.toLocaleString()}\n\n`;
+          const formatPrice = window.formatPrice || ((p) => p.toLocaleString());
+          message += `   • Precio unitario: $${formatPrice(itemPrice)}\n`;
+          message += `   • Subtotal: $${formatPrice(itemSubtotal)}\n\n`;
         });
         
         // Calcular totales
@@ -299,9 +300,10 @@ const defaultWhatsAppNumber = DEFAULT_WHATSAPP_NUMBER;
         const total = subtotal + shipping;
         
         message += `*💰 RESUMEN DEL PEDIDO:*\n`;
-        message += `• Subtotal: $${subtotal.toLocaleString()}\n`;
-        message += `• Envío: ${shipping === 0 ? 'GRATIS' : `$${shipping.toLocaleString()}`}\n`;
-        message += `• *TOTAL A PAGAR: $${total.toLocaleString()}*\n\n`;
+        const formatPrice = window.formatPrice || ((p) => p.toLocaleString());
+        message += `• Subtotal: $${formatPrice(subtotal)}\n`;
+        message += `• Envío: ${shipping === 0 ? 'GRATIS' : `$${formatPrice(shipping)}`}\n`;
+        message += `• *TOTAL A PAGAR: $${formatPrice(total)}*\n\n`;
         message += `¡Gracias por tu pedido! 🎉\n`;
         message += `Te contactaremos pronto para confirmar los detalles.`;
 

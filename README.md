@@ -23,6 +23,8 @@ Tienda online moderna construida con Astro, implementando arquitectura Atomic De
 - 🎯 **Atomic Design**: Arquitectura de componentes escalable y mantenible
 - 🎨 **BEM Methodology**: Nomenclatura CSS clara y consistente
 - ⚡ **Performance**: Optimizado para velocidad y SEO
+- 💰 **Formato de Precios**: Precios formateados con separador de miles (formato colombiano: 20.000)
+- 🖼️ **Imágenes Uniformes**: Todas las imágenes de productos con altura uniforme y alineadas
 
 ## 🏗️ Arquitectura
 
@@ -149,6 +151,9 @@ Tarjeta completa de producto con todas sus funcionalidades.
 - Botón de favoritos
 - Vista rápida
 - Rating con estrellas
+- Imágenes con altura uniforme (aspect-ratio 1:1)
+- Precios formateados con separador de miles (20.000)
+- Botones de acción: "Ver Detalles" y "Comprar Ahora"
 
 ### Organisms
 
@@ -241,6 +246,26 @@ El proyecto está completamente adaptado para todos los dispositivos:
 
 - **Mobile**: Ocupa 100% del ancho
 - **Desktop**: Ancho máximo de 28rem (448px)
+
+### Menú Mobile
+
+- **Menú hamburguesa**: Se desliza desde la izquierda cubriendo toda la pantalla (100% width)
+- **Botón de cerrar**: Visible en la esquina superior derecha del menú
+- **Overlay**: Fondo semitransparente con blur que cubre toda la pantalla
+- **Cierre automático**: Al hacer clic en un enlace, en el overlay, en el botón de cerrar o presionar Escape
+- **Sin transformación**: El botón hamburguesa mantiene su forma original (no se convierte en X)
+
+### Formato de Precios
+
+- **Formato colombiano**: Separador de miles con punto (20.000)
+- **Función global**: `window.formatPrice()` disponible en todo el sitio
+- **Aplicado en**: Tarjetas de producto, carrito, resumen de pedidos y mensajes de WhatsApp
+
+### Imágenes de Productos
+
+- **Altura uniforme**: Todas las imágenes usan `aspect-ratio: 1/1` para mantener la misma altura
+- **Alineación**: Imágenes centradas con `object-fit: cover` y `object-position: center`
+- **Responsive**: Se adaptan correctamente en todos los tamaños de pantalla
 
 ### Hero Section
 
