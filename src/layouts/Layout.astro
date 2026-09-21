@@ -1,8 +1,10 @@
 ---
 import { DEFAULT_WHATSAPP_NUMBER } from '../config/whatsapp';
+import { ACTIVE_THEME, THEME_CLASS } from '../config/themes';
 import CartBadge from '../components/atoms/CartBadge.astro';
 // Importar estilos CSS
 import '../styles/tokens.css';
+import '../styles/themes/index.css';
 import '../styles/base.css';
 import '../styles/components.css';
 import '../styles/layout.css';
@@ -19,7 +21,7 @@ const { title, description = 'Tienda online con sistema de pedidos por WhatsApp'
 ---
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class={THEME_CLASS[ACTIVE_THEME]}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -41,7 +43,7 @@ const { title, description = 'Tienda online con sistema de pedidos por WhatsApp'
       .fab:active { transform: translateY(0); }
       .fab__icon { font-size: 22px; }
       .fab--whatsapp { background: linear-gradient(180deg, #25d366, #1ab855); color: #07150f; animation: fabPulse 2.8s ease-in-out infinite; }
-      .fab--cart { position: relative; background: linear-gradient(180deg, #ffffff, #cfd8ff); color: #0b0d12; }
+      .fab--cart { position: relative; background: linear-gradient(180deg, #ffffff, var(--blue-200)); color: #0b0d12; }
       .fab__badge { position: absolute; top: -6px; right: -6px; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; background: #ef4444; color: #fff; font-weight: 800; font-size: 12px; display: inline-flex; align-items: center; justify-content: center; border: 2px solid #0e0f12; }
       @keyframes fabPulse {
         0%, 100% { box-shadow: 0 10px 26px rgba(0,0,0,.35), 0 0 0 0 rgba(37, 211, 102, 0.0); }

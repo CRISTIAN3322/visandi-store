@@ -1,0 +1,78 @@
+/* ===== TEMA: HALLOWEEN 2026 =====
+   Activa con: <html class="theme-halloween">
+   O cambiando ACTIVE_THEME en src/config/themes.ts */
+
+:root.theme-halloween {
+    /* === Paleta violeta (reemplaza azules) === */
+    --blue-50: #f5f3ff;
+    --blue-100: #ede9fe;
+    --blue-200: #ddd6fe;
+    --blue-300: #c4b5fd;
+    --blue-400: #a78bfa;
+    --blue-500: #8b5cf6;
+    --blue-600: #7c3aed;
+    --blue-700: #6d28d9;
+    --blue-800: #5b21b6;
+    --blue-900: #4c1d95;
+    --blue-950: #2e1065;
+
+    /* === Paleta naranja (reemplaza cyan/teal) === */
+    --cyan-50: #fff7ed;
+    --cyan-100: #ffedd5;
+    --cyan-200: #fed7aa;
+    --cyan-300: #fdba74;
+    --cyan-400: #fb923c;
+    --cyan-500: #f97316;
+    --cyan-600: #ea580c;
+    --cyan-700: #c2410c;
+    --cyan-800: #9a3412;
+    --cyan-900: #7c2d12;
+    --cyan-950: #431407;
+
+    /* === Paleta lima (reemplaza indigo) === */
+    --indigo-50: #f7fee7;
+    --indigo-100: #ecfccb;
+    --indigo-200: #d9f99d;
+    --indigo-300: #bef264;
+    --indigo-400: #a3e635;
+    --indigo-500: #84cc16;
+    --indigo-600: #65a30d;
+    --indigo-700: #4d7c0f;
+    --indigo-800: #3f6212;
+    --indigo-900: #365314;
+    --indigo-950: #1a2e05;
+
+    /* === Tokens semánticos === */
+    --color-primary: var(--blue-600);
+    --color-primary-light: var(--blue-500);
+    --color-primary-dark: var(--blue-700);
+    --color-primary-darker: var(--blue-800);
+    --color-secondary: var(--cyan-600);
+    --color-secondary-light: var(--cyan-500);
+    --color-secondary-dark: var(--cyan-700);
+    --color-accent: var(--indigo-500);
+    --color-accent-light: var(--indigo-400);
+    --color-accent-dark: var(--indigo-600);
+    --color-background-secondary: var(--blue-50);
+    --color-background-tertiary: var(--cyan-50);
+    --color-success: var(--blue-600);
+    --color-success-light: var(--blue-100);
+    --color-warning: var(--cyan-500);
+    --color-warning-light: var(--cyan-100);
+    --color-error: var(--indigo-600);
+    --color-error-light: var(--indigo-100);
+
+    /* === Gradientes === */
+    --gradient-primary: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-500) 100%);
+    --gradient-secondary: linear-gradient(135deg, var(--cyan-600) 0%, var(--cyan-500) 100%);
+    --gradient-accent: linear-gradient(135deg, var(--indigo-500) 0%, var(--indigo-400) 100%);
+    --gradient-hero: linear-gradient(135deg, var(--blue-900) 0%, var(--blue-700) 50%, var(--blue-950) 100%);
+    --gradient-surface: linear-gradient(145deg, #ffffff 0%, var(--blue-50) 100%);
+    --gradient-text: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-500) 100%);
+
+    /* === Sombras de marca === */
+    --shadow-blue-sm: 0 1px 3px 0 color-mix(in srgb, var(--blue-500) 10%, transparent), 0 1px 2px 0 color-mix(in srgb, var(--blue-500) 6%, transparent);
+    --shadow-blue-md: 0 4px 6px -1px color-mix(in srgb, var(--blue-500) 10%, transparent), 0 2px 4px -1px color-mix(in srgb, var(--blue-500) 6%, transparent);
+    --shadow-blue-lg: 0 10px 15px -3px color-mix(in srgb, var(--blue-500) 10%, transparent), 0 4px 6px -2px color-mix(in srgb, var(--blue-500) 5%, transparent);
+    --shadow-blue-xl: 0 20px 25px -5px color-mix(in srgb, var(--blue-500) 10%, transparent), 0 10px 10px -5px color-mix(in srgb, var(--blue-500) 4%, transparent);
+}

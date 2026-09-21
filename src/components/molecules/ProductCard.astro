@@ -413,13 +413,13 @@ function formatPrice(price: number): string {
         justify-content: space-between;
         align-items: center;
         padding: 1.5rem;
-        border-bottom: 1px solid #e5e7eb;
+        border-bottom: 1px solid var(--slate-200);
       }
       
       .quick-view-modal__title {
         font-size: 1.5rem;
         font-weight: 700;
-        color: #1f2937;
+        color: var(--color-text-primary);
         margin: 0;
       }
       
@@ -429,13 +429,13 @@ function formatPrice(price: number): string {
         padding: 0.5rem;
         border-radius: 0.5rem;
         cursor: pointer;
-        color: #6b7280;
+        color: var(--color-text-secondary);
         transition: all 0.2s ease;
       }
       
       .quick-view-modal__close:hover {
-        background: #f3f4f6;
-        color: #374151;
+        background: var(--slate-100);
+        color: var(--color-text-primary);
       }
       
       .quick-view-modal__close svg {
@@ -465,12 +465,12 @@ function formatPrice(price: number): string {
       .quick-view-modal__price {
         font-size: 2rem;
         font-weight: 800;
-        color: #059669;
+        color: var(--color-primary);
         margin-bottom: 1rem;
       }
       
       .quick-view-modal__description {
-        color: #6b7280;
+        color: var(--color-text-secondary);
         line-height: 1.6;
         margin-bottom: 2rem;
       }

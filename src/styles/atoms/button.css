@@ -47,7 +47,7 @@
 
 .btn:focus {
   outline: none;
-  box-shadow: var(--shadow-lg), 0 0 0 3px rgba(59, 130, 246, 0.1);
+  box-shadow: var(--shadow-lg), 0 0 0 3px color-mix(in srgb, var(--color-primary) 10%, transparent);
 }
 
 /* Variantes del botón */
