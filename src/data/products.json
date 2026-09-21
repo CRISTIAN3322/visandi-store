@@ -1,107 +1,36 @@
 [{
         "id": "1",
-        "name": "Vela Kapibara",
+        "name": "Caja Sopresa Roja",
         "price": 20000,
         "originalPrice": 25000,
         "images": [
-            "/images/products/capibara-2.jpeg",
-            "/images/products/capibara-3.jpeg"
+            "/images/products/01-banner.png",
+            "/images/products/01-caja.png",
+            "/images/products/01-tapa.png"
         ],
-        "description": "Vela Kapibara por 10 Unidades - Perfecta para decorar tu hogar con el adorable diseño de este animalito.",
-        "category": "vela",
-        "stock": 15,
-        "discount": 20,
+        "description": "Caja Sopresa Roja",
+        "category": "caja",
+        "stock": 1,
+        "discount": 1,
         "isNew": true,
         "isFeatured": false,
         "rating": 4.8
     },
     {
         "id": "2",
-        "name": "Velas Jesus",
+        "name": "Caja Sopresa Mageta",
         "price": 20000,
         "originalPrice": 20000,
         "images": [
-            "/images/products/jesus-1.jpeg",
-            "/images/products/jesus-2.jpeg"
+            "/images/products/02-banner.png",
+            "/images/products/02-caja.png",
+            "/images/products/02-tapa.png"
         ],
-        "description": "Velas Jesus por 10 Unidades - Un diseño espiritual y elegante para momentos especiales.",
-        "category": "vela",
-        "stock": 8,
+        "description": "Caja Sopresa Mageta",
+        "category": "caja",
+        "stock": 5,
         "discount": 0,
         "isNew": false,
         "isFeatured": true,
         "rating": 4.9
-    },
-    {
-        "id": "3",
-        "name": "Velas Looney Toons",
-        "price": 20000,
-        "originalPrice": 22000,
-        "images": [
-            "/images/products/looney-toons-1.jpeg",
-            "/images/products/looney-toons-2.jpeg",
-            "/images/products/looney-toons-3.jpeg"
-        ],
-        "description": "Velas Looney Toons por 10 Unidades - Divierte a los niños con estos personajes clásicos.",
-        "category": "vela",
-        "stock": 3,
-        "discount": 9,
-        "isNew": true,
-        "isFeatured": false,
-        "rating": 4.6
-    },
-    {
-        "id": "4",
-        "name": "Velas Pinguinos",
-        "price": 20000,
-        "originalPrice": 20000,
-        "images": [
-            "/images/products/pinguinos-1.jpeg",
-            "/images/products/pinguinos-2.jpeg",
-            "/images/products/pinguinos-3.jpeg"
-        ],
-        "description": "Velas Pinguinos por 10 Unidades - Un diseño adorable que encantará a toda la familia.",
-        "category": "vela",
-        "stock": 0,
-        "discount": 0,
-        "isNew": false,
-        "isFeatured": false,
-        "rating": 4.7
-    },
-    {
-        "id": "5",
-        "name": "Velas Rugrats",
-        "price": 20000,
-        "originalPrice": 23000,
-        "images": [
-            "/images/products/rugrats-1.jpeg",
-            "/images/products/rugrats-2.jpeg",
-            "/images/products/rugrats-3.jpeg"
-        ],
-        "description": "Velas Rugrats por 10 Unidades - Revive la nostalgia con estos personajes de los 90.",
-        "category": "vela",
-        "stock": 12,
-        "discount": 13,
-        "isNew": true,
-        "isFeatured": true,
-        "rating": 4.5
-    },
-    {
-        "id": "6",
-        "name": "Velas Stitch",
-        "price": 20000,
-        "originalPrice": 20000,
-        "images": [
-            "/images/products/stitch-1.jpeg",
-            "/images/products/stitch-2.jpeg",
-            "/images/products/stitch-3.jpeg"
-        ],
-        "description": "Velas Stitch por 10 Unidades - El adorable alienígena azul para hacer tu fiesta más especial.",
-        "category": "vela",
-        "stock": 20,
-        "discount": 0,
-        "isNew": false,
-        "isFeatured": false,
-        "rating": 4.9
-    }
-]
+    }]
