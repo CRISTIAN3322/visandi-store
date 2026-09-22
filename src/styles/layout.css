@@ -226,7 +226,7 @@
 }
 
 .footer__decoration-circle--3 {
-    bottom: -var(--space-8);
+    bottom: calc(-1 * var(--space-8));
     left: var(--space-20);
     width: 18rem;
     height: 18rem;
@@ -475,6 +475,7 @@
         left: 0;
         width: 100%;
         height: 100vh;
+        height: 100dvh;
         background: var(--color-background-surface);
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
         transform: translateX(-100%);
@@ -483,6 +484,7 @@
         display: flex;
         flex-direction: column;
         padding: var(--space-6);
+        padding-bottom: calc(var(--space-6) + env(safe-area-inset-bottom, 0px));
         overflow-y: auto;
     }
     
@@ -577,6 +579,7 @@
     .header__navigation {
         width: 100%;
         padding: var(--space-16) var(--space-4) var(--space-4);
+        padding-bottom: calc(var(--space-4) + env(safe-area-inset-bottom, 0px));
     }
     
     .header__nav-link {

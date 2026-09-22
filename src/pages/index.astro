@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Hero from '../components/organisms/Hero.astro';
 import ProductGrid from '../components/organisms/ProductGrid.astro';
 import ShoppingCart from '../components/organisms/ShoppingCart.astro';
 import products from '../data/products.json';
@@ -10,33 +11,7 @@ const whatsappNumber = DEFAULT_WHATSAPP_NUMBER;
 ---
 
 <Layout title="Visandi Store - Toma de Pedidos">
-  <section class="hero">
-    <!-- Elementos decorativos de fondo -->
-    <div class="hero__decoration">
-      <div class="hero__decoration-circle hero__decoration-circle--1"></div>
-      <div class="hero__decoration-circle hero__decoration-circle--2"></div>
-      <div class="hero__decoration-circle hero__decoration-circle--3"></div>
-    </div>
-    
-    <div class="hero__container container">
-      <div class="hero__content">
-        <h1 class="hero__title">
-          Bienvenido a <span class="hero__title-highlight">Visandi Store</span>
-        </h1>
-        <p class="hero__description">
-          Explora nuestra selección de productos únicos y realiza tu pedido fácilmente por WhatsApp.
-        </p>
-        <div class="hero__buttons">
-          <a href="#productos" class="hero__btn hero__btn--primary btn btn--lg">
-            Ver Productos
-          </a>
-          <a href="#contacto" class="hero__btn hero__btn--secondary btn btn--lg">
-            Contactar
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
+  <Hero />
   
   <section id="productos" class="products-section">
     <div class="products__container container">

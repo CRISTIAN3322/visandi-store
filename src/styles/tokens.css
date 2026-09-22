@@ -202,6 +202,13 @@
     --gradient-hero: linear-gradient(135deg, var(--blue-700) 0%, var(--blue-600) 50%, var(--blue-800) 100%);
     --gradient-surface: linear-gradient(145deg, #ffffff 0%, var(--blue-50) 100%);
     --gradient-text: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-500) 100%);
+
+    /* === Fondo representativo (tema clásico azul) === */
+    --theme-background:
+        radial-gradient(circle at 15% 18%, color-mix(in srgb, var(--blue-200) 42%, transparent) 0%, transparent 45%),
+        radial-gradient(circle at 85% 12%, color-mix(in srgb, var(--cyan-100) 48%, transparent) 0%, transparent 40%),
+        radial-gradient(circle at 72% 88%, color-mix(in srgb, var(--indigo-100) 45%, transparent) 0%, transparent 45%),
+        linear-gradient(180deg, var(--color-background-primary) 0%, var(--color-background-secondary) 100%);
 }
 
 

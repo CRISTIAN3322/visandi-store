@@ -20,4 +20,4 @@ export const THEME_LABEL: Record<ThemeId, string> = {
  * Cambia este valor (o pega la clase del tema en <html> dentro de Layout.astro)
  * para activar el tema estacional que quieras sin tocar funcionalidades.
  */
-export const ACTIVE_THEME: ThemeId = 'default';
+export const ACTIVE_THEME: ThemeId = 'amoryamistad';

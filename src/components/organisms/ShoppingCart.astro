@@ -562,8 +562,8 @@ const { phoneNumber = '573123293314' } = Astro.props;
 
   .shopping-cart__item-quantity-badge {
     position: absolute;
-    top: -var(--space-1);
-    right: -var(--space-1);
+    top: calc(-1 * var(--space-1));
+    right: calc(-1 * var(--space-1));
     background: var(--gradient-primary);
     color: white;
     font-size: var(--font-size-xs);

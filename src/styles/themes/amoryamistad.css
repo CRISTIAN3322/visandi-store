@@ -1,46 +1,47 @@
-/* ===== TEMA: AMOR Y AMISTAD 2026 =====
+/* ===== TEMA: AMOR Y AMISTAD / SAN VALENTÍN 2026 =====
+   Estética romántica y elegante (rojo vino, coral y blanco).
    Activa con: <html class="theme-amoryamistad">
    O cambiando ACTIVE_THEME en src/config/themes.ts */
 
 :root.theme-amoryamistad {
-    /* === Paleta rosa (reemplaza azules) === */
-    --blue-50: #fdf2f8;
-    --blue-100: #fce7f3;
-    --blue-200: #fbcfe8;
-    --blue-300: #f9a8d4;
-    --blue-400: #f472b6;
-    --blue-500: #ec4899;
-    --blue-600: #db2777;
-    --blue-700: #be185d;
-    --blue-800: #9d174d;
-    --blue-900: #831843;
-    --blue-950: #500724;
+    /* === Paleta rojo vino (reemplaza azules) === */
+    --blue-50: #fdf2f3;
+    --blue-100: #fbe2e4;
+    --blue-200: #f7c6c9;
+    --blue-300: #f09fa5;
+    --blue-400: #e7737b;
+    --blue-500: #de4c58;
+    --blue-600: #d32212;
+    --blue-700: #b3120f;
+    --blue-800: #9f020b;
+    --blue-900: #780008;
+    --blue-950: #380104;
 
-    /* === Paleta rose (reemplaza cyan/teal) === */
-    --cyan-50: #fff1f2;
-    --cyan-100: #ffe4e6;
-    --cyan-200: #fecdd3;
-    --cyan-300: #fda4af;
-    --cyan-400: #fb7185;
-    --cyan-500: #f43f5e;
-    --cyan-600: #e11d48;
-    --cyan-700: #be123c;
-    --cyan-800: #9f1239;
-    --cyan-900: #881337;
-    --cyan-950: #4c0519;
+    /* === Paleta coral/rosa (reemplaza cyan/teal) === */
+    --cyan-50: #fff1ef;
+    --cyan-100: #ffe1de;
+    --cyan-200: #ffc4c0;
+    --cyan-300: #fb9895;
+    --cyan-400: #f6737a;
+    --cyan-500: #ec5d71;
+    --cyan-600: #db3c5e;
+    --cyan-700: #bb2b4c;
+    --cyan-800: #982540;
+    --cyan-900: #7a2235;
+    --cyan-950: #42111a;
 
-    /* === Paleta rojo (reemplaza indigo) === */
-    --indigo-50: #fef2f2;
-    --indigo-100: #fee2e2;
-    --indigo-200: #fecaca;
-    --indigo-300: #fca5a5;
-    --indigo-400: #f87171;
-    --indigo-500: #ef4444;
-    --indigo-600: #dc2626;
-    --indigo-700: #b91c1c;
-    --indigo-800: #991b1b;
-    --indigo-900: #7f1d1d;
-    --indigo-950: #450a0a;
+    /* === Paleta vino profundo (reemplaza indigo) === */
+    --indigo-50: #fdf2f3;
+    --indigo-100: #fae3e6;
+    --indigo-200: #f4c5ca;
+    --indigo-300: #e89aa3;
+    --indigo-400: #da6a78;
+    --indigo-500: #c74c58;
+    --indigo-600: #ab3742;
+    --indigo-700: #8c2a33;
+    --indigo-800: #6e2329;
+    --indigo-900: #5c1f25;
+    --indigo-950: #300a0d;
 
     /* === Tokens semánticos === */
     --color-primary: var(--blue-600);
@@ -66,13 +67,50 @@
     --gradient-primary: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-500) 100%);
     --gradient-secondary: linear-gradient(135deg, var(--cyan-600) 0%, var(--cyan-500) 100%);
     --gradient-accent: linear-gradient(135deg, var(--indigo-500) 0%, var(--indigo-400) 100%);
-    --gradient-hero: linear-gradient(135deg, var(--blue-700) 0%, var(--blue-600) 50%, var(--blue-800) 100%);
+    --gradient-hero: linear-gradient(135deg, var(--blue-900) 0%, var(--blue-800) 50%, var(--blue-700) 100%);
     --gradient-surface: linear-gradient(145deg, #ffffff 0%, var(--blue-50) 100%);
     --gradient-text: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-500) 100%);
+
+    /* === Fondo representativo (amor y amistad) === */
+    --theme-background:
+        radial-gradient(circle at 85% 12%, color-mix(in srgb, var(--blue-200) 55%, transparent) 0%, transparent 45%),
+        radial-gradient(circle at 15% 18%, color-mix(in srgb, var(--cyan-100) 60%, transparent) 0%, transparent 50%),
+        radial-gradient(circle at 72% 88%, color-mix(in srgb, var(--indigo-100) 50%, transparent) 0%, transparent 45%),
+        linear-gradient(180deg, #ffffff 0%, var(--blue-50) 100%);
 
     /* === Sombras de marca === */
     --shadow-blue-sm: 0 1px 3px 0 color-mix(in srgb, var(--blue-500) 10%, transparent), 0 1px 2px 0 color-mix(in srgb, var(--blue-500) 6%, transparent);
     --shadow-blue-md: 0 4px 6px -1px color-mix(in srgb, var(--blue-500) 10%, transparent), 0 2px 4px -1px color-mix(in srgb, var(--blue-500) 6%, transparent);
     --shadow-blue-lg: 0 10px 15px -3px color-mix(in srgb, var(--blue-500) 10%, transparent), 0 4px 6px -2px color-mix(in srgb, var(--blue-500) 5%, transparent);
     --shadow-blue-xl: 0 20px 25px -5px color-mix(in srgb, var(--blue-500) 10%, transparent), 0 10px 10px -5px color-mix(in srgb, var(--blue-500) 4%, transparent);
+}
+
+/* === Detalles del tema (solo estética, sin afectar funcionalidad) === */
+:root.theme-amoryamistad .hero__btn--primary {
+    background: var(--cyan-500);
+    color: #ffffff;
+}
+
+:root.theme-amoryamistad .hero__btn--primary:hover {
+    background: var(--cyan-600);
+    color: #ffffff;
+}
+
+:root.theme-amoryamistad .footer {
+    background: linear-gradient(135deg, var(--blue-900) 0%, var(--blue-950) 50%, var(--blue-800) 100%);
+}
+
+:root.theme-amoryamistad .footer__description,
+:root.theme-amoryamistad .footer__link,
+:root.theme-amoryamistad .footer__contact-text {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+:root.theme-amoryamistad .footer__copyright {
+    color: rgba(255, 255, 255, 0.75);
+}
+
+:root.theme-amoryamistad .hero__title {
+    font-family: 'Love Light', 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 400;
 }

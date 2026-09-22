@@ -5,7 +5,13 @@
 
 .hero {
     position: relative;
-    background: var(--gradient-hero);
+    background:
+        linear-gradient(135deg,
+            color-mix(in srgb, var(--blue-800) 85%, transparent) 0%,
+            color-mix(in srgb, var(--blue-600) 75%, transparent) 50%,
+            color-mix(in srgb, var(--blue-900) 88%, transparent) 100%),
+        var(--theme-background);
+    background-color: var(--color-background-secondary);
     color: var(--color-text-inverse);
     padding: var(--space-20) 0;
     overflow: hidden;
@@ -45,7 +51,7 @@
 }
 
 .hero__decoration-circle--3 {
-    bottom: -var(--space-10);
+    bottom: calc(-1 * var(--space-10));
     left: 33.333%;
     width: 9rem;
     height: 9rem;
@@ -150,7 +156,7 @@
 
 .products-section {
     padding: var(--space-20) 0;
-    background: linear-gradient(180deg, var(--color-background-primary) 0%, var(--color-background-surface) 100%);
+    background: transparent;
     position: relative;
 }
 
@@ -897,7 +903,7 @@
         background: linear-gradient(135deg, var(--slate-800) 0%, var(--slate-900) 50%, var(--slate-800) 100%);
     }
     .products-section {
-        background: linear-gradient(180deg, var(--slate-900) 0%, var(--slate-800) 100%);
+        background: transparent;
     }
     .products__title {
         color: var(--slate-100);

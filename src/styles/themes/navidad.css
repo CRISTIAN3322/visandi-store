@@ -70,6 +70,13 @@
     --gradient-surface: linear-gradient(145deg, #ffffff 0%, var(--blue-50) 100%);
     --gradient-text: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-500) 100%);
 
+    /* === Fondo representativo (navidad) === */
+    --theme-background:
+        radial-gradient(circle at 15% 18%, color-mix(in srgb, var(--blue-300) 38%, transparent) 0%, transparent 45%),
+        radial-gradient(circle at 85% 12%, color-mix(in srgb, var(--cyan-200) 50%, transparent) 0%, transparent 40%),
+        radial-gradient(circle at 72% 88%, color-mix(in srgb, var(--indigo-100) 45%, transparent) 0%, transparent 45%),
+        linear-gradient(180deg, var(--color-background-primary) 0%, var(--color-background-secondary) 100%);
+
     /* === Sombras de marca === */
     --shadow-blue-sm: 0 1px 3px 0 color-mix(in srgb, var(--blue-500) 10%, transparent), 0 1px 2px 0 color-mix(in srgb, var(--blue-500) 6%, transparent);
     --shadow-blue-md: 0 4px 6px -1px color-mix(in srgb, var(--blue-500) 10%, transparent), 0 2px 4px -1px color-mix(in srgb, var(--blue-500) 6%, transparent);

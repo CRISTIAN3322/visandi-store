@@ -339,7 +339,7 @@
 
 .form-field__message {
     position: absolute;
-    bottom: -var(--space-6);
+    bottom: calc(-1 * var(--space-6));
     left: 0;
     font-size: var(--font-size-xs);
     margin-top: var(--space-1);

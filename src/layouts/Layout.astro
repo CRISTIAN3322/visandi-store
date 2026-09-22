@@ -35,9 +35,12 @@ const { title, description = 'Tienda online con sistema de pedidos por WhatsApp'
     <meta name="description" content={description} />
     <title>{title}</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    {ACTIVE_THEME === 'amoryamistad' && (
+      <link href="https://fonts.googleapis.com/css2?family=Love+Light&display=swap" rel="stylesheet" />
+    )}
     <style>
       /* FABs globales para usar también en Inicio */
-      .fab-container { position: fixed; right: calc(16px + env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); display: grid; gap: 10px; z-index: 1010; }
+      .fab-container { position: fixed; right: calc(16px + env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); display: grid; gap: 10px; z-index: 1000; }
       .fab { width: 56px; height: 56px; border-radius: 50%; border: 0; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 10px 26px rgba(0,0,0,.35); transition: transform .12s ease, filter .2s ease, box-shadow .2s ease; }
       .fab:hover { transform: translateY(-2px); box-shadow: 0 14px 34px rgba(0,0,0,.45); }
       .fab:active { transform: translateY(0); }
