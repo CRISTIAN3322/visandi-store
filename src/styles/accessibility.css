@@ -261,8 +261,7 @@
         scroll-behavior: auto !important;
     }
     .hero__decoration-circle,
-    .footer__decoration-circle,
-    .shopping-cart__decoration-circle {
+    .footer__decoration-circle {
         animation: none;
     }
 }

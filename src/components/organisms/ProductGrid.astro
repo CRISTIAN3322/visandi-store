@@ -7,18 +7,17 @@ interface Props {
 }
 
 const { products } = Astro.props;
+const activeProducts = products.filter(p => p.estado !== false);
 ---
 
 <div class="product-grid">
-  {products.map((product, index) => (
+  {activeProducts.map((product, index) => (
     <div class="product-grid__item" style={`animation-delay: ${index * 0.1}s;`}>
-      <ProductCard 
+      <ProductCard
         id={product.id}
         name={product.name}
-        price={product.price}
         images={product.images}
         description={product.description}
-        stock={1}
       />
     </div>
   ))}

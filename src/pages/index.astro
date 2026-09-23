@@ -2,17 +2,13 @@
 import Layout from '../layouts/Layout.astro';
 import Hero from '../components/organisms/Hero.astro';
 import ProductGrid from '../components/organisms/ProductGrid.astro';
-import ShoppingCart from '../components/organisms/ShoppingCart.astro';
 import products from '../data/products.json';
 import { DEFAULT_WHATSAPP_NUMBER } from '../config/whatsapp';
-
-// Número de WhatsApp para enviar pedidos (configurable)
-const whatsappNumber = DEFAULT_WHATSAPP_NUMBER;
 ---
 
 <Layout title="Visandi Store - Toma de Pedidos">
   <Hero />
-  
+
   <section id="productos" class="products-section">
     <div class="products__container container">
       <div class="products__header">
@@ -26,8 +22,7 @@ const whatsappNumber = DEFAULT_WHATSAPP_NUMBER;
       <ProductGrid products={products} />
     </div>
   </section>
-  <ShoppingCart phoneNumber={whatsappNumber} />
-  
+
   <!-- FAB WhatsApp en inicio -->
   <div class="fab-container">
     <button class="fab fab--whatsapp" id="homeFabWhatsApp" aria-label="Chatear por WhatsApp">
@@ -36,16 +31,16 @@ const whatsappNumber = DEFAULT_WHATSAPP_NUMBER;
   </div>
 </Layout>
 
-<script define:vars={{ whatsappNumber }}>
+<script>
+  import { DEFAULT_WHATSAPP_NUMBER } from '../config/whatsapp';
   document.addEventListener('DOMContentLoaded', function() {
     const fab = document.getElementById('homeFabWhatsApp');
     fab?.addEventListener('click', () => {
       const saved = (localStorage.getItem('whatsapp-number') || '').replace(/[^0-9]/g, '');
-      const fallback = whatsappNumber;
+      const fallback = DEFAULT_WHATSAPP_NUMBER;
       const number = saved && saved.length >= 10 ? saved : fallback;
       const message = encodeURIComponent('Hola, me gustaría recibir asesoría 🌟');
       window.open(`https://wa.me/${number}?text=${message}`, '_blank');
     });
   });
 </script>
-

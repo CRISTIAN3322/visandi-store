@@ -1,85 +1,52 @@
-[{
+[
+    {
         "id": "1",
         "name": "Caja Sopresa Roja",
-        "price": 20000,
-        "originalPrice": 25000,
         "images": [
             "/images/products/01-caja.png",
             "/images/products/01-tapa.png"
         ],
         "description": "Caja Sopresa Roja",
-        "category": "caja",
-        "stock": 1,
-        "discount": 1,
-        "isNew": true,
-        "isFeatured": false,
-        "rating": 4.8
+        "estado": true
     },
     {
         "id": "2",
         "name": "Caja Sopresa Mageta",
-        "price": 20000,
-        "originalPrice": 20000,
         "images": [
             "/images/products/02-caja.png",
             "/images/products/02-tapa.png"
         ],
         "description": "Caja Sopresa Mageta",
-        "category": "caja",
-        "stock": 1,
-        "discount": 0,
-        "isNew": false,
-        "isFeatured": true,
-        "rating": 4.9
+        "estado": true
     },
-{
+    {
         "id": "3",
         "name": "Caja Sopresa Paleta",
-        "price": 20000,
-        "originalPrice": 20000,
         "images": [
             "/images/products/03-caja.png",
             "/images/products/03-tapa.png"
         ],
         "description": "Caja Sopresa Paleta",
-        "category": "caja",
-        "stock": 1,
-        "discount": 0,
-        "isNew": false,
-        "isFeatured": true,
-        "rating": 4.9
+        "estado": true
     },
-{
+    {
         "id": "4",
         "name": "Estuche Ventana",
-        "price": 20000,
-        "originalPrice": 20000,
         "images": [
             "/images/products/04-caja.png",
             "/images/products/04-tapa.png"
         ],
         "description": "Estuche Ventana",
-        "category": "caja",
-        "stock": 1,
-        "discount": 0,
-        "isNew": false,
-        "isFeatured": true,
-        "rating": 4.9
+        "estado": true
     },
-{
+    {
         "id": "5",
         "name": "Caja Sopresa Corazon",
-        "price": 20000,
-        "originalPrice": 20000,
         "images": [
             "/images/products/05-caja.png",
             "/images/products/05-tapa.png"
         ],
         "description": "Caja Sopresa Corazon",
-        "category": "caja",
-        "stock": 1,
-        "discount": 0,
-        "isNew": false,
-        "isFeatured": true,
-        "rating": 4.9
-    }]
+        "estado": true
+    }
+]

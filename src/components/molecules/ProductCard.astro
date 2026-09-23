@@ -1,44 +1,23 @@
 ---
 import ProductImage from '../atoms/ProductImage.astro';
-import Button from '../atoms/Button.astro';
+import { DEFAULT_WHATSAPP_NUMBER } from '../../config/whatsapp';
 
 interface Props {
   id: string;
   name: string;
-  price: number;
-  originalPrice?: number;
   images: string[];
   description: string;
-  stock?: number;
-  discount?: number;
-  isNew?: boolean;
-  isFeatured?: boolean;
-  rating?: number;
-  category?: string;
 }
 
-const { 
-  id, 
-  name, 
-  price, 
-  originalPrice, 
-  images, 
-  description, 
-  stock = 10, 
-  discount = 0, 
-  isNew = true, 
-  isFeatured = false,
-  rating = 4.5,
-  category = 'vela'
+const {
+  id,
+  name,
+  images,
+  description
 } = Astro.props;
-
-// Función para formatear precio con separador de miles
-function formatPrice(price: number): string {
-  return price.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-}
 ---
 
-<div class="product-card" data-product-id={id} data-category={category}>
+<div class="product-card" data-product-id={id}>
   <!-- Imagen del producto -->
   <div class="product-card__images">
     {images.map((image, index) => (
@@ -46,29 +25,29 @@ function formatPrice(price: number): string {
         <ProductImage src={image} alt={`${name} - Imagen ${index + 1}`} class="product-card__image-content" />
       </div>
     ))}
-    
+
     <!-- Overlay con gradiente -->
     <div class="product-card__gradient"></div>
-    
+
     <!-- Controles de navegación de imágenes -->
     {images.length > 1 && (
       <>
         <div class="product-card__controls">
           {images.map((_, index) => (
-            <button 
+            <button
               class={`product-card__dot ${index === 0 ? 'product-card__dot--active' : ''}`}
               data-control={index}
               aria-label={`Ver imagen ${index + 1}`}
             ></button>
           ))}
         </div>
-        
+
         <button class="product-card__nav product-card__nav--prev" aria-label="Imagen anterior">
           <svg xmlns="http://www.w3.org/2000/svg" class="product-card__nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
           </svg>
         </button>
-        
+
         <button class="product-card__nav product-card__nav--next" aria-label="Imagen siguiente">
           <svg xmlns="http://www.w3.org/2000/svg" class="product-card__nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
@@ -76,35 +55,14 @@ function formatPrice(price: number): string {
         </button>
       </>
     )}
-    
-    <!-- Badges superiores -->
-    <div class="product-card__badges">
-      {discount > 0 && (
-        <div class="product-card__badge product-card__badge--discount">
-          <span class="product-card__badge-text">-{discount}%</span>
-        </div>
-      )}
-      
-      {isNew && (
-        <div class="product-card__badge product-card__badge--new">
-          <span class="product-card__badge-text">Nuevo</span>
-        </div>
-      )}
-      
-      {isFeatured && (
-        <div class="product-card__badge product-card__badge--featured">
-          <span class="product-card__badge-text">⭐ Destacado</span>
-        </div>
-      )}
-    </div>
-    
+
     <!-- Botón de favoritos -->
     <button class="product-card__favorite" aria-label="Agregar a favoritos" data-product-id={id}>
       <svg xmlns="http://www.w3.org/2000/svg" class="product-card__favorite-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
       </svg>
     </button>
-    
+
     <!-- Botón de vista rápida -->
     <button class="product-card__quick-view" aria-label="Vista rápida" data-product-id={id}>
       <svg xmlns="http://www.w3.org/2000/svg" class="product-card__quick-view-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -112,157 +70,123 @@ function formatPrice(price: number): string {
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
       </svg>
     </button>
-    
-    <!-- Indicador de stock -->
-    <div class="product-card__stock-indicator">
-      {stock > 5 ? (
-        <span class="product-card__stock product-card__stock--available">
-          <svg xmlns="http://www.w3.org/2000/svg" class="product-card__stock-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-          </svg>
-          En stock
-        </span>
-      ) : stock > 0 ? (
-        <span class="product-card__stock product-card__stock--low">
-          <svg xmlns="http://www.w3.org/2000/svg" class="product-card__stock-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
-          </svg>
-          Solo {stock} disponibles
-        </span>
-      ) : (
-        <span class="product-card__stock product-card__stock--out">
-          <svg xmlns="http://www.w3.org/2000/svg" class="product-card__stock-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-          Agotado
-        </span>
-      )}
-    </div>
   </div>
-  
+
   <!-- Contenido de la tarjeta -->
   <div class="product-card__content">
-    <!-- Título y precio en la misma línea -->
+    <!-- Título -->
     <div class="product-card__header">
       <h3 class="product-card__title">{name}</h3>
-      <div class="product-card__price-container">
-        <span class="product-card__price">${formatPrice(price)}</span>
-        {originalPrice && originalPrice > price && (
-          <span class="product-card__original-price">${formatPrice(originalPrice)}</span>
-        )}
-      </div>
     </div>
-    
+
     <!-- Botones de acción -->
     <div class="product-card__actions">
-      <button 
+      <button
         class="product-card__btn product-card__btn--view"
         data-product-id={id}
       >
         Ver Detalles
       </button>
-      <button 
-        class="product-card__btn product-card__btn--buy"
-        onclick={stock > 0 ? `addToCart('${id}', '${name}', ${price}, '${images[0]}')` : ''}
-        disabled={stock === 0}
+      <button
+        class="product-card__btn product-card__btn--whatsapp"
+        data-product-name={name}
       >
-        Comprar Ahora
+        Contactar por WhatsApp
       </button>
     </div>
-    
+
     <!-- Descripción -->
     <p class="product-card__description">{description}</p>
   </div>
 </div>
 
 
-<script define:vars={{ id }}>
+<script define:vars={{ id, DEFAULT_WHATSAPP_NUMBER }}>
+  window.__DEFAULT_WHATSAPP_NUMBER__ = DEFAULT_WHATSAPP_NUMBER;
+
+  window.openWhatsAppProduct = window.openWhatsAppProduct || function(productName) {
+    const saved = (localStorage.getItem('whatsapp-number') || '').replace(/[^0-9]/g, '');
+    const fallback = window.__DEFAULT_WHATSAPP_NUMBER__ || '573123293314';
+    const number = saved && saved.length >= 10 ? saved : fallback;
+    const message = encodeURIComponent(`Hola, me interesa el producto: ${productName}. ¿Podrían darme más información?`);
+    window.open(`https://wa.me/${number}?text=${message}`, '_blank');
+  };
+
   document.addEventListener('DOMContentLoaded', () => {
     const productCard = document.querySelector(`.product-card[data-product-id="${id}"]`);
     if (!productCard) return;
-    
+
     const images = productCard.querySelectorAll('.product-card__image');
     const controls = productCard.querySelectorAll('[data-control]');
     const prevButton = productCard.querySelector('.product-card__nav--prev');
     const nextButton = productCard.querySelector('.product-card__nav--next');
     const favoriteButton = productCard.querySelector('.product-card__favorite');
     const quickViewButton = productCard.querySelector('.product-card__quick-view');
-    const stockChip = productCard.querySelector('.product-card__stock');
-    
+
     // Funcionalidad de navegación de imágenes
     if (images.length > 1) {
-    let currentIndex = 0;
-    
-    // Función para actualizar la imagen activa
-    const updateActiveImage = (index) => {
-      // Asegurarse de que el índice esté dentro del rango
-      if (index < 0) index = images.length - 1;
-      if (index >= images.length) index = 0;
-      
-      currentIndex = index;
-      
-        // Actualizar imágenes con animación
+      let currentIndex = 0;
+
+      const updateActiveImage = (index) => {
+        if (index < 0) index = images.length - 1;
+        if (index >= images.length) index = 0;
+
+        currentIndex = index;
+
         images.forEach((img, i) => {
           img.classList.remove('product-card__image--active');
           if (i === currentIndex) {
             setTimeout(() => img.classList.add('product-card__image--active'), 50);
           }
         });
-      
-      // Actualizar controles
-      controls.forEach((ctrl, i) => {
-        if (i === currentIndex) {
+
+        controls.forEach((ctrl, i) => {
+          if (i === currentIndex) {
             ctrl.classList.add('product-card__dot--active');
-        } else {
+          } else {
             ctrl.classList.remove('product-card__dot--active');
-        }
+          }
+        });
+      };
+
+      controls.forEach(control => {
+        control.addEventListener('click', () => {
+          const index = parseInt(control.getAttribute('data-control'));
+          updateActiveImage(index);
+        });
       });
-    };
-    
-    // Configurar eventos para los controles de puntos
-    controls.forEach(control => {
-      control.addEventListener('click', () => {
-        const index = parseInt(control.getAttribute('data-control'));
-        updateActiveImage(index);
-      });
-    });
-    
-    // Configurar eventos para los botones de navegación
-    if (prevButton) {
-      prevButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        updateActiveImage(currentIndex - 1);
-      });
-    }
-    
-    if (nextButton) {
-      nextButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        updateActiveImage(currentIndex + 1);
-      });
-    }
-    
-      // Cambio automático de imágenes cada 4 segundos
-    let autoplayInterval;
-    
-    const startAutoplay = () => {
-      autoplayInterval = setInterval(() => {
-        updateActiveImage(currentIndex + 1);
+
+      if (prevButton) {
+        prevButton.addEventListener('click', (e) => {
+          e.preventDefault();
+          updateActiveImage(currentIndex - 1);
+        });
+      }
+
+      if (nextButton) {
+        nextButton.addEventListener('click', (e) => {
+          e.preventDefault();
+          updateActiveImage(currentIndex + 1);
+        });
+      }
+
+      let autoplayInterval;
+
+      const startAutoplay = () => {
+        autoplayInterval = setInterval(() => {
+          updateActiveImage(currentIndex + 1);
         }, 4000);
-    };
-    
-    const stopAutoplay = () => {
-      clearInterval(autoplayInterval);
-    };
-    
-    // Iniciar autoplay
-    startAutoplay();
-    
-      // Detener autoplay al interactuar
-    productCard.addEventListener('mouseenter', stopAutoplay);
-    productCard.addEventListener('mouseleave', startAutoplay);
-      
-      // Detener autoplay al hacer clic en controles
+      };
+
+      const stopAutoplay = () => {
+        clearInterval(autoplayInterval);
+      };
+
+      startAutoplay();
+
+      productCard.addEventListener('mouseenter', stopAutoplay);
+      productCard.addEventListener('mouseleave', startAutoplay);
+
       [...controls, prevButton, nextButton].forEach(control => {
         if (control) {
           control.addEventListener('click', stopAutoplay);
@@ -270,20 +194,20 @@ function formatPrice(price: number): string {
         }
       });
     }
-    
+
     // Funcionalidad de favoritos
     if (favoriteButton) {
       const isFavorited = localStorage.getItem(`favorite-${id}`) === 'true';
       if (isFavorited) {
         favoriteButton.classList.add('product-card__favorite--active');
       }
-      
+
       favoriteButton.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        
+
         const isCurrentlyFavorited = favoriteButton.classList.contains('product-card__favorite--active');
-        
+
         if (isCurrentlyFavorited) {
           favoriteButton.classList.remove('product-card__favorite--active');
           localStorage.removeItem(`favorite-${id}`);
@@ -295,18 +219,16 @@ function formatPrice(price: number): string {
         }
       });
     }
-    
+
     // Funcionalidad de vista rápida
     if (quickViewButton) {
       quickViewButton.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        
-        // Crear modal de vista rápida
         createQuickViewModal(productCard);
       });
     }
-    
+
     // Botón "Ver Detalles"
     const viewDetailsBtn = productCard.querySelector('.product-card__btn--view');
     if (viewDetailsBtn) {
@@ -316,8 +238,17 @@ function formatPrice(price: number): string {
         createQuickViewModal(productCard);
       });
     }
-    
-    // Sin interacción en el chip de stock
+
+    // Botón Contactar por WhatsApp
+    const whatsappBtn = productCard.querySelector('.product-card__btn--whatsapp');
+    if (whatsappBtn) {
+      whatsappBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const productName = whatsappBtn.getAttribute('data-product-name') || '';
+        window.openWhatsAppProduct(productName);
+      });
+    }
 
     // Efecto de zoom en la imagen al hover
     const imageContainer = productCard.querySelector('.product-card__images');
@@ -328,7 +259,7 @@ function formatPrice(price: number): string {
           activeImage.style.transform = 'scale(1.1)';
         }
       });
-      
+
       imageContainer.addEventListener('mouseleave', () => {
         const activeImage = productCard.querySelector('.product-card__image--active img');
         if (activeImage) {
@@ -337,16 +268,15 @@ function formatPrice(price: number): string {
       });
     }
   });
-  
+
   // Función para crear modal de vista rápida
   function createQuickViewModal(productCard) {
-    const productId = productCard.getAttribute('data-product-id');
     const productTitle = productCard.querySelector('.product-card__title').textContent;
-    const productPrice = productCard.querySelector('.product-card__price').textContent;
     const productDescription = productCard.querySelector('.product-card__description').textContent;
     const productImages = Array.from(productCard.querySelectorAll('.product-card__image img')).map(img => img.src);
-    
-    // Crear overlay
+
+    const safeTitle = productTitle.replace(/'/g, "\\'");
+
     const overlay = document.createElement('div');
     overlay.className = 'quick-view-overlay';
     overlay.innerHTML = `
@@ -359,30 +289,28 @@ function formatPrice(price: number): string {
             </svg>
           </button>
         </div>
-        
+
         <div class="quick-view-modal__content">
           <div class="quick-view-modal__image">
             <img src="${productImages[0]}" alt="${productTitle}" class="quick-view-modal__img">
           </div>
-          
+
           <div class="quick-view-modal__details">
-            <div class="quick-view-modal__price">${productPrice}</div>
             <p class="quick-view-modal__description">${productDescription}</p>
-            
+
             <div class="quick-view-modal__actions">
-              <button class="btn btn--primary btn--full" onclick="addToCart('${productId}', '${productTitle}', ${parseFloat(productPrice.replace(/\./g, '').replace('$', ''))}, '${productImages[0]}'); closeQuickView();">
-                Agregar al carrito
+              <button class="btn btn--primary btn--full" onclick="openWhatsAppProduct('${safeTitle}'); closeQuickView();">
+                Contactar por WhatsApp
               </button>
               <button class="btn btn--secondary btn--full" onclick="closeQuickView();">
-                Ver detalles completos
+                Cerrar
               </button>
             </div>
           </div>
         </div>
       </div>
     `;
-    
-    // Agregar estilos para el modal
+
     const style = document.createElement('style');
     style.textContent = `
       .quick-view-overlay {
@@ -397,9 +325,9 @@ function formatPrice(price: number): string {
         padding: 1rem;
         animation: fadeIn 0.3s ease-out;
       }
-      
+
       .quick-view-modal {
-        background: white;
+        background: var(--color-background-surface);
         border-radius: 1rem;
         max-width: 800px;
         width: 100%;
@@ -407,22 +335,22 @@ function formatPrice(price: number): string {
         overflow-y: auto;
         animation: slideInUp 0.3s ease-out;
       }
-      
+
       .quick-view-modal__header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 1.5rem;
-        border-bottom: 1px solid var(--slate-200);
+        border-bottom: 1px solid color-mix(in srgb, var(--color-text-secondary) 15%, transparent);
       }
-      
+
       .quick-view-modal__title {
         font-size: 1.5rem;
         font-weight: 700;
         color: var(--color-text-primary);
         margin: 0;
       }
-      
+
       .quick-view-modal__close {
         background: none;
         border: none;
@@ -432,67 +360,78 @@ function formatPrice(price: number): string {
         color: var(--color-text-secondary);
         transition: all 0.2s ease;
       }
-      
+
       .quick-view-modal__close:hover {
-        background: var(--slate-100);
+        background: var(--color-background-secondary);
         color: var(--color-text-primary);
       }
-      
+
       .quick-view-modal__close svg {
         width: 1.5rem;
         height: 1.5rem;
       }
-      
+
       .quick-view-modal__content {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 2rem;
         padding: 1.5rem;
       }
-      
+
       .quick-view-modal__image {
         aspect-ratio: 1;
         border-radius: 0.75rem;
         overflow: hidden;
       }
-      
+
       .quick-view-modal__img {
         width: 100%;
         height: 100%;
         object-fit: cover;
       }
-      
-      .quick-view-modal__price {
-        font-size: 2rem;
-        font-weight: 800;
-        color: var(--color-primary);
-        margin-bottom: 1rem;
-      }
-      
+
       .quick-view-modal__description {
         color: var(--color-text-secondary);
         line-height: 1.6;
         margin-bottom: 2rem;
       }
-      
+
       .quick-view-modal__actions {
         display: flex;
         flex-direction: column;
         gap: 1rem;
       }
-      
+
       @media (max-width: 768px) {
         .quick-view-modal__content {
           grid-template-columns: 1fr;
           gap: 1rem;
         }
+        .quick-view-modal__title {
+          font-size: 1.25rem;
+        }
+        .quick-view-modal__actions {
+          flex-direction: column-reverse;
+        }
       }
-      
+
+      @media (max-width: 480px) {
+        .quick-view-modal__header {
+          padding: 1rem;
+        }
+        .quick-view-modal__content {
+          padding: 1rem;
+        }
+        .quick-view-modal__description {
+          margin-bottom: 1.25rem;
+        }
+      }
+
       @keyframes fadeIn {
         from { opacity: 0; }
         to { opacity: 1; }
       }
-      
+
       @keyframes slideInUp {
         from {
           opacity: 0;
@@ -504,12 +443,11 @@ function formatPrice(price: number): string {
         }
       }
     `;
-    
+
     document.head.appendChild(style);
     document.body.appendChild(overlay);
     document.body.style.overflow = 'hidden';
-    
-    // Función para cerrar el modal
+
     const closeQuickView = () => {
       overlay.style.animation = 'fadeOut 0.3s ease-out forwards';
       setTimeout(() => {
@@ -523,15 +461,13 @@ function formatPrice(price: number): string {
         document.removeEventListener('keydown', handleEscape);
       }, 300);
     };
-    
-    // Cerrar modal al hacer clic en el overlay
+
     overlay.addEventListener('click', (e) => {
       if (e.target === overlay) {
         closeQuickView();
       }
     });
-    
-    // Cerrar modal con botón - usar event delegation para asegurar que funcione
+
     setTimeout(() => {
       const closeButton = overlay.querySelector('.quick-view-modal__close');
       if (closeButton) {
@@ -542,19 +478,17 @@ function formatPrice(price: number): string {
         });
       }
     }, 0);
-    
-    // Cerrar modal con Escape
+
     const handleEscape = (e) => {
       if (e.key === 'Escape') {
         closeQuickView();
       }
     };
     document.addEventListener('keydown', handleEscape);
-    
-    // Exponer función globalmente para los botones onclick
+
     window.closeQuickView = closeQuickView;
   }
-  
+
   // Función para mostrar notificaciones
   function showNotification(message, type = 'success') {
     const notification = document.createElement('div');
@@ -566,10 +500,9 @@ function formatPrice(price: number): string {
         <button class="notification__close" onclick="this.parentElement.parentElement.remove()">×</button>
       </div>
     `;
-    
+
     document.body.appendChild(notification);
-    
-    // Auto-remove after 3 seconds
+
     setTimeout(() => {
       if (notification.parentElement) {
         notification.remove();
